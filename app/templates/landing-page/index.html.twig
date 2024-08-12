@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ meta.title }}</title>
+
+    {% include 'landing-page/meta.html.twig' %}
+
+    <!--  Add structured data to improve how search engines understand and display your content.-->
+    <!--  <script type="application/ld+json">-->
+    <!--    {-->
+    <!--      "@context": "https://schema.org",-->
+    <!--      "@type": "SoftwareApplication",-->
+    <!--      "name": "AI Resume Builder",-->
+    <!--      "operatingSystem": "All",-->
+    <!--      "applicationCategory": "BusinessApplication",-->
+    <!--      "offers": {-->
+    <!--        "@type": "Offer",-->
+    <!--        "priceCurrency": "USD",-->
+    <!--        "price": "9.99",-->
+    <!--        "seller": {-->
+    <!--          "@type": "Organization",-->
+    <!--          "name": "Your Company Name"-->
+    <!--        }-->
+    <!--      }-->
+    <!--    }-->
+    <!--  </script>-->
+
+    <!--  To track conversions and user behavior for Facebook Ads:-->
+    <!--  &lt;!&ndash; Facebook Pixel Code &ndash;&gt;-->
+    <!--  <script>-->
+    <!--    !function(f,b,e,v,n,t,s)-->
+    <!--    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?-->
+    <!--      n.callMethod.apply(n,arguments):n.queue.push(arguments)};-->
+    <!--      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';-->
+    <!--      n.queue=[];t=b.createElement(e);t.async=!0;-->
+    <!--      t.src=v;s=b.getElementsByTagName(e)[0];-->
+    <!--      s.parentNode.insertBefore(t,s)}(window, document,'script',-->
+    <!--      'https://connect.facebook.net/en_US/fbevents.js');-->
+    <!--    fbq('init', 'your_pixel_id');-->
+    <!--    fbq('track', 'PageView');-->
+    <!--  </script>-->
+    <!--  <noscript><img height="1" width="1" style="display:none"-->
+    <!--                 src="https://www.facebook.com/tr?id=your_pixel_id&ev=PageView&noscript=1"-->
+    <!--  /></noscript>-->
+
+    <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap-icons.min.css', 'bootstrap')) }}">
+    <link href="{{ absolute_url(asset('css/bootstrap.min.css', 'bootstrap')) }}" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: Arial, sans-serif;
+            /*background-color: #f7f9fc;*/
+            color: #333;}
+
+        #first-screen {
+            position: relative;
+            z-index: 1;
+            background: rgb(60,150,255);
+            background: -moz-linear-gradient(120deg, rgba(60,150,255,1) 0%, rgba(45,251,255,1) 100%);
+            background: -webkit-linear-gradient(120deg, rgba(60,150,255,1) 0%, rgba(45,251,255,1) 100%);
+            background: linear-gradient(120deg, rgba(60,150,255,1) 0%, rgba(45,251,255,1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3c96ff",endColorstr="#2dfbff",GradientType=1);
+        }
+
+        {##first-screen::before {#}
+        {#    content: "";#}
+        {#    position: absolute;#}
+        {#    width: 100%;#}
+        {#    height: 100%;#}
+        {#    top: 0;#}
+        {#    left: 0;#}
+        {#    z-index: -1;#}
+        {#    background-image: url('{{ absolute_url(asset('hero-cloud-2-rotate-270.min.svg', 'img')) }}');#}
+        {#    background-repeat: no-repeat;#}
+        {#    background-size: contain;#}
+        {#    background-position: bottom left;#}
+        {#}#}
+
+        .header {
+            /*background-color: #ffffff;*/
+            /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+            padding: 10px 0;
+        }
+
+        .header .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+            background: none;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .features,
+        .how-it-works,
+        .pricing,
+        .testimonials,
+        .newsletter {
+            padding: 60px 0;
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-table {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .pricing-table h3 {
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .pricing-table .price {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .newsletter {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--Sure! I’ll draft a complete landing page for your SaaS product that helps write resumes using AI. Here's a breakdown of what I'll include:-->
+
+<!--1. **Header Section:** Navigation, Logo, CTA Button-->
+<!--2. **Hero Section:** Title, Subtitle, Action Button, Visual-->
+<!--3. **Features Section:** Highlight Key Benefits of the Product-->
+<!--4. **How It Works Section:** Step-by-step Process-->
+<!--5. **Testimonials Section:** Customer Feedback-->
+<!--6. **Pricing Section:** Price Plans-->
+<!--7. **Newsletter Section:** Subscription Form-->
+<!--8. **Footer Section:** Links, Social Media, Contact Information-->
+
+<!--I will code it using HTML5, CSS3, and Bootstrap5. Let's begin:-->
+
+<div id="first-screen">
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="#">AI Resume Builder</a>
+                <button class="btn btn-primary ms-auto">Get Started</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Land Your Dream Job with an AI-Powered Resume</h1>
+            <p>Let our AI create the perfect resume to showcase your skills and get you hired faster.</p>
+            <button class="btn btn-primary btn-lg">Create Your Resume Now</button>
+        </div>
+    </section>
+
+</div>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-icon mb-3">
+                    <img src="https://via.placeholder.com/64" alt="icon">
+                </div>
+                <h4>AI-Powered Optimization</h4>
+                <p>Our AI analyzes your experience and suggests improvements to make your resume stand out.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-icon mb-3">
+                    <img src="https://via.placeholder.com/64" alt="icon">
+                </div>
+                <h4>Tailored to Job Descriptions</h4>
+                <p>Get personalized resume suggestions based on the job you’re applying for.</p>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-icon mb-3">
+                    <img src="https://via.placeholder.com/64" alt="icon">
+                </div>
+                <h4>Quick & Easy</h4>
+                <p>Create a professional resume in minutes with our user-friendly interface.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works bg-light">
+    <div class="container text-center">
+        <h2>How It Works</h2>
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <h4>1. Enter Your Details</h4>
+                <p>Provide us with your work history and skills.</p>
+            </div>
+            <div class="col-md-4">
+                <h4>2. Let the AI Work</h4>
+                <p>Our AI will analyze and enhance your resume content.</p>
+            </div>
+            <div class="col-md-4">
+                <h4>3. Download & Apply</h4>
+                <p>Download your polished resume and start applying.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+    <div class="container text-center">
+        <h2>What Our Users Say</h2>
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <img src="https://via.placeholder.com/64" alt="user" class="rounded-circle mb-3">
+                    <p>"I got my dream job thanks to this resume builder! The AI suggestions were spot on."</p>
+                    <h5>Jane Doe</h5>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <img src="https://via.placeholder.com/64" alt="user" class="rounded-circle mb-3">
+                    <p>"This service is amazing! I created a professional resume in just a few minutes."</p>
+                    <h5>John Smith</h5>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial">
+                    <img src="https://via.placeholder.com/64" alt="user" class="rounded-circle mb-3">
+                    <p>"The AI did an incredible job tailoring my resume to the job I wanted. Highly recommend!"</p>
+                    <h5>Emily Johnson</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing">
+    <div class="container text-center">
+        <h2>Choose Your Plan</h2>
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="pricing-table">
+                    <h3>Basic</h3>
+                    <div class="price">$9.99</div>
+                    <p>1 Resume Template</p>
+                    <p>Basic AI Optimization</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="pricing-table">
+                    <h3>Pro</h3>
+                    <div class="price">$19.99</div>
+                    <p>5 Resume Templates</p>
+                    <p>Advanced AI Optimization</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="pricing-table">
+                    <h3>Premium</h3>
+                    <div class="price">$29.99</div>
+                    <p>Unlimited Templates</p>
+                    <p>Premium AI Optimization</p>
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter">
+    <div class="container">
+        <h2>Stay Updated</h2>
+        <p>Subscribe to our newsletter for tips on resume writing and job hunting.</p>
+        <form class="d-flex justify-content-center mt-4">
+            <input type="email" class="form-control w-50" placeholder="Enter your email">
+            <button class="btn btn-light ms-2">Subscribe</button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer class
+
+        ="footer">
+    <div class="container">
+        <p>&copy; 2024 AI Resume Builder. All Rights Reserved.</p>
+        <p>
+            <a href="#" class="text-light">Privacy Policy</a> |
+            <a href="#" class="text-light">Terms of Service</a> |
+            <a href="#" class="text-light">Contact Us</a>
+        </p>
+        <p>
+            <a href="#"><img src="https://via.placeholder.com/24" alt="facebook"></a>
+            <a href="#"><img src="https://via.placeholder.com/24" alt="twitter"></a>
+            <a href="#"><img src="https://via.placeholder.com/24" alt="linkedin"></a>
+        </p>
+    </div>
+</footer>
+
+<script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
+{#<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>#}
+</body>
+</html>

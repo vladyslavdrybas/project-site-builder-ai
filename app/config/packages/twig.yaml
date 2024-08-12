@@ -1,5 +1,15 @@
 twig:
     file_name_pattern: '*.twig'
+    auto_reload: false
+    form_themes: ['bootstrap_5_layout.html.twig']
+
+when@local:
+  twig:
+    auto_reload: true
+    
+when@dev:
+  twig:
+    auto_reload: true
 
 when@test:
     twig:

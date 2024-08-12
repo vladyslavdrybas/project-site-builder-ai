@@ -8,6 +8,17 @@ framework:
 
     #esi: true
     #fragments: true
+    
+    assets:
+      packages:
+        img:
+          base_path: 'assets/img'
+        js:
+          base_path: 'assets/js'
+        css:
+          base_path: 'assets/css'
+        bootstrap:
+          base_path: 'assets/bootstrap-5.3.3-dist'
 
 when@test:
     framework:

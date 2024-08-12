@@ -93,9 +93,6 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "generate-jwt-keys": [
-            "php bin/console lexik:jwt:generate-keypair"
-        ],
         "test": [
             "php bin/phpunit"
         ]
