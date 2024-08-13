@@ -28,4 +28,5 @@
 1. background remove https://www.remove.bg/upload
 2. favicon create https://favicon.io/favicon-converter/
 3. css gradients https://cssgradient.io/
-4. 
+4. color palette generator https://mycolor.space/?hex=%233C9CFD&sub=1
+5. font https://www.fontsquirrel.com/fonts/aller
