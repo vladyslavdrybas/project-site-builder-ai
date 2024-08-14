@@ -5,7 +5,7 @@ body {
     color: #333;
 }
 
-#first-screen, #testimonialsCarousel, .pricing-2, .newsletter, .footer {
+#first-screen, #testimonialsCarousel, .pricing-2, .newsletter {
     position: relative;
     z-index: 1;
     background: rgb(60,150,255);
@@ -15,10 +15,8 @@ body {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3c96ff",endColorstr="#2dfbff",GradientType=1);
 }
 
-.header {
-    /*background-color: #ffffff;*/
-    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
-    padding: 10px 0;
+.header nav {
+    background: var(--palette-color-white);
 }
 
 .header .navbar-brand {
@@ -84,8 +82,7 @@ body {
 }
 
 .footer {
-    background-color: #333;
-    color: #fff;
+    color: var(--palette-color-black);
     padding: 40px 0;
     text-align: center;
 }
@@ -121,21 +118,23 @@ body {
 
     --palette-color-white: #f8f9fa;
     --palette-color-black: #060606;
+
+    --paletter-color-primary: var(--palette-generic-100);
 }
 
 .btn-light {
-    --bs-btn-color: var(--palette-generic-100);
+    --bs-btn-color: var(--paletter-color-primary);
     --bs-btn-bg: var(--palette-color-white);
     --bs-btn-border-color: var(--palette-color-white);
     --bs-btn-hover-color: var(--palette-color-white);;
-    --bs-btn-hover-bg: var(--palette-generic-100);
+    --bs-btn-hover-bg: var(--paletter-color-primary);
     --bs-btn-hover-border-color: var(--palette-color-white);
     --bs-btn-focus-shadow-rgb: 211, 212, 213;
-    --bs-btn-active-color: var(--palette-generic-100);
+    --bs-btn-active-color: var(--paletter-color-primary);
     --bs-btn-active-bg:var(--palette-color-white);
     --bs-btn-active-border-color: var(--palette-color-white);
     --bs-btn-active-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: var(--palette-generic-100);
+    --bs-btn-disabled-color: var(--paletter-color-primary);
     --bs-btn-disabled-bg: var(--palette-color-white);
     --bs-btn-disabled-border-color: var(--palette-color-white);
 }
@@ -144,12 +143,12 @@ body {
     --bs-btn-color: var(--palette-color-white);
     --bs-btn-bg: transparent;
     --bs-btn-border-color: var(--palette-color-white);
-    --bs-btn-hover-color: var(--palette-generic-100);
+    --bs-btn-hover-color: var(--paletter-color-primary);
     --bs-btn-hover-bg: var(--palette-color-white);
     --bs-btn-hover-border-color: var(--palette-color-white);
     --bs-btn-focus-shadow-rgb: 248, 249, 250;
     --bs-btn-active-color: var(--palette-color-white);
-    --bs-btn-active-bg: var(--palette-generic-100);
+    --bs-btn-active-bg: var(--paletter-color-primary);
     --bs-btn-active-border-color: var(--palette-color-white);
     --bs-btn-active-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --bs-btn-disabled-color: var(--palette-color-white);
@@ -160,23 +159,23 @@ body {
 
 .btn-primary {
     --bs-btn-color: var(--palette-color-white);
-    --bs-btn-bg: var(--palette-generic-200);
+    --bs-btn-bg: var(--paletter-color-primary);
     --bs-btn-border-color: var(--palette-color-white);
-    --bs-btn-hover-color: var(--palette-generic-200);
+    --bs-btn-hover-color: var(--paletter-color-primary);
     --bs-btn-hover-bg: var(--palette-color-white);
-    --bs-btn-hover-border-color: var(--palette-generic-200);
+    --bs-btn-hover-border-color: var(--paletter-color-primary);
     --bs-btn-focus-shadow-rgb: 49, 132, 253;
     --bs-btn-active-color: var(--palette-color-white);
-    --bs-btn-active-bg: var(--palette-generic-200);
-    --bs-btn-active-border-color: var(--palette-generic-200);
+    --bs-btn-active-bg: var(--paletter-color-primary);
+    --bs-btn-active-border-color: var(--paletter-color-primary);
     --bs-btn-active-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
     --bs-btn-disabled-color: var(--palette-color-white);
-    --bs-btn-disabled-bg: var(--palette-generic-200);
-    --bs-btn-disabled-border-color: var(--palette-generic-200);
+    --bs-btn-disabled-bg: var(--paletter-color-primary);
+    --bs-btn-disabled-border-color: var(--paletter-color-primary);
 }
 
 .text-primary {
-    color: var(--palette-generic-200) !important;
+    color: var(--paletter-color-primary) !important;
 }
 
 .carousel-item {
@@ -199,4 +198,12 @@ body {
 .btn {
     --bs-btn-border-width: 0.34rem;
     transition: all 0.3s ease-in-out;
+}
+
+.form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: var(--paletter-color-primary);
+    outline: 0;
+    box-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
