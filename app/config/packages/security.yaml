@@ -1,17 +1,51 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'bcrypt'
+    
     providers:
-        users_in_memory: { memory: null }
+      email_provider:
+        entity:
+          class: App\Entity\User
+          property: email
+      username_provider:
+        entity:
+          class: App\Entity\User
+          property: username
+      id_provider:
+        entity:
+          class: App\Entity\User
+          property: id
+    
+    role_hierarchy:
+      ROLE_USER: [IS_AUTHENTICATED_FULLY]
+    
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern:
+              - ^/_profiler/
+              - ^/_wdt/
+              - ^/css/
+              - ^/images/
+              - ^/js/
+              - ^/bootstrap-5.3.3-dist/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: email_provider
+            user_checker: App\Security\UserChecker
+            custom_authenticator: App\Security\AppAuthenticator
+            logout:
+                path: security_logout
+                # where to redirect after logout
+                # target: app_any_route
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
+                # by default, the feature is enabled by checking a checkbox in the
+                # login form, uncomment the following line to always enable it.
+                #always_remember_me: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

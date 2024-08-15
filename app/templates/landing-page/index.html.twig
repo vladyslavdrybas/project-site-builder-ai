@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ meta.title }}</title>
+    <title>{% block title %}{% if meta is defined and meta.title is defined %}{{ meta.title }}{% elseif title is defined %}{{ title }}{% else %}Welcome{% endif %}{% endblock %}</title>
 
-    {% include 'landing-page/meta.html.twig' %}
+    {% if meta is defined %}
+        {% include 'landing-page/meta.html.twig' %}
+    {% endif %}
 
     <!--  Add structured data to improve how search engines understand and display your content.-->
     <!--  <script type="application/ld+json">-->

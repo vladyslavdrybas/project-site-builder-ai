@@ -119,6 +119,10 @@ body {
     --palette-generic-500: #97f58c;
     --palette-generic-600: #f9f871;
 
+    --palette-danger-color: #bb5b3e;
+    --palette-danger-bg: #f88f6f;
+    --palette-danger-border: #ffc6a3;
+
     --palette-skip-shade-100: #3c9cfd;
     --palette-skip-shade-200: #00c3ff;
     --palette-skip-shade-300: #00e2ec;
@@ -182,6 +186,50 @@ body {
     --bs-btn-disabled-border-color: var(--paletter-color-primary);
 }
 
+.alert-primary {
+    --bs-alert-color: var(--bs-primary-text-emphasis);
+    --bs-alert-bg: var(--bs-primary-bg-subtle);
+    --bs-alert-border-color: var(--bs-primary-border-subtle);
+    --bs-alert-link-color: var(--bs-primary-text-emphasis);
+}
+
+.alert-secondary {
+    --bs-alert-color: var(--bs-secondary-text-emphasis);
+    --bs-alert-bg: var(--bs-secondary-bg-subtle);
+    --bs-alert-border-color: var(--bs-secondary-border-subtle);
+    --bs-alert-link-color: var(--bs-secondary-text-emphasis);
+}
+
+.alert-success {
+    --bs-alert-color: var(--bs-success-text-emphasis);
+    --bs-alert-bg: var(--bs-success-bg-subtle);
+    --bs-alert-border-color: var(--bs-success-border-subtle);
+    --bs-alert-link-color: var(--bs-success-text-emphasis);
+}
+
+.alert-info {
+    --bs-alert-color: var(--bs-info-text-emphasis);
+    --bs-alert-bg: var(--bs-info-bg-subtle);
+    --bs-alert-border-color: var(--bs-info-border-subtle);
+    --bs-alert-link-color: var(--bs-info-text-emphasis);
+}
+
+.alert-warning {
+    --bs-alert-color: var(--bs-warning-text-emphasis);
+    --bs-alert-bg: var(--bs-warning-bg-subtle);
+    --bs-alert-border-color: var(--bs-warning-border-subtle);
+    --bs-alert-link-color: var(--bs-warning-text-emphasis);
+}
+
+.alert-danger {
+    --bs-alert-color: var(--palette-color-black);
+    --bs-alert-bg: var(--palette-danger-bg);
+    --bs-alert-border-color: var(--palette-danger-border);
+    --bs-alert-link-color: var(--palette-color-black);
+    box-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
+);
+}
+
 .text-primary {
     color: var(--paletter-color-primary) !important;
 }
@@ -212,6 +260,17 @@ body {
 .form-select:focus {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
+    border-color: var(--paletter-color-primary);
+    outline: 0;
+    box-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.form-check-input:checked {
+    background-color: var(--paletter-color-primary);
+    border-color: var(--paletter-color-primary);
+}
+
+.form-check-input:focus {
     border-color: var(--paletter-color-primary);
     outline: 0;
     box-shadow: 0px 8px 9px 0px rgba(96, 94, 94, 0.17), inset 0 3px 5px rgba(0, 0, 0, 0.125);
