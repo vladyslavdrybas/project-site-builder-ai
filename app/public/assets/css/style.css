@@ -5,7 +5,11 @@ body {
     color: #333;
 }
 
-#first-screen, #testimonialsCarousel, .pricing-2, .newsletter {
+#first-screen,
+#testimonialsCarousel,
+.pricing-2,
+.newsletter,
+#page-checkout {
     position: relative;
     z-index: 1;
     background: rgb(60,150,255);
@@ -13,6 +17,10 @@ body {
     background: -webkit-linear-gradient(120deg, rgba(60,150,255,1) 0%, rgba(45,251,255,1) 100%);
     background: linear-gradient(120deg, rgba(60,150,255,1) 0%, rgba(45,251,255,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3c96ff",endColorstr="#2dfbff",GradientType=1);
+}
+
+#page-checkout {
+    height: 100vh;
 }
 
 .header nav {
@@ -200,7 +208,8 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
     border-color: var(--paletter-color-primary);

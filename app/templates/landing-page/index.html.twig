@@ -76,16 +76,51 @@
 
 <!--I will code it using HTML5, CSS3, and Bootstrap5. Let's begin:-->
 
-{% include "landing-page/components/header/fixed-top.html.twig" %}
-{% include 'landing-page/components/first-screen/hero-with-button-and-cover.html.twig' %}
-{% include 'landing-page/components/features/3-in-row.html.twig' %}
-{% include 'landing-page/components/how-it-works/3-in-column-with-covers.html.twig' %}
-{% include 'landing-page/components/testimonial/carousel.html.twig' %}
-{% include 'landing-page/components/pricing/standard-3-in-row.html.twig' %}
-{% include 'landing-page/components/newsletter/standard.html.twig' %}
-{% include 'landing-page/components/footer/standard.html.twig' %}
+{% block content %}
+    <div id="page-landing">
+        {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
+        {% include 'landing-page/components/sections/first-screen/hero-with-button-and-cover.html.twig' %}
+        {% include 'landing-page/components/sections/features/3-in-row.html.twig' %}
+        {% include 'landing-page/components/sections/how-it-works/3-in-column-with-covers.html.twig' %}
+        {% include 'landing-page/components/sections/testimonial/carousel.html.twig' %}
+        {% include 'landing-page/components/sections/pricing/standard-3-in-row.html.twig' %}
+        {% include 'landing-page/components/sections/newsletter/standard.html.twig' %}
+        {% include 'landing-page/components/sections/footer/standard.html.twig' %}
+    </div>
+
+    {% include 'landing-page/components/sections/checkout/simple.html.twig' %}
+{% endblock %}
 
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
+
+<script type="application/javascript">
+    const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
+    const btnBackToLanding = document.getElementById("btn-back-to-landing");
+    const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");
+    const pageLanding = document.getElementById("page-landing");
+    const pageCheckout = document.getElementById("page-checkout");
+
+    btnSubmitCheckout.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+    });
+
+    btnBackToLanding.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+        pageLanding.classList.toggle("d-none");
+        pageCheckout.classList.toggle("d-none");
+        window.scrollTo(0, 0);
+    });
+
+    console.log(btnGoToPayment);
+    btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+        pageLanding.classList.toggle("d-none");
+        pageCheckout.classList.toggle("d-none");
+    }));
+</script>
 
 </body>
 </html>

@@ -1,0 +1,12 @@
+{% extends 'landing-page/index.html.twig'%}
+
+{% block content %}
+
+    <div id="page-landing" class="container mt-5">
+        <div class="row">
+            <button class="btn-goto-payment" type="submit">subscribe</button>
+        </div>
+    </div>
+
+    {% include 'landing-page/components/sections/checkout/simple.html.twig' %}
+{% endblock %}
