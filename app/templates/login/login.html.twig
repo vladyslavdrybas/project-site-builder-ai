@@ -7,42 +7,47 @@
 <div class="container">
     <div class="row d-flex flex-column align-items-center justify-content-center">
         <div class="hero text-start col-md-3">
-            <form method="post">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
+            {% if app.user %}
+                <div class="mb-3">
+                    <p class="text-center">Hello, {{ app.user.userIdentifier }}.</p>
+                    <p class="text-center">You already in the system.</p>
 
-                {% if app.user %}
-                    <div class="mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('security_logout') }}">Logout</a>
+                    <div class="text-center">
+                        <a href="{{ path('security_logout') }}" class="btn btn-primary rounded-5">Logout</a>
                     </div>
-                {% endif %}
-
-                <h1 class="h3 mb-3 font-weight-normal text-center">Sign in</h1>
-
-                <label for="inputEmail">Email</label>
-                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control rounded-5 mb-3" autocomplete="email" required autofocus>
-
-                <label for="inputPassword">Password</label>
-                <input type="password" name="password" id="inputPassword" class="form-control rounded-5 mb-3" autocomplete="current-password" required>
-
-                <input type="hidden" name="_csrf_token"
-                       value="{{ csrf_token('authenticate') }}"
-                >
-
-                <div class="checkbox mb-3">
-                    <label class="mb-3">
-                        <input type="checkbox" name="_remember_me"> Remember me
-                    </label>
-                    <a href="{{ absolute_url(path('security_register')) }}" class="text-primary d-inline-block mb-3">Do not have account? Register now!</a>
                 </div>
+            {% else %}>
+                <form method="post"
+                     {% if error %}
+                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                     {% endif %}
 
-                <div class="text-center">
-                    <button class="btn btn-lg btn-primary rounded-5" type="submit">
-                        Sign in
-                    </button>
-                </div>
-            </form>
+                    <h1 class="h3 mb-3 font-weight-normal text-center">Sign in</h1>
+
+                    <label for="inputEmail">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control rounded-5 mb-3" autocomplete="email" required autofocus>
+
+                    <label for="inputPassword">Password</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control rounded-5 mb-3" autocomplete="current-password" required>
+
+                    <input type="hidden" name="_csrf_token"
+                           value="{{ csrf_token('authenticate') }}"
+                    >
+
+                    <div class="checkbox mb-3">
+                        <label class="mb-3">
+                            <input type="checkbox" name="_remember_me"> Remember me
+                        </label>
+                        <a href="{{ absolute_url(path('security_register')) }}" class="text-primary d-inline-block mb-3">Do not have account? Register now!</a>
+                    </div>
+
+                    <div class="text-center">
+                        <button class="btn btn-lg btn-primary rounded-5" type="submit">
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
         </div>
     </div>
 </div>
