@@ -39,7 +39,10 @@
                     </li>
                 </ul>
 
-                {% include 'landing-page/components/buttons/subscription.html.twig' with {'classes': 'ms-auto'} %}
+                {% if app.request.get('_route') == 'app_homepage' %}
+                    {% include 'landing-page/components/buttons/subscription.html.twig' with {'classes': 'ms-auto'} %}
+                {% endif %}
+
                 {% include 'landing-page/components/buttons/login.html.twig' with {'isLink': true} %}
             </div>
 

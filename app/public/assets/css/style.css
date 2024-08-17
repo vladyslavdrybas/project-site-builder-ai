@@ -9,7 +9,8 @@ body {
 #testimonialsCarousel,
 .pricing-2,
 .newsletter,
-#page-checkout {
+#page-checkout,
+.bg-gradient-primary {
     position: relative;
     z-index: 1;
     background: rgb(60,150,255);
@@ -20,7 +21,7 @@ body {
 }
 
 #page-checkout {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .header nav {

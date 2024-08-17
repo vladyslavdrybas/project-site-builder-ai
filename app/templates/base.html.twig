@@ -23,17 +23,17 @@
 
 </head>
 
-<body>
+<body class="">
 
 {% block header %}
 
 <div id="header" class="fixed-top">
     {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
 
-    {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
+    <div>
+        {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
+    </div>
 </div>
-
-
 {% endblock %}
 
 {% block content %}
@@ -54,6 +54,10 @@
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
 
 <script type="application/javascript">
+    function scrollTo(hash) {
+        location.hash = "#" + hash;
+    }
+
     const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
     const btnBackToLanding = document.getElementById("btn-back-to-landing");
     const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");
@@ -69,16 +73,16 @@
     btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {
         console.log(this);
         e.preventDefault();
-        pageLanding.classList.toggle("d-none");
-        pageCheckout.classList.toggle("d-none");
-        window.scrollTo(0, 0);
+        pageLanding && pageLanding.classList.toggle("d-none");
+        pageCheckout && pageCheckout.classList.toggle("d-none");
+        scrollTo('pricing');
     });
 
     btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
         console.log(this);
-        e.preventDefault();
-        pageLanding.classList.toggle("d-none");
-        pageCheckout.classList.toggle("d-none");
+        e.preventDefault();;
+        pageLanding && pageLanding.classList.toggle("d-none");
+        pageCheckout && pageCheckout.classList.toggle("d-none");
     }));
 
     alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {
