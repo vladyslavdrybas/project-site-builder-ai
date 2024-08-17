@@ -46,12 +46,17 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
-        return $this->findByEmail($identifier);
-    }
+        $query = $this->createQueryBuilder('t')
+            ->where('t.email = :identifier')
+            ->orWhere('t.username = :identifier')
+            ->setParameter('identifier', $identifier);
 
-    public function loadUserByUsername(string $identifier): ?UserInterface
-    {
-//        return $this->findByEmail($identifier);
-        return $this->findOneBy(['username' => $identifier]);
+        $result = $query->getQuery()->getOneOrNullResult();
+
+        if ($result instanceof User) {
+            return $result;
+        }
+
+        return null;
     }
 }

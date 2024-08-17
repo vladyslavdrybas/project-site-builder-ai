@@ -38,20 +38,16 @@ class UserBuilder implements IEntityBuilder
 
         $user = new User();
 
-        $user->setEmail($email);
-        $user->setPassword($password);
+        $user->setEmail(trim($email));
+        $user->setPassword($this->passwordHasher->hashPassword(
+            $user,
+            trim($password)
+        ));
 
         if (null === $username) {
             $rndGen = new RandomGenerator();
             $user->setUsername($rndGen->uniqueId('u'));
         }
-
-        $hashedPassword = $this->passwordHasher->hashPassword(
-            $user,
-            $user->getPassword()
-        );
-
-        $user->setPassword($hashedPassword);
 
         return $user;
     }

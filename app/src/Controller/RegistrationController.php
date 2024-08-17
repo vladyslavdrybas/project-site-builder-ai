@@ -7,7 +7,7 @@ use App\DataTransferObject\UserRegistrationDto;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Security\AppAuthenticator;
+use App\Security\AppFormLoginAuthenticator;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -25,27 +25,9 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route(name: "security")]
 class RegistrationController extends AbstractController
 {
-    public function __construct(private EmailVerifier $emailVerifier)
-    {
-    }
-
-    #[Route('/register/old', name: '_register_old', methods: ["POST"])]
-    public function index(
-        #[MapRequestPayload] UserRegistrationDto $userRegisterDto,
-        UserBuilder $userBuilder,
-        UserRepository $repo
-    ): RedirectResponse {
-
-        $user = $userBuilder->base(
-            $userRegisterDto->email,
-            $userRegisterDto->password
-        );
-
-        $repo->add($user);
-        $repo->save();
-
-        return $this->redirect('app_homepage');
-    }
+    public function __construct(
+        protected readonly EmailVerifier $emailVerifier
+    ) {}
 
     #[Route('/register', name: '_register')]
     public function register(
@@ -60,17 +42,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            // encode the plain password
-//            $user->setPassword(
-//                $userPasswordHasher->hashPassword(
-//                    $user,
-//                    $form->get('plainPassword')->getData()
-//                )
-//            );
-
             $user = $userBuilder->base(
-                $user->getEmail(),
-                $user->getPassword()
+                $form->get('email')->getData(),
+                $form->get('plainPassword')->getData()
             );
 
             $entityManager->persist($user);
@@ -87,7 +61,7 @@ class RegistrationController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            return $security->login($user, AppAuthenticator::class, 'main');
+            return $security->login($user, AppFormLoginAuthenticator::class, 'main');
         }
 
         return $this->render('registration/register.html.twig', [

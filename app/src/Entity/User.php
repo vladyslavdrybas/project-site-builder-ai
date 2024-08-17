@@ -33,7 +33,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[Assert\Email]
     #[Assert\NotBlank]
     #[ORM\Column( name: "email", type: Types::STRING, length: 180, unique: true, nullable: false )]
-    protected string $email = '';
+    protected string $email;
 
     #[ORM\Column( name: "username", type: Types::STRING, length: 100, unique: true, nullable: false)]
     protected string $username = '';
