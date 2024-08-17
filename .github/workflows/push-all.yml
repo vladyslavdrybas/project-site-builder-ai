@@ -59,4 +59,4 @@ jobs:
   
       - name: Run test suite
         working-directory: app
-        run: composer run-script test
+        run: php bin/phpunit
