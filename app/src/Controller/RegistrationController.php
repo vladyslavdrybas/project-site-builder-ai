@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Builder\UserBuilder;
-use App\DataTransferObject\UserRegistrationDto;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
@@ -13,12 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -32,9 +28,8 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: '_register')]
     public function register(
         Request $request,
-        UserPasswordHasherInterface $userPasswordHasher,
         Security $security,
-        EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
         UserBuilder $userBuilder
     ): Response {
         $user = new User();
@@ -47,8 +42,8 @@ class RegistrationController extends AbstractController
                 $form->get('plainPassword')->getData()
             );
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $userRepository->add($user);
+            $userRepository->save();
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('security_verify_email', $user,

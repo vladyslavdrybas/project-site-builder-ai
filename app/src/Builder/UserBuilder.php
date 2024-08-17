@@ -24,7 +24,7 @@ class UserBuilder implements IEntityBuilder
         string $email,
         string $password,
         ?string $username = null
-    ): User{
+    ): User {
         if (strlen($email) < 6) {
             throw new InvalidArgumentException('Invalid email length. Expect string length greater than 5.');
         }
