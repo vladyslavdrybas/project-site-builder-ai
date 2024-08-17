@@ -7,7 +7,6 @@ namespace App\Builder;
 use App\Entity\User;
 use App\Exceptions\AlreadyExists;
 use App\Repository\UserRepository;
-use App\Utility\EmailHasher;
 use App\Utility\RandomGenerator;
 use InvalidArgumentException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -18,8 +17,7 @@ class UserBuilder implements IEntityBuilder
     public function __construct(
         protected readonly UserPasswordHasherInterface $passwordHasher,
         protected readonly RandomGenerator $randomGenerator,
-        protected readonly UserRepository $userRepository,
-        protected readonly EmailHasher $emailHasher
+        protected readonly UserRepository $userRepository
     ) {}
 
     public function base(
