@@ -59,9 +59,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(name: "is_deleted", type: Types::BOOLEAN, options: ["default" => false])]
     protected bool $isDeleted = false;
 
-    #[ORM\Column(type: 'boolean')]
-    private $isVerified = false;
-
     public function isEqualTo(SecurityUserInterface $user): bool
     {
         return $user->getUserIdentifier() === $this->getUserIdentifier();
@@ -230,17 +227,5 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setLastname(?string $lastname): void
     {
         $this->lastname = $lastname;
-    }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
-
-        return $this;
     }
 }

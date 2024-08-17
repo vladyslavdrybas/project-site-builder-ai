@@ -27,9 +27,12 @@
 
 {% block header %}
 
-<div id="header">
+<div id="header" class="fixed-top">
     {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
+
+    {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
 </div>
+
 
 {% endblock %}
 
@@ -54,15 +57,16 @@
     const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
     const btnBackToLanding = document.getElementById("btn-back-to-landing");
     const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");
+    const alerts = document.querySelectorAll(".alert");
     const pageLanding = document.getElementById("page-landing");
     const pageCheckout = document.getElementById("page-checkout");
 
-    btnSubmitCheckout.addEventListener('click', function (e) {
+    btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {
         console.log(this);
         e.preventDefault();
     });
 
-    btnBackToLanding.addEventListener('click', function (e) {
+    btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {
         console.log(this);
         e.preventDefault();
         pageLanding.classList.toggle("d-none");
@@ -70,13 +74,20 @@
         window.scrollTo(0, 0);
     });
 
-    console.log(btnGoToPayment);
-    btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
+    btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
         console.log(this);
         e.preventDefault();
         pageLanding.classList.toggle("d-none");
         pageCheckout.classList.toggle("d-none");
     }));
+
+    alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+        e.target.remove();
+    }));
+
+
 </script>
 
 </body>

@@ -8,16 +8,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 #[Route(name: "security")]
-class SecurityController extends AbstractController
+class LoginController extends AbstractController
 {
 
     #[Route(path: '/login', name: '_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-//         if ($this->getUser()) {
-//             return $this->redirectToRoute('security_login');
-//         }
-
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
