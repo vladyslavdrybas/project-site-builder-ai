@@ -8,7 +8,6 @@ services:
   mailer:
     container_name: ${PROJECT_NAME:-solo}-${SERVICE_NAME:-service}-mailer-${API_VERSION:-1.0}-${APP_ENV:-none}
     image: axllent/mailpit
-    restart: unless-stopped
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
