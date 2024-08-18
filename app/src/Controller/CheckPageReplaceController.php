@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(name: "app")]
 class CheckPageReplaceController extends AbstractController
 {
-    #[Route("/replace", name: "_replace", methods: ["GET", "OPTIONS", "HEAD"])]
+    #[Route("/replace", name: "_replace", methods: ["GET"])]
     public function index(): Response
     {
         return $this->render(

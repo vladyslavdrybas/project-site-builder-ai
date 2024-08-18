@@ -56,6 +56,5 @@ class ExceptionFlashMessageSubscriber implements EventSubscriberInterface
         }
 
         $this->flash->set('danger', $message);
-
     }
 }

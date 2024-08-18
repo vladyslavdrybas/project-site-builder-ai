@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(name: "app")]
 class CheckoutController extends AbstractController
 {
-    #[Route("/checkout", name: "_checkout", methods: ["GET", "OPTIONS", "HEAD"])]
+    #[Route("/checkout", name: "_checkout", methods: ["GET"])]
     public function index(): Response
     {
         return $this->render(

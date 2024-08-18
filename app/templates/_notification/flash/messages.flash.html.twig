@@ -4,7 +4,7 @@
     set appFlashMessageLabel = 'primary'
 %}
 {% for label, messages in app.flashes() %}
-    {% if ('error' in label or 'warning' in label or 'notice' in label) %}
+    {% if ('error' in label or 'warning' in label or 'notice' in label or 'danger' in label) %}
         {% set appFlashMessageLabel = 'danger' %}
     {% elseif 'success' in label %}
         {% set appFlashMessageLabel = 'success' %}

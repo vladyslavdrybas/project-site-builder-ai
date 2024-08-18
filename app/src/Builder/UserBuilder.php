@@ -37,10 +37,7 @@ class UserBuilder implements IEntityBuilder
         $user = new User();
 
         $user->setEmail(trim($email));
-        $user->setPassword($this->passwordHasher->hashPassword(
-            $user,
-            trim($password)
-        ));
+        $user->setPassword($this->hashPassword($user, $password));
 
         if (null === $username) {
             $rndGen = new RandomGenerator();
@@ -48,5 +45,13 @@ class UserBuilder implements IEntityBuilder
         }
 
         return $user;
+    }
+
+    public function hashPassword(User $user, string $password): string
+    {
+        return $this->passwordHasher->hashPassword(
+            $user,
+            trim($password)
+        );
     }
 }

@@ -1,3 +1,4 @@
+{% set routeCurrent = app.request.get('_route') %}
 <!-- Header Section -->
 <header  class="header">
     <nav class="navbar navbar-expand-md navbar-light">
@@ -20,22 +21,16 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#first-screen">What</a>
+                        <a class="nav-link {% if routeCurrent == 'cp_user_show' %}active{% endif %}" href="{{ absolute_url(path('cp_user_edit', {'user': app.user.username})) }}">Me</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#features">Why</a>
+                        <a class="nav-link {% if routeCurrent == 'cp_project_list' %}active{% endif %}" href="#how-it-works">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#how-it-works">How</a>
+                        <a class="nav-link {% if routeCurrent == 'cp_campaign_list' %}active{% endif %}" href="#testimonials">Campaigns</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#testimonials">Testimonial</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#pricing">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
+                        <a class="nav-link {% if routeCurrent == 'cp_variant_list' %}active{% endif %}" href="#pricing">Variants</a>
                     </li>
                 </ul>
 

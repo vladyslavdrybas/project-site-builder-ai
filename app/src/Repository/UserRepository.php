@@ -59,4 +59,9 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
         return null;
     }
+
+    public function loadUserByUsername(string $username): ?UserInterface
+    {
+        return $this->findOneBy(['username' => $username]);
+    }
 }
