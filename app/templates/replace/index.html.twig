@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+    <title>Template</title>
+</head>
+<body>
+<script type="application/javascript">
+
+    (() => {
+        fetch("{{ absolute_url(path('app_checkout')) }}")
+            .then((response) => {
+                return response.text();
+            })
+            .then((html) => {
+                console.log(html);
+
+                document.open();
+                document.write(html);
+                document.close();
+            });
+    }) ();
+
+</script>
+
+</body>
+</html>
