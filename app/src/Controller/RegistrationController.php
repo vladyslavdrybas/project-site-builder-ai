@@ -75,9 +75,10 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('security_login');
         }
 
+
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            if ($user->isEmailVerified()) {
+            if (!$user->isEmailVerified()) {
                 $emailVerifier->handleEmailConfirmation($request, $user);
             }
         } catch (ExpiredSignatureException $exception) {
@@ -95,7 +96,7 @@ class RegistrationController extends AbstractController
             $this->addFlash('success', 'Your email address has been verified.');
         }
 
-        return $this->redirectToRoute('security_login');
+        return $this->redirectToRoute('cp_user_show', ['user' => $user->getUsername()]);
     }
 
     protected function sendValidationEmail(User $user, EmailVerifier $emailVerifier): void

@@ -44,7 +44,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column( name: "lastname", type: Types::STRING, length: 100, nullable: true)]
     protected ?string $lastname = null;
 
-    #[ORM\Column(name: "password", type: Types::STRING, length: 100, unique: false, nullable: false)]
+    #[ORM\Column(name: "password", type: Types::STRING, length: 100, nullable: false)]
     protected string $password = '';
 
     #[ORM\Column( name: "is_email_verified", type: 'boolean', options: ["default" => false] )]
