@@ -42,7 +42,8 @@ class ProjectController extends AbstractControlPanelController
         name: '_list',
         methods: ['GET']
     )]
-    public function list(): Response {
+    public function list(): Response
+    {
         return $this->render(
             'control-panel/project/list.html.twig',
             [

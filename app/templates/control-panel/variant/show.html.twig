@@ -1,0 +1,94 @@
+{% extends 'control-panel/index.html.twig'%}
+
+
+{% block content %}
+    <div class="min-vh-100 pt-5">
+        <div class="container pt-5 ">
+            <div class="row gx-5 justify-content-center">
+
+                <div class="col-md-8 col-lg-6">
+                    <h1>View {{ variant.title }}</h1>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Title
+                            </div>
+                            {{ variant.title }}
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Project
+                            </div>
+                            {{ variant.project.title }}
+                        </li>
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Status
+                            </div>
+                            {% if variant.isActive %}Active{% else %}Pending{% endif %}
+                        </li>
+
+                        {% if variant.description is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Description
+                            </div>
+                            {{ variant.description }}
+                        </li>
+                        {% endif %}
+
+                        {% if variant.meta is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Meta
+                            </div>
+                            {{ variant.meta|json_encode }}
+                        </li>
+                        {% endif %}
+
+                        {% if variant.startAt is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Start At
+                            </div>
+                            {{ variant.startAt|date('d/m/Y H:i') }}
+                        </li>
+                        {% endif %}
+
+                        {% if variant.endAt is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                End At
+                            </div>
+                            {{ variant.endAt|date('d/m/Y H:i') }}
+                        </li>
+                        {% endif %}
+
+                        {% if variant.weight %}
+                            <li class="list-group-item">
+                                <div class="fw-bold">
+                                    Weight
+                                </div>
+                                {{ variant.weight }}
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="m-1">
+                        <a
+                            class="btn btn-primary rounded-5"
+                            href="{{ absolute_url(path('cp_variant_edit', {variant: variant.id})) }}"
+                            title="edit"
+                        >
+                            <svg class="bi bi-08"><use xlink:href="#pen-fill"/></svg>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

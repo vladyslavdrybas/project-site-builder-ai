@@ -8,7 +8,7 @@
             <div class="row justify-content-start mb-3">
                 <div class="d-flex justify-content-start align-items-center">
                     <a
-                        href="{{ absolute_url(path('cp_project_add')) }}"
+                        href="{{ absolute_url(path('cp_variant_add')) }}"
                         type="button"
                         class="btn btn-md btn-primary rounded-5"
                     >
@@ -24,55 +24,51 @@
                 <table class="table table-striped table-bordered table-hover">
                     <tr>
                         <th>title</th>
+                        <th>Project</th>
                         <th>status</th>
                         <th>description</th>
-                        <th>proposal</th>
-                        <th>customer portrait</th>
                         <th>start at</th>
                         <th>end at</th>
                         <th>actions</th>
                     </tr>
 
-                        {% for project in projects %}
+                        {% for variant in variants %}
 
                             <tr>
                                 <td>
-                                    {{ project.title }}
+                                    {{ variant.title }}
                                 </td>
                                 <td>
-                                    {{ project.isActive ? 'active' : 'pending' }}
+                                    {{ variant.project.title }}
                                 </td>
                                 <td>
-                                    {{ project.description }}
+                                    {{ variant.isActive ? 'active' : 'pending' }}
                                 </td>
                                 <td>
-                                    {{ project.proposal }}
+                                    {{ variant.description }}
                                 </td>
                                 <td>
-                                    {{ project.customerPortrait }}
-                                </td>
-                                <td>
-                                    {% if project.startAt is not null %}
-                                        {{ project.startAt|date('d/m/Y H:i') }}
+                                    {% if variant.startAt is not null %}
+                                        {{ variant.startAt|date('d/m/Y H:i') }}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if project.endAt is not null %}
-                                        {{ project.endAt|date('d/m/Y H:i') }}
+                                    {% if variant.endAt is not null %}
+                                        {{ variant.endAt|date('d/m/Y H:i') }}
                                     {% endif %}
                                 </td>
 
                                 <td>
                                     <a
                                         class="btn btn-primary rounded-5"
-                                        href="{{ absolute_url(path('cp_project_edit', {project: project.id})) }}"
+                                        href="{{ absolute_url(path('cp_variant_edit', {variant: variant.id})) }}"
                                         title="edit"
                                     >
                                         <svg class="bi bi-08"><use xlink:href="#pen-fill"/></svg>
                                     </a>
                                     <a
                                         class="btn btn-primary rounded-5"
-                                        href="{{ absolute_url(path('cp_project_show', {project: project.id})) }}"
+                                        href="{{ absolute_url(path('cp_variant_show', {variant: variant.id})) }}"
                                         title="view"
                                     >
                                         <svg class="bi bi-08"><use xlink:href="#eye-fill"/></svg>

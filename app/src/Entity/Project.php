@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use App\Repository\ProjectRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,6 +44,16 @@ class Project extends AbstractEntity
 
     #[ORM\Column(name: "is_active", type: Types::BOOLEAN, options: ["default" => false])]
     protected bool $isActive = false;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Variant::class)]
+    #[ORM\OrderBy(['endAt' => 'DESC'])]
+    protected Collection $variants;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->variants = new ArrayCollection();
+    }
 
     protected ?string $teamId = null;
     protected ?string $analyticsId = null;
@@ -125,5 +137,15 @@ class Project extends AbstractEntity
     public function setCustomerPortrait(?string $customerPortrait): void
     {
         $this->customerPortrait = $customerPortrait;
+    }
+
+    public function getVariants(): Collection
+    {
+        return $this->variants;
+    }
+
+    public function setVariants(Collection $variants): void
+    {
+        $this->variants = $variants;
     }
 }

@@ -27,10 +27,7 @@
                         <a class="nav-link {% if routeCurrent == 'cp_project_list' %}active{% endif %}" href="{{ absolute_url(path('cp_project_list')) }}">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if routeCurrent == 'cp_campaign_list' %}active{% endif %}" href="#testimonials">Campaigns</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if routeCurrent == 'cp_variant_list' %}active{% endif %}" href="#pricing">Variants</a>
+                        <a class="nav-link {% if routeCurrent == 'cp_variant_list' %}active{% endif %}" href="{{ absolute_url(path('cp_variant_list')) }}">Variants</a>
                     </li>
                 </ul>
 
