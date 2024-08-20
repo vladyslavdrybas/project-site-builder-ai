@@ -24,7 +24,7 @@
                         <a class="nav-link {% if routeCurrent == 'cp_user_show' %}active{% endif %}" href="{{ absolute_url(path('cp_user_show', {'user': app.user.username})) }}">Me</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if routeCurrent == 'cp_project_list' %}active{% endif %}" href="#how-it-works">Projects</a>
+                        <a class="nav-link {% if routeCurrent == 'cp_project_list' %}active{% endif %}" href="{{ absolute_url(path('cp_project_list')) }}">Projects</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if routeCurrent == 'cp_campaign_list' %}active{% endif %}" href="#testimonials">Campaigns</a>

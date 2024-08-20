@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserEditForm extends AbstractType
+class UserEditFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -24,7 +24,7 @@ class UserEditForm extends AbstractType
                 'required' => false,
             ])
             ->add('save', SubmitType::class, [
-                'attr' => ['class' => 'save btn btn-primary rounded-5 w-100'],
+                'attr' => ['class' => 'save btn btn-primary rounded-5'],
             ])
         ;
     }

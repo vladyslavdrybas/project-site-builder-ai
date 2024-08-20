@@ -6,8 +6,8 @@ namespace App\Controller\ControlPanel;
 use App\Builder\UserBuilder;
 use App\Constants\RouteRequirements;
 use App\Entity\User;
-use App\Form\CommandCenter\Profile\UserEditForm;
-use App\Form\CommandCenter\Profile\UserPasswordChangeForm;
+use App\Form\CommandCenter\Profile\UserEditFormType;
+use App\Form\CommandCenter\Profile\UserPasswordChangeFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\ValueResolver\UserValueResolver;
@@ -50,10 +50,10 @@ class UserController extends AbstractControlPanelController
     ): Response {
         $emailBuffer = $user->getEmail();
 
-        $userPasswordChangeForm = $this->createForm(UserPasswordChangeForm::class, $user);
+        $userPasswordChangeForm = $this->createForm(UserPasswordChangeFormType::class, $user);
         $userPasswordChangeForm->handleRequest($request);
 
-        $userEditForm = $this->createForm(UserEditForm::class, $user);
+        $userEditForm = $this->createForm(UserEditFormType::class, $user);
         $userEditForm->handleRequest($request);
 
         try {

@@ -1,0 +1,17 @@
+{% extends 'control-panel/index.html.twig'%}
+
+
+{% block content %}
+<div class="min-vh-100 pt-5">
+    <div class="container pt-5 ">
+
+        <div class="row gx-5 justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                <h1>Edit {{ project.title }}</h1>
+                {{ form(projectEditForm, {'method': 'POST'}) }}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

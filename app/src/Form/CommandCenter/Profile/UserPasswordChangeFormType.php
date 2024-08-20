@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UserPasswordChangeForm extends AbstractType
+class UserPasswordChangeFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -71,7 +71,7 @@ class UserPasswordChangeForm extends AbstractType
                 ],
             ])
             ->add('save', SubmitType::class, [
-                'attr' => ['class' => 'save btn btn-primary rounded-5 w-100'],
+                'attr' => ['class' => 'save btn btn-primary rounded-5'],
             ])
         ;
     }

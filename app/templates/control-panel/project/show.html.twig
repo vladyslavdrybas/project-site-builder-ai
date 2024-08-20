@@ -1,0 +1,84 @@
+{% extends 'control-panel/index.html.twig'%}
+
+
+{% block content %}
+    <div class="min-vh-100 pt-5">
+        <div class="container pt-5 ">
+            <div class="row gx-5 justify-content-center">
+
+                <div class="col-md-8 col-lg-6">
+                    <h1>View {{ project.title }}</h1>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Title
+                            </div>
+                            {{ project.title }}
+                        </li>
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Status
+                            </div>
+                            {% if project.isActive %}Active{% else %}Pending{% endif %}
+                        </li>
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Description
+                            </div>
+                            {{ project.description }}
+                        </li>
+
+                        {% if project.proposal is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Proposal
+                            </div>
+                            {{ project.proposal }}
+                        </li>
+                        {% endif %}
+
+                        {% if project.customerPortrait is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Customer Portrait
+                            </div>
+                            {{ project.customerPortrait }}
+                        </li>
+                        {% endif %}
+
+                        {% if project.startAt is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                Start At
+                            </div>
+                            {{ project.startAt|date('d/m/Y H:i') }}
+                        </li>
+                        {% endif %}
+
+                        {% if project.endAt is not null %}
+                        <li class="list-group-item">
+                            <div class="fw-bold">
+                                End At
+                            </div>
+                            {{ project.endAt|date('d/m/Y H:i') }}
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="m-1">
+                        <a
+                            class="btn btn-primary rounded-5"
+                            href="{{ absolute_url(path('cp_project_edit', {project: project.id})) }}"
+                            title="edit"
+                        >
+                            <svg class="bi bi-08"><use xlink:href="#pen-fill"/></svg>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

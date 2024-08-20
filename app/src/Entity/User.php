@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -58,6 +60,44 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\Column(name: "is_deleted", type: Types::BOOLEAN, options: ["default" => false])]
     protected bool $isDeleted = false;
+
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Project::class)]
+    #[ORM\OrderBy(['endAt' => 'DESC'])]
+    protected Collection $projects;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->projects = new ArrayCollection();
+    }
+
+    public function addProject(Project $project): void
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+        }
+    }
+
+    public function removeProject(Project $project): void
+    {
+        if ($project->getOwner() !== $this) {
+            throw new \Exception('Trying to remove project from foreign owner.');
+        }
+
+        $this->projects->removeElement($project);
+    }
+
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function setProjects(Collection $projects): void
+    {
+        foreach ($projects as $project) {
+            $this->addProject($project);
+        }
+    }
 
     public function isEqualTo(SecurityUserInterface $user): bool
     {
