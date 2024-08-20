@@ -1,0 +1,49 @@
+{% set blockName = 'testimonial_v1' %}
+
+<div class="d-flex flex-column justify-content-center align-content-center mb-2">
+    <button
+        class="btn btn-primary rounded-1"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseTestimonialBuilderForm"
+        aria-expanded="true"
+        aria-controls="collapseTestimonialBuilderForm"
+    >
+        Testimonial section
+    </button>
+
+    <div class="collapse card mt-1 p-1" id="collapseTestimonialBuilderForm">
+
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" role="switch">
+            <label class="form-check-label" for="flexCheckDefault">
+                Enable
+            </label>
+        </div>
+
+        <div class="mb-3">
+            <label for="basic-url" class="form-label">Header text</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="basic-url" class="form-label">Amount of reviews</label>
+            <div class="input-group">
+                <input type="number" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+        </div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Reviews</label>
+            <select class="form-select" id="inputGroupSelect01" multiple>
+                <option selected>Choose...</option>
+                <option value="id1">Reviewer name 1</option>
+                <option value="id2">Reviewer name 1</option>
+                <option value="id3">Reviewer name 1</option>
+            </select>
+        </div>
+
+    </div>
+</div>

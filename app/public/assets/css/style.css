@@ -286,3 +286,13 @@ body {
     width: 0.8rem;
     height: 0.8rem;
 }
+
+.border-r-1 {
+    border: none;
+    border-right: solid;
+}
+
+.border-primary {
+    border-width: 0.1rem;
+    border-color: var(--paletter-color-primary);
+}

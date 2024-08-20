@@ -1,0 +1,47 @@
+{% set blockName = 'designsettings_v1' %}
+
+<div class="d-flex flex-column justify-content-center align-content-center mb-2">
+    <button
+        class="btn btn-primary rounded-1"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseDesignSettingsBuilderForm"
+        aria-expanded="true"
+        aria-controls="collapseDesignSettingsBuilderForm"
+    >
+        Design Settings
+    </button>
+
+    <div class="collapse card mt-1 p-1" id="collapseDesignSettingsBuilderForm">
+
+        <div class="mb-3">
+            <label for="basic-url" class="form-label">Colors</label>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">primary</span>
+                <span class="input-group-text">#</span>
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">secondary</span>
+                <span class="input-group-text">#</span>
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">success</span>
+                <span class="input-group-text">#</span>
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">error</span>
+                <span class="input-group-text">#</span>
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">info</span>
+                <span class="input-group-text">#</span>
+                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
+            </div>
+        </div>
+
+    </div>
+</div>

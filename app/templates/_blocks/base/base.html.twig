@@ -29,15 +29,15 @@
 
 <div id="home"></div>
 
-{% block header %}
 <div id="header" class="fixed-top">
-    {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
+    {% block header %}
+        {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
+    {% endblock %}
 
     <div>
         {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
     </div>
 </div>
-{% endblock %}
 
 {% block content %}
     <div id="page-landing">
