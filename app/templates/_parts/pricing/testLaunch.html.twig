@@ -2,78 +2,38 @@
 <section id="pricing" class="pricing">
 
     <div class="container text-center">
-        <h2>Choose Your Plan</h2>
+
+        {% if data.head is defined and data.head is not null and data.head|length > 0 %}
+            <div class="row">
+                <div class="col mb-5">
+                    <h2>{{ data.head }}</h2>
+                </div>
+            </div>
+        {% endif %}
 
         <div class="row mt-5">
 
+            {% for plan in data.items %}
             <div class="col-md-4">
-                <div class="pricing-table pricing-1">
-                    <h3>Basic</h3>
+                <div class="pricing-table {% if loop.index == 2 %}text-white pricing-primary{% endif %}">
+                    <h3>{{ plan.head }}</h3>
 
-                    <p>1 Resume Template</p>
-                    <p>2 GB Storage</p>
-                    <p>Basic AI Optimization</p>
-                    <p>Single User</p>
-                    <p>Sales Dashboard</p>
-                    <p>Minimal Features</p>
-                    <p>1000 Logs</p>
+                    {% for proposal in plan.description %}
+                        <p>{{ proposal }}</p>
+                    {% endfor %}
 
-                    <div class="price text-primary">$9.99</div>
+                    <div class="price {% if loop.index == 2 %}text-white{% else %}text-primary{% endif %}">{{ plan.currencySign }}{{ plan.price }}</div>
 
-                    <button
+                    <a
+                        href="{{ plan.callToActionButton.link }}"
                         class="btn btn-primary rounded-5 btn-goto-payment"
                     >
-                        Get Started
-                    </button>
-
+                        {{ plan.callToActionButton.text }}
+                    </a>
                 </div>
             </div>
+            {% endfor %}
 
-            <div class="col-md-4">
-                <div class="pricing-table pricing-2 text-white">
-                    <h3>Pro</h3>
-
-                    <p>5 Resume Templates</p>
-                    <p>Advanced AI Optimization</p>
-                    <p>10 GB Hosting</p>
-                    <p>5 Users</p>
-                    <p>Sales Dashboard</p>
-                    <p>Premium Features</p>
-                    <p>50,000 Logs</p>
-
-                    <div class="price text-white">$19.99</div>
-
-                    <button
-                        class="btn btn-primary rounded-5 btn-goto-payment"
-                    >
-                        Get Started
-                    </button>
-
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="pricing-table pricing-3">
-                    <h3>Premium</h3>
-
-                    <p>Unlimited Templates</p>
-                    <p>Premium AI Optimization</p>
-                    <p>50 GB Hosting</p>
-                    <p>Unlimited Users</p>
-                    <p>Sales and Marketing Dashboard</p>
-                    <p>Premium Features</p>
-                    <p>Unlimited Logs</p>
-
-                    <div class="price text-primary">$29.99</div>
-
-                    <button
-                        class="btn btn-primary rounded-5 btn-goto-payment"
-                    >
-                        Get Started
-                    </button>
-
-                </div>
-            </div>
         </div>
     </div>
 

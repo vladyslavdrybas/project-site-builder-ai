@@ -1,12 +1,12 @@
 <!-- Newsletter Section -->
 <section id="contact" class="newsletter">
     <div class="container">
-        <h2>Stay Updated</h2>
-        <p>Subscribe to our newsletter for tips on resume writing and job hunting.</p>
+        <h2>{{ data.head }}</h2>
+        <p>{{ data.description }}</p>
         <form class="d-flex justify-content-center mt-4">
-            <input type="email" class="form-control w-50 rounded-5" placeholder="Enter your email">
+            <input type="email" class="form-control w-50 rounded-5" placeholder="{{ data.inputPlaceholder }}">
 
-            <button class="btn btn-primary ms-2 rounded-5">Subscribe</button>
+            <button class="btn btn-primary ms-2 rounded-5">{{ data.callToActionButton.text }}</button>
 
         </form>
     </div>

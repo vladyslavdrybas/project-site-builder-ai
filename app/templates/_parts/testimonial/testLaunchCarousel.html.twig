@@ -2,65 +2,50 @@
 <section id="testimonials" class="testimonials">
     <div class="container text-center">
 
-        <div class="row featurette">
-            <div class="col mb-5">
-                <h2>Reviews</h2>
+        {% if data.head is defined and data.head is not null and data.head|length > 0 %}
+            <div class="row">
+                <div class="col mb-5">
+                    <h2>{{ data.head }}</h2>
+                </div>
             </div>
-        </div>
+        {% endif %}
 
     </div>
 
     <div id="testimonialsCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
 
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            {% for item in data.items %}
+                <button
+                    type="button"
+                    data-bs-target="#testimonialsCarousel"
+                    data-bs-slide-to="{{ loop.index-1 }}"
+                    aria-label="Slide {{ loop.index-1 }}"
+                    {% if loop.index == 1 %}
+                        class="active"
+                        aria-current="true"
+                    {% endif %}
+                ></button>
+            {% endfor %}
         </div>
 
         <div class="carousel-inner">
 
-            <div class="carousel-item active">
-                <div class="container">
-                    <div class="testimonial carousel-caption">
-                        <img
-                            src="{{ absolute_url(asset('undraw_pic_profile_re_7g2h.svg', 'img')) }}"
-                            alt="user"
-                            class="rounded-circle mb-3"
-                        >
-                        <p>"I got my dream job thanks to this resume builder! The AI suggestions were spot on."</p>
-                        <h5>Jane Doe</h5>
+            {% for item in data.items %}
+                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                    <div class="container">
+                        <div class="testimonial carousel-caption">
+                            <img
+                                src="{{ absolute_url(asset( item.thumb, 'img')) }}"
+                                alt="{{ item.head }}"
+                                class="rounded-circle mb-3"
+                            >
+                            <p>{{ item.description }}</p>
+                            <h5>{{ item.head }}</h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="testimonial carousel-caption">
-                        <img
-                            src="{{ absolute_url(asset('undraw_profile_pic_re_iwgo.svg', 'img')) }}"
-                            alt="user"
-                            class="rounded-circle mb-3"
-                        >
-                        <p>"This service is amazing! I created a professional resume in just a few minutes."</p>
-                        <h5>John Smith</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="carousel-item">
-                <div class="container">
-                    <div class="testimonial carousel-caption">
-                        <img
-                            src="{{ absolute_url(asset('undraw_female_avatar_efig.svg', 'img')) }}"
-                            alt="user"
-                            class="rounded-circle mb-3"
-                        >
-                        <p>"The AI did an incredible job tailoring my resume to the job I wanted. Highly recommend!"</p>
-                        <h5>Emily Johnson</h5>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
 
         </div>
 

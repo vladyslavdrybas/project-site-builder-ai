@@ -39,10 +39,10 @@
 
 <div id="home"></div>
 
-{% if data.parts.header.isActive %}
+{% if data.parts.header is defined and data.parts.header.isActive %}
 <div id="header" class="fixed-top">
     {% block header %}
-        {% include "_parts/header/testLaunch.html.twig" with {'data': data.parts.header.data}%}
+        {% include "_parts/header/testLaunch.html.twig" with {'data': data.parts.header.data} %}
     {% endblock %}
 
     <div>
@@ -53,13 +53,35 @@
 
 {% block content %}
     <div id="page-landing">
-        {% include '_parts/hero/testLaunch.html.twig' %}
-        {% include '_parts/features/testLaunch.html.twig' %}
-        {% include '_parts/how-it-works/testLaunch.html.twig' %}
-        {% include '_parts/testimonial/testLaunchCarousel.html.twig' %}
-        {% include '_parts/pricing/testLaunch.html.twig' %}
-        {% include '_parts/newsletter/testLaunch.html.twig' %}
-        {% include '_parts/footer/testLaunch.html.twig' %}
+
+        {% if data.parts.hero is defined and data.parts.hero.isActive %}
+            {% include '_parts/hero/testLaunch.html.twig'  with {'data': data.parts.hero.data} %}
+        {% endif %}
+
+        {% if data.parts.features is defined and data.parts.features.isActive %}
+            {% include '_parts/features/testLaunch.html.twig'  with {'data': data.parts.features.data} %}
+        {% endif %}
+
+        {% if data.parts.howitworks is defined and data.parts.howitworks.isActive %}
+            {% include '_parts/how-it-works/testLaunch.html.twig'  with {'data': data.parts.howitworks.data} %}
+        {% endif %}
+
+        {% if data.parts.testimonial is defined and data.parts.testimonial.isActive %}
+            {% include '_parts/testimonial/testLaunchCarousel.html.twig'  with {'data': data.parts.testimonial.data} %}
+        {% endif %}
+
+        {% if data.parts.pricing is defined and data.parts.pricing.isActive %}
+            {% include '_parts/pricing/testLaunch.html.twig'  with {'data': data.parts.pricing.data} %}
+        {% endif %}
+
+        {% if data.parts.newsletter is defined and data.parts.newsletter.isActive %}
+            {% include '_parts/newsletter/testLaunch.html.twig'  with {'data': data.parts.newsletter.data} %}
+        {% endif %}
+
+        {% if data.parts.footer is defined and data.parts.footer.isActive %}
+            {% include '_parts/footer/testLaunch.html.twig'  with {'data': data.parts.footer.data} %}
+        {% endif %}
+
     </div>
 
 {#    {% include 'landing-page/components/sections/checkout/simple.html.twig' %}#}

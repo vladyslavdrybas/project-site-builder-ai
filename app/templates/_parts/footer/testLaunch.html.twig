@@ -1,16 +1,26 @@
 <!-- Footer Section -->
 <footer class="footer">
     <div class="container">
-        <p>&copy; 2024 AI Resume Builder. All Rights Reserved.</p>
-        <p>
-            <a href="#" class="text-black">Privacy Policy</a> |
-            <a href="#" class="text-black">Terms of Service</a> |
-            <a href="#" class="text-black">Contact Us</a>
-        </p>
-        <p>
-            <a href="#"><img src="{{ absolute_url(asset('social-icons/5279114_linkedin_network_social network_linkedin logo_icon.svg', 'img')) }}" alt="linkedin"></a>
-            <a href="#"><img src="{{ absolute_url(asset('social-icons/5279115_chat bubble_facebook_messenger_messenger logo_icon.png', 'img')) }}" alt="facebook"></a>
-            <a href="#"><img src="{{ absolute_url(asset('social-icons/5279120_play_video_youtube_youtuble logo_icon.png', 'img')) }}" alt="twitter"></a>
-        </p>
+
+        {% if data.head is defined and data.head is not null and data.head|length > 0 %}
+            <div class="row">
+                <div class="col mb-5">
+                    <h2>{{ data.head }}</h2>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <p>&copy; 2024 {{ data.description }}</p>
+            <p>
+                <a role="button" class="text-black">Privacy Policy</a> |
+                <a role="button" class="text-black">Terms of Service</a>
+            </p>
+            <p>
+                {% for social in data.items %}
+                <a href="{{ social.link }}"><img src="{{ absolute_url(asset('social-icons/' ~ social.thumb, 'img')) }}" alt="{{ social.alt }}"></a>
+                {% endfor %}
+            </p>
+        </div>
     </div>
 </footer>
