@@ -1,0 +1,79 @@
+<!-- Testimonials Section -->
+<section id="testimonials" class="testimonials">
+    <div class="container text-center">
+
+        <div class="row featurette">
+            <div class="col mb-5">
+                <h2>Reviews</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="testimonialsCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+
+        <div class="carousel-inner">
+
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="testimonial carousel-caption">
+                        <img
+                            src="{{ absolute_url(asset('undraw_pic_profile_re_7g2h.svg', 'img')) }}"
+                            alt="user"
+                            class="rounded-circle mb-3"
+                        >
+                        <p>"I got my dream job thanks to this resume builder! The AI suggestions were spot on."</p>
+                        <h5>Jane Doe</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="testimonial carousel-caption">
+                        <img
+                            src="{{ absolute_url(asset('undraw_profile_pic_re_iwgo.svg', 'img')) }}"
+                            alt="user"
+                            class="rounded-circle mb-3"
+                        >
+                        <p>"This service is amazing! I created a professional resume in just a few minutes."</p>
+                        <h5>John Smith</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="testimonial carousel-caption">
+                        <img
+                            src="{{ absolute_url(asset('undraw_female_avatar_efig.svg', 'img')) }}"
+                            alt="user"
+                            class="rounded-circle mb-3"
+                        >
+                        <p>"The AI did an incredible job tailoring my resume to the job I wanted. Highly recommend!"</p>
+                        <h5>Emily Johnson</h5>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+
+    </div>
+
+</section>

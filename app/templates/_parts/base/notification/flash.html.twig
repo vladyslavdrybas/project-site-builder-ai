@@ -1,0 +1,23 @@
+{# read and display several types of flash messages #}
+{#{% for label, messages in app.flashes(['success', 'warning', 'notice', 'verify_email_error']) %}#}
+{%
+    set appFlashMessageLabel = 'primary'
+%}
+{% for label, messages in app.flashes() %}
+    {% if ('error' in label or 'warning' in label or 'notice' in label or 'danger' in label) %}
+        {% set appFlashMessageLabel = 'danger' %}
+    {% elseif 'success' in label %}
+        {% set appFlashMessageLabel = 'success' %}
+    {% elseif 'info' in label %}
+        {% set appFlashMessageLabel = 'info' %}
+    {% endif %}
+
+    <div class="container mx-auto">
+        {% for message in messages %}
+            <div class="flash-{{ label }} alert alert-{{ appFlashMessageLabel }} alert-dismissible fade show mt-1" role="alert" aria-label="Close">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}

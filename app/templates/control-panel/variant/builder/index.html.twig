@@ -2,21 +2,37 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
+    <style>
+        html, body {
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <div class="container-fluid vh-100">
         <div class="row">
 
             <div
-                class="col-md-4 col-lg-3 bg-gradient-primary min-vh-100 p-1 border-r-1 border-primary"
-                style="
-                    position: relative;
-                    z-index: 999999;
+                class="
+                    scroll-primary
+                    col-md-4
+                    col-lg-3
+                    bg-gradient-primary
+                    h-100
+                    p-1
+                    border-r-1
+                    border-primary
+                    overflow-y-auto
+                    vh-100
                 "
             >
-                <form
-                    class=""
-                    method="post"
-                    action="{{ absolute_url(path('cp_variant_builder', {'variant': variant.id})) }}"
-                >
+
+                {{ form_start(builderForm, {'method': 'POST'}) }}
+{#                <form#}
+{#                    class=""#}
+{#                    method="post"#}
+{#                    action="{{ absolute_url(path('cp_variant_builder', {'variant': variant.id})) }}"#}
+{#                >#}
                     {% include 'control-panel/variant/builder/sidebar/header.html.twig' %}
 
                     {% include 'control-panel/variant/builder/sidebar/navigation.html.twig' %}
@@ -38,37 +54,52 @@
                     {% include 'control-panel/variant/builder/sidebar/design-settings.html.twig' %}
 
                     <div class="d-flex flex-row justify-content-between">
-                        <button class="btn btn-primary rounded-5 mt-3">Save</button>
+                        <button type="submit" class="btn btn-primary rounded-5 mt-3">Save</button>
                         <button class="btn btn-primary rounded-5 mt-3">Preview</button>
                     </div>
-                </form>
+{#                </form>#}
+
+                {{ form_end(builderForm) }}
             </div>
 
-            <div class="col-md-8 col-lg-9 p-0">
-                <div
-                    id="header"
-                    class="fixed-top"
-                    style="
-                        position: relative;
-                        z-index: 999;
+            <div class="col-md-8 col-lg-9 p-0 overflow-hidden">
+{#                <div#}
+{#                    id="header"#}
+{#                    class="fixed-top"#}
+{#                    style="#}
+{#                        position: relative;#}
+{#                        z-index: 999;#}
+{#                    "#}
+{#                >#}
+{#                    {% include "landing-page/components/sections/header/fixed-top.html.twig" %}#}
+{#                </div>#}
+
+{#                {% include "landing-page/components/sections/first-screen/hero-with-button-and-cover.html.twig" %}#}
+
+{#                {% include "landing-page/components/sections/features/3-in-row.html.twig" %}#}
+
+{#                {% include "landing-page/components/sections/how-it-works/3-in-column-with-covers.html.twig" %}#}
+
+{#                {% include "landing-page/components/sections/testimonial/carousel.html.twig" %}#}
+
+{#                {% include "landing-page/components/sections/pricing/standard-3-in-row.html.twig" %}#}
+
+{#                {% include "landing-page/components/sections/newsletter/standard.html.twig" %}#}
+
+{#                {% include "landing-page/components/sections/footer/standard.html.twig" %}#}
+
+                <iframe
+                    class="
+                        scroll-primary
+                        w-100
+                        vh-100
+                        overflow-auto
+                        border-0
                     "
-                >
-                    {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
-                </div>
+                    src="{{ absolute_url(path('cp_variant_preview', {'variant': variant.id})) }}"
+                    title="preview">
+                </iframe>
 
-                {% include "landing-page/components/sections/first-screen/hero-with-button-and-cover.html.twig" %}
-
-                {% include "landing-page/components/sections/features/3-in-row.html.twig" %}
-
-                {% include "landing-page/components/sections/how-it-works/3-in-column-with-covers.html.twig" %}
-
-                {% include "landing-page/components/sections/testimonial/carousel.html.twig" %}
-
-                {% include "landing-page/components/sections/pricing/standard-3-in-row.html.twig" %}
-
-                {% include "landing-page/components/sections/newsletter/standard.html.twig" %}
-
-                {% include "landing-page/components/sections/footer/standard.html.twig" %}
             </div>
 
         </div>

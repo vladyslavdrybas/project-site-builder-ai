@@ -6,6 +6,8 @@ body {
 }
 
 #first-screen,
+#cover,
+#hero,
 #testimonialsCarousel,
 .pricing-2,
 .newsletter,
@@ -295,4 +297,9 @@ body {
 .border-primary {
     border-width: 0.1rem;
     border-color: var(--paletter-color-primary);
+}
+
+.header-brand-logo {
+    height: 2.1rem;
+    width: auto;
 }

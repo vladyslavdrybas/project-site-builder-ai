@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            {% if meta is defined and meta.title is defined %}
+                {{ meta.title }}
+            {% elseif title is defined %}
+                {{ title }}
+            {% else %}
+                Welcome
+            {% endif %}
+        {% endblock %}
+    </title>
+
+    {% if meta is defined %}
+        {% include '_parts/base/meta.html.twig' %}
+    {% endif %}
+
+    <style>
+        @font-face {
+            font-family: 'Aller Regular'; /*a name to be used later*/
+            src: url('{{ absolute_url(asset('fonts/Aller_Rg.ttf', 'css')) }}'); /*URL to font*/
+        }
+    </style>
+
+    <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap-icons.min.css', 'bootstrap')) }}">
+    <link href="{{ absolute_url(asset('css/bootstrap.min.css', 'bootstrap')) }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ absolute_url(asset('style.css', 'css')) }}">
+
+</head>
+
+<body class="">
+
+{% include'_parts/base/icons.html.twig' %}
+
+<div id="home"></div>
+
+{% if data.parts.header.isActive %}
+<div id="header" class="fixed-top">
+    {% block header %}
+        {% include "_parts/header/testLaunch.html.twig" with {'data': data.parts.header.data}%}
+    {% endblock %}
+
+    <div>
+        {% embed "_parts/base/notification/flash.html.twig" %}{% endembed %}
+    </div>
+</div>
+{% endif %}
+
+{% block content %}
+    <div id="page-landing">
+        {% include '_parts/hero/testLaunch.html.twig' %}
+        {% include '_parts/features/testLaunch.html.twig' %}
+        {% include '_parts/how-it-works/testLaunch.html.twig' %}
+        {% include '_parts/testimonial/testLaunchCarousel.html.twig' %}
+        {% include '_parts/pricing/testLaunch.html.twig' %}
+        {% include '_parts/newsletter/testLaunch.html.twig' %}
+        {% include '_parts/footer/testLaunch.html.twig' %}
+    </div>
+
+{#    {% include 'landing-page/components/sections/checkout/simple.html.twig' %}#}
+{% endblock %}
+
+<script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
+
+{#{% block scriptsbottom %}#}
+{#<script type="application/javascript">#}
+{#    function scrollTo(hash) {#}
+{#        location.hash = "#" + hash;#}
+{#    }#}
+
+{#    const btnSubmitCheckout = document.getElementById("btn-submit-checkout");#}
+{#    const btnBackToLanding = document.getElementById("btn-back-to-landing");#}
+{#    const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");#}
+{#    const alerts = document.querySelectorAll(".alert");#}
+{#    const pageLanding = document.getElementById("page-landing");#}
+{#    const pageCheckout = document.getElementById("page-checkout");#}
+
+{#    btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {#}
+{#        console.log(this);#}
+{#        e.preventDefault();#}
+{#    });#}
+
+{#    btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {#}
+{#        console.log(this);#}
+{#        e.preventDefault();#}
+{#        pageLanding && pageLanding.classList.toggle("d-none");#}
+{#        pageCheckout && pageCheckout.classList.toggle("d-none");#}
+{#        scrollTo('pricing');#}
+{#    });#}
+
+{#    btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {#}
+{#        console.log(this);#}
+{#        e.preventDefault();;#}
+{#        pageLanding && pageLanding.classList.toggle("d-none");#}
+{#        pageCheckout && pageCheckout.classList.toggle("d-none");#}
+{#    }));#}
+
+{#    alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {#}
+{#        console.log(this);#}
+{#        e.preventDefault();#}
+{#        e.target.remove();#}
+{#    }));#}
+{#</script>#}
+{#{% endblock %}#}
+
+</body>
+</html>

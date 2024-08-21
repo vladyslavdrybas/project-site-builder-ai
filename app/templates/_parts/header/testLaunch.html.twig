@@ -1,0 +1,56 @@
+<!-- Header Section -->
+<header class="header">
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container">
+
+            <a class="navbar-brand" href="#">
+
+                {% if data.brand.logo is defined and data.brand.logo is not null %}
+                    <div
+                        class="header-brand-logo"
+                    >
+                        <img
+                            class="h-100"
+                            src="{{ absolute_url(asset(data.brand.logo, 'img')) }}"
+                            alt="icon"
+                        >
+                    </div>
+                {% else %}
+                    {{ data.brand.text }}
+                {% endif %}
+
+            </a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    {% for key, el in data.navigation %}
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ el }}">{{ key }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <a
+                    href="{{ data.callToActionButton.link }}"
+                    class="btn btn-primary rounded-5 btn-goto-payment ms-auto"
+                >
+                    {{ data.callToActionButton.text }}
+                </a>
+
+            </div>
+
+        </div>
+    </nav>
+</header>
