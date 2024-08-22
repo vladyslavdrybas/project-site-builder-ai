@@ -42,7 +42,7 @@
 {% if data.parts.header is defined and data.parts.header.isActive %}
 <div id="header" class="fixed-top">
     {% block header %}
-        {% include "_parts/header/testLaunch.html.twig" with {'data': data.parts.header.data} %}
+        {% include '_parts/header/' ~ data.parts.header.template ~ '.html.twig' with {'data': data.parts.header.data} %}
     {% endblock %}
 
     <div>
@@ -55,31 +55,31 @@
     <div id="page-landing">
 
         {% if data.parts.hero is defined and data.parts.hero.isActive %}
-            {% include '_parts/hero/testLaunch.html.twig'  with {'data': data.parts.hero.data} %}
+            {% include '_parts/hero/' ~ data.parts.hero.template ~ '.html.twig'  with {'data': data.parts.hero.data} %}
         {% endif %}
 
         {% if data.parts.features is defined and data.parts.features.isActive %}
-            {% include '_parts/features/testLaunch.html.twig'  with {'data': data.parts.features.data} %}
+            {% include '_parts/features/' ~ data.parts.features.template ~ '.html.twig'  with {'data': data.parts.features.data} %}
         {% endif %}
 
         {% if data.parts.howitworks is defined and data.parts.howitworks.isActive %}
-            {% include '_parts/how-it-works/testLaunch.html.twig'  with {'data': data.parts.howitworks.data} %}
+            {% include '_parts/how-it-works/' ~ data.parts.howitworks.template ~ '.html.twig'  with {'data': data.parts.howitworks.data} %}
         {% endif %}
 
         {% if data.parts.testimonial is defined and data.parts.testimonial.isActive %}
-            {% include '_parts/testimonial/testLaunchCarousel.html.twig'  with {'data': data.parts.testimonial.data} %}
+            {% include '_parts/testimonial/' ~ data.parts.testimonial.template ~ '.html.twig'  with {'data': data.parts.testimonial.data} %}
         {% endif %}
 
         {% if data.parts.pricing is defined and data.parts.pricing.isActive %}
-            {% include '_parts/pricing/testLaunch.html.twig'  with {'data': data.parts.pricing.data} %}
+            {% include '_parts/pricing/' ~ data.parts.pricing.template ~ '.html.twig'  with {'data': data.parts.pricing.data} %}
         {% endif %}
 
         {% if data.parts.newsletter is defined and data.parts.newsletter.isActive %}
-            {% include '_parts/newsletter/testLaunch.html.twig'  with {'data': data.parts.newsletter.data} %}
+            {% include '_parts/newsletter/' ~ data.parts.newsletter.template ~ '.html.twig'  with {'data': data.parts.newsletter.data} %}
         {% endif %}
 
         {% if data.parts.footer is defined and data.parts.footer.isActive %}
-            {% include '_parts/footer/testLaunch.html.twig'  with {'data': data.parts.footer.data} %}
+            {% include '_parts/footer/' ~ data.parts.footer.template ~ '.html.twig'  with {'data': data.parts.footer.data} %}
         {% endif %}
 
     </div>
@@ -89,46 +89,46 @@
 
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
 
-{#{% block scriptsbottom %}#}
-{#<script type="application/javascript">#}
-{#    function scrollTo(hash) {#}
-{#        location.hash = "#" + hash;#}
-{#    }#}
+{% block scriptsbottom %}
+<script type="application/javascript">
+    function scrollTo(hash) {
+        location.hash = "#" + hash;
+    }
 
-{#    const btnSubmitCheckout = document.getElementById("btn-submit-checkout");#}
-{#    const btnBackToLanding = document.getElementById("btn-back-to-landing");#}
-{#    const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");#}
-{#    const alerts = document.querySelectorAll(".alert");#}
-{#    const pageLanding = document.getElementById("page-landing");#}
-{#    const pageCheckout = document.getElementById("page-checkout");#}
+    const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
+    const btnBackToLanding = document.getElementById("btn-back-to-landing");
+    const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");
+    const alerts = document.querySelectorAll(".alert");
+    const pageLanding = document.getElementById("page-landing");
+    const pageCheckout = document.getElementById("page-checkout");
 
-{#    btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {#}
-{#        console.log(this);#}
-{#        e.preventDefault();#}
-{#    });#}
+    btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+    });
 
-{#    btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {#}
-{#        console.log(this);#}
-{#        e.preventDefault();#}
-{#        pageLanding && pageLanding.classList.toggle("d-none");#}
-{#        pageCheckout && pageCheckout.classList.toggle("d-none");#}
-{#        scrollTo('pricing');#}
-{#    });#}
+    btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+        pageLanding && pageLanding.classList.toggle("d-none");
+        pageCheckout && pageCheckout.classList.toggle("d-none");
+        scrollTo('pricing');
+    });
 
-{#    btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {#}
-{#        console.log(this);#}
-{#        e.preventDefault();;#}
-{#        pageLanding && pageLanding.classList.toggle("d-none");#}
-{#        pageCheckout && pageCheckout.classList.toggle("d-none");#}
-{#    }));#}
+    btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();;
+        pageLanding && pageLanding.classList.toggle("d-none");
+        pageCheckout && pageCheckout.classList.toggle("d-none");
+    }));
 
-{#    alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {#}
-{#        console.log(this);#}
-{#        e.preventDefault();#}
-{#        e.target.remove();#}
-{#    }));#}
-{#</script>#}
-{#{% endblock %}#}
+    alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {
+        console.log(this);
+        e.preventDefault();
+        e.target.remove();
+    }));
+</script>
+{% endblock %}
 
 </body>
 </html>

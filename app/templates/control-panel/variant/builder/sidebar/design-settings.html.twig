@@ -9,39 +9,12 @@
         aria-expanded="true"
         aria-controls="collapseDesignSettingsBuilderForm"
     >
-        Design Settings
+        {{ builderForm.designSettings.vars.label }}
     </button>
 
     <div class="collapse card mt-1 p-1" id="collapseDesignSettingsBuilderForm">
 
-        <div class="mb-3">
-            <label for="basic-url" class="form-label">Colors</label>
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">primary</span>
-                <span class="input-group-text">#</span>
-                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
-            </div>
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">secondary</span>
-                <span class="input-group-text">#</span>
-                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
-            </div>
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">success</span>
-                <span class="input-group-text">#</span>
-                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
-            </div>
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">error</span>
-                <span class="input-group-text">#</span>
-                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
-            </div>
-            <div class="input-group">
-                <span class="input-group-text" id="basic-addon1">info</span>
-                <span class="input-group-text">#</span>
-                <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4">
-            </div>
-        </div>
+        {{ form_row(builderForm.designSettings, {'label' : false}) }}
 
     </div>
 </div>

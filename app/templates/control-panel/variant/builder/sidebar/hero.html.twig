@@ -1,0 +1,20 @@
+{% set blockName = 'cover_v1' %}
+
+<div class="d-flex flex-column justify-content-center align-content-center mb-2">
+    <button
+        class="btn btn-primary rounded-1"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseCoverBuilderForm"
+        aria-expanded="true"
+        aria-controls="collapseCoverBuilderForm"
+    >
+        {{ builderForm.hero.vars.label }}
+    </button>
+
+    <div class="collapse card mt-1 p-1" id="collapseCoverBuilderForm">
+
+        {{ form_row(builderForm.hero, {'label' : false}) }}
+
+    </div>
+</div>

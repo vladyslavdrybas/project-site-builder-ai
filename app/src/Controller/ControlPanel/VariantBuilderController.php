@@ -6,6 +6,7 @@ namespace App\Controller\ControlPanel;
 use App\Constants\RouteRequirements;
 use App\Entity\Variant;
 use App\Form\CommandCenter\VariantBuilder\VariantBuilderFormType;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,9 +30,7 @@ class VariantBuilderController extends AbstractControlPanelController
         Variant $variant
     ): Response {
 
-        $builderForm = $this->createForm(VariantBuilderFormType::class, [
-
-        ]);
+        $builderForm = $this->createForm(VariantBuilderFormType::class, $variant->getMeta());
 
         $builderForm->handleRequest($request);
 
@@ -40,10 +39,25 @@ class VariantBuilderController extends AbstractControlPanelController
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
             dump('Submitted');
             dump($builderForm->getData());
-            $request->getSession()->set(
-                'variantBuilderData',
-                $this->builderData($variant)
-            );
+
+            dump([
+               $builderForm->get('saveBtn')->isClicked(),
+               $builderForm->get('previewBtn')->isClicked(),
+            ]);
+
+
+
+            if ($builderForm->get('saveBtn')->isClicked()) {
+
+            }
+
+            if ($builderForm->get('previewBtn')->isClicked()) {
+                $this->previewBtnHandler(
+                    $request,
+                    $variant
+                );
+            }
+
         }
 
         return $this->render(
@@ -78,6 +92,24 @@ class VariantBuilderController extends AbstractControlPanelController
         );
     }
 
+    protected function saveBtnHandler(
+        Variant $variant
+    ): void {
+
+    }
+
+    protected function previewBtnHandler(
+        Request $request,
+        Variant $variant
+    ): void {
+        $request->getSession()->set(
+            'variantBuilderData',
+            $this->builderData($variant)
+        );
+
+
+    }
+
     protected function getVariantMeta(
         Request $request,
         Variant $variant
@@ -92,11 +124,13 @@ class VariantBuilderController extends AbstractControlPanelController
     }
 
     protected function builderData(
-        Variant $variant
+        Variant $variant,
+        ?FormTypeInterface $builderForm = null
     ): array {
         return [
             'variant_id' => $variant->getRawId(),
             'project_id' => $variant->getProject()->getRawId(),
+            'design' => [],
             'parts' => [
                 'header' => [
                     'isActive' => true,
@@ -122,7 +156,7 @@ class VariantBuilderController extends AbstractControlPanelController
                     ],
                 ],
                 'hero' => [
-                    'isActive' => false,
+                    'isActive' => true,
                     'position' => 1,
                     'type' => 'hero',
                     'template' => 'testLaunch',
@@ -294,7 +328,7 @@ class VariantBuilderController extends AbstractControlPanelController
                     'type' => 'newsletter',
                     'template' => 'testLaunch',
                     'data' => [
-                        'head' => 'Stay Updated',
+                        'head' => 'Stay Updated Always',
                         'description' => 'Subscribe to our newsletter for tips on resume writing and job hunting.',
                         'callToActionButton' => [
                             'text' => 'Subscribe',
