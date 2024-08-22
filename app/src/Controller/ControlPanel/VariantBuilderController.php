@@ -4,12 +4,29 @@ declare(strict_types=1);
 namespace App\Controller\ControlPanel;
 
 use App\Constants\RouteRequirements;
+use App\DataTransferObject\Variant\Meta\BrandDto;
+use App\DataTransferObject\Variant\Meta\CallToActionButtonDto;
+use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
+use App\DataTransferObject\Variant\Meta\FeaturesPartDto;
+use App\DataTransferObject\Variant\Meta\FooterPartDto;
+use App\DataTransferObject\Variant\Meta\HeaderPartDataDto;
+use App\DataTransferObject\Variant\Meta\HeaderPartDto;
+use App\DataTransferObject\Variant\Meta\HeroPartDataDto;
+use App\DataTransferObject\Variant\Meta\HeroPartDto;
+use App\DataTransferObject\Variant\Meta\HowItWorksPartDto;
+use App\DataTransferObject\Variant\Meta\NewsletterPartDto;
+use App\DataTransferObject\Variant\Meta\PartsDto;
+use App\DataTransferObject\Variant\Meta\PricingPartDto;
+use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
+use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\Variant;
 use App\Form\CommandCenter\VariantBuilder\VariantBuilderFormType;
+use App\Repository\VariantRepository;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route(
     "/v",
@@ -27,37 +44,75 @@ class VariantBuilderController extends AbstractControlPanelController
     )]
     public function show(
         Request $request,
-        Variant $variant
+        Variant $variant,
+        SerializerInterface $serializer,
+        VariantRepository $variantRepository
     ): Response {
 
-        $builderForm = $this->createForm(VariantBuilderFormType::class, $variant->getMeta());
+        $meta = $this->getVariantMeta($request, $variant);
+
+        $variantMetaDto = $serializer->denormalize(
+            $meta,
+            VariantMetaDto::class
+        );
+
+        $builderForm = $this->createForm(VariantBuilderFormType::class, $variantMetaDto);
 
         $builderForm->handleRequest($request);
 
-        $data = $this->getVariantMeta($request, $variant);
-
+dump($meta);
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
             dump('Submitted');
             dump($builderForm->getData());
+            dump($builderForm->get('header')->getData());
+            dump($builderForm->get('navigationLinksText'));
 
             dump([
                $builderForm->get('saveBtn')->isClicked(),
                $builderForm->get('previewBtn')->isClicked(),
             ]);
 
+            $formData = [
+                'variantId' => $builderForm->get('variantId')->getData(),
+                'projectId' => $builderForm->get('projectId')->getData(),
+                'parts' => [
+                    'header' => $builderForm->get('header')->getData(),
+                    'navigationLinksText' => $builderForm->get('navigationLinksText')->getData(),
+                    'hero' => $builderForm->get('hero')->getData(),
+                    'features' => $builderForm->get('features')->getData(),
+                    'howitworks' => $builderForm->get('howitworks')->getData(),
+                    'testimonial' => $builderForm->get('testimonial')->getData(),
+                    'subscriptions' => $builderForm->get('subscriptions')->getData(),
+                    'newsletter' => $builderForm->get('newsletter')->getData(),
+                    'footer' => $builderForm->get('footer')->getData(),
+                ],
+                'design' => $builderForm->get('designSettings')->getData(),
+            ];
 
+            dump($formData);
+
+            $variantMeta = $this->buildVariantMetaFromForm($formData);
+            $variantMetaArray = $serializer->normalize($variantMeta);
+            dump($variantMeta);
+
+            if ($builderForm->get('cancelBtn')->isClicked()) {
+                $request->getSession()->remove('variantBuilderData');
+            }
 
             if ($builderForm->get('saveBtn')->isClicked()) {
-
+                $variant->setMeta($variantMetaArray);
+                $variantRepository->add($variant);
+                $variantRepository->save();
             }
 
             if ($builderForm->get('previewBtn')->isClicked()) {
-                $this->previewBtnHandler(
-                    $request,
-                    $variant
+                dump($variantMetaArray);
+
+                $request->getSession()->set(
+                    'variantBuilderData',
+                    $variantMetaArray
                 );
             }
-
         }
 
         return $this->render(
@@ -65,7 +120,7 @@ class VariantBuilderController extends AbstractControlPanelController
             [
                 'variant' => $variant,
                 'builderForm' => $builderForm,
-                'data' => $data,
+                'data' => $meta,
             ]
         );
     }
@@ -79,15 +134,15 @@ class VariantBuilderController extends AbstractControlPanelController
         Request $request,
         Variant $variant
     ): Response {
-        $data = $this->getVariantMeta($request, $variant);
+        $meta = $this->getVariantMeta($request, $variant);
 
-        dump($data);
+        dump($meta);
 
         return $this->render(
             '_parts/base/base.html.twig',
             [
                 'variant' => $variant,
-                'data' => $data,
+                'data' => $meta,
             ]
         );
     }
@@ -98,18 +153,6 @@ class VariantBuilderController extends AbstractControlPanelController
 
     }
 
-    protected function previewBtnHandler(
-        Request $request,
-        Variant $variant
-    ): void {
-        $request->getSession()->set(
-            'variantBuilderData',
-            $this->builderData($variant)
-        );
-
-
-    }
-
     protected function getVariantMeta(
         Request $request,
         Variant $variant
@@ -117,10 +160,102 @@ class VariantBuilderController extends AbstractControlPanelController
         $data = $request->getSession()->get('variantBuilderData');
 
         if (null === $data) {
-            $data = $this->builderData($variant);
+            $data = $this->buildMetaFromVariant($variant);
         }
 
         return $data;
+    }
+
+    protected function buildVariantMetaFromForm(
+        array $data
+    ): VariantMetaDto {
+        $header = new HeaderPartDto(
+          new HeaderPartDataDto(
+            new BrandDto(
+                null, // file link
+                $data['parts']['header']['logoText'],
+            ),
+            new CallToActionButtonDto(
+                $data['parts']['header']['ctaBtnText'],
+                '#pricing'
+            ),
+            $data['parts']['navigationLinksText']
+          ),
+          $data['parts']['header']['isActive'],
+        );
+
+        $hero = new HeroPartDto(
+            new HeroPartDataDto(
+                $data['parts']['hero']['head'],
+                $data['parts']['hero']['description'],
+                new CallToActionButtonDto(
+                    $data['parts']['hero']['ctaBtnText'],
+                    '#pricing'
+                )
+            ),
+            $data['parts']['hero']['isActive']
+        );
+
+        $features = new FeaturesPartDto(
+
+        );
+
+        $howitworks = new HowItWorksPartDto(
+
+        );
+
+        $testimonial = new TestimonialPartDto(
+
+        );
+
+        $pricing = new PricingPartDto(
+
+        );
+
+        $newsletter = new NewsletterPartDto(
+
+        );
+
+        $footer = new FooterPartDto(
+
+        );
+
+        $parts = new PartsDto(
+            $header,
+            $hero,
+            $features,
+            $howitworks,
+            $testimonial,
+            $pricing,
+            $newsletter,
+            $footer,
+        );
+        $design = new DesignSettingsDto();
+
+        $vmDto = new VariantMetaDto(
+            $data['variantId'],
+            $data['projectId'],
+            $parts,
+            $design
+        );
+
+        return $vmDto;
+    }
+
+    protected function buildMetaFromVariant(
+        Variant $variant
+    ): array {
+        $meta = $variant->getMeta();
+
+        if (!isset($meta['variantId'])) {
+            $meta['variantId'] = $variant->getRawId();
+        }
+
+        if (!isset($meta['projectId'])) {
+            $meta['projectId'] = $variant->getProject()->getRawId();
+        }
+
+        return $meta;
     }
 
     protected function builderData(
@@ -128,8 +263,8 @@ class VariantBuilderController extends AbstractControlPanelController
         ?FormTypeInterface $builderForm = null
     ): array {
         return [
-            'variant_id' => $variant->getRawId(),
-            'project_id' => $variant->getProject()->getRawId(),
+            'variantId' => $variant->getRawId(),
+            'projectId' => $variant->getProject()->getRawId(),
             'design' => [],
             'parts' => [
                 'header' => [
@@ -143,11 +278,11 @@ class VariantBuilderController extends AbstractControlPanelController
                             'text' => 'AI/CV',
                         ],
                         'navigation' => [
-                            'Home' => '#home',
-                            'Features' => '#features',
-                            'Testimonials' => '#testimonials',
-                            'Pricing' => '#pricing',
-                            'Contact' => '#contact',
+                            'home' => 'Home',
+                            'features' => 'Features',
+                            'testimonials' => 'Testimonials',
+                            'pricing' => 'Pricing',
+                            'contact' => 'Contact',
                         ],
                         'callToActionButton' => [
                             'text' => 'Get Started',

@@ -50,15 +50,9 @@
                     {% include 'control-panel/variant/builder/sidebar/design-settings.html.twig' %}
 
                     <div class="d-flex flex-row justify-content-between  mt-3">
-{#                        <button type="submit" name="actionBtn" value="save"#}
-{#                                class="btn btn-primary rounded-5">Save</button>#}
-{#                        <button type="submit" name="actionBtn" value="preview"#}
-{#                                class="btn btn-primary rounded-5">Preview</button>#}
-
-
+                        {{ form_row(builderForm.cancelBtn) }}
                         {{ form_row(builderForm.saveBtn) }}
                         {{ form_row(builderForm.previewBtn) }}
-
                     </div>
 
                 {{ form_end(builderForm) }}

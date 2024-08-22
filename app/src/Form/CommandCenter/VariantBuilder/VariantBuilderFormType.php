@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\Form\CommandCenter\VariantBuilder;
 
+use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -20,7 +22,24 @@ class VariantBuilderFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var VariantMetaDto $data */
+        $data = $builder->getData();
+
+        dump($data);
+
         $builder
+            ->add('variantId',
+                HiddenType::class,
+                [
+                    'data' => $data->variantId,
+                ]
+            )
+            ->add('projectId',
+                HiddenType::class,
+                [
+                    'data' => $data->projectId,
+                ]
+            )
             ->add(
                 $builder->create(
                     'header',
@@ -28,6 +47,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Header',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -37,15 +57,22 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->header->isActive
                         ]
                     )
                     ->add('ctaBtnText',
                         TextType::class,
                         [
-                            'label' => 'Action Button Text'
+                            'label' => 'Action Button Text',
+                            'data' => $data->parts->header->data->callToActionButton->text
                         ]
                     )
-                    ->add('logoText', TextType::class, [])
+                    ->add('logoText',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->brand->text
+                        ]
+                    )
                     ->add('logoPathFile', FileType::class, [
                         'label' => 'Logo Image',
                         'mapped' => false,
@@ -70,31 +97,56 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Navigation Links Text',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('home',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['home']
+                        ]
                     )
                     ->add('hero',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['hero']
+                        ]
                     )
                     ->add('features',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['features']
+                        ]
                     )
                     ->add('howItWorks',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['howItWorks']
+                        ]
                     )
                     ->add('reviews',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['reviews']
+                        ]
                     )
                     ->add('pricing',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['pricing']
+                        ]
                     )
                     ->add('newsletter',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['newsletter']
+                        ]
                     )
                     ->add('contact',
-                        TextType::class
+                        TextType::class,
+                        [
+                            'data' => $data->parts->header->data->navigation['contact']
+                        ]
                     )
             )
             ->add(
@@ -104,6 +156,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Hero',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -113,10 +166,21 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->hero->isActive
                         ]
                     )
-                    ->add('header', TextType::class, [])
-                    ->add('description', TextareaType::class, [])
+                    ->add('head',
+                        TextType::class,
+                        [
+//                            'data' => $data->parts->hero->header
+                        ]
+                    )
+                    ->add('description',
+                        TextareaType::class,
+                        [
+//                            'data' => $data->parts->hero->description
+                        ]
+                    )
                     ->add('ctaBtnText',
                         TextType::class,
                         [
@@ -167,6 +231,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Features',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -270,6 +335,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'How It Works',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -379,6 +445,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Testimonials',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -411,6 +478,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Subscriptions',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -490,6 +558,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Newsletter',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -518,6 +587,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Footer',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('isActive',
@@ -567,6 +637,7 @@ class VariantBuilderFormType extends AbstractType
                     [
                         'label' => 'Design Settings',
                         'required' => false,
+                        'mapped' => false,
                     ]
                 )
                     ->add('primary',
@@ -584,6 +655,16 @@ class VariantBuilderFormType extends AbstractType
                     ->add('info',
                         TextType::class,
                     )
+            )
+            ->add(
+                'cancelBtn',
+                SubmitType::class,
+                [
+                    'label' => 'Cancel',
+                    'attr' => [
+                        'class' => 'btn btn-primary rounded-5',
+                    ],
+                ]
             )
             ->add(
                 'saveBtn',
@@ -611,7 +692,7 @@ class VariantBuilderFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-//            'data_class' => Variant::class,
+            'data_class' => VariantMetaDto::class,
         ]);
     }
 }

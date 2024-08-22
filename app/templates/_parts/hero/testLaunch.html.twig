@@ -4,26 +4,37 @@
         <div class="row justify-content-center align-items-center g-5">
 
             <div class="col-lg-6 text-start">
-                <h1 class="display-5 fw-bold lh-1 mb-3 text-white">{{ data.head }}</h1>
-                <p class="lead text-white">{{ data.description }}</p>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <a
-                        href="{{ data.callToActionButton.link }}"
-                        type="button"
-                        class="btn btn-light btn-lg px-2 me-md-2 rounded-5"
+                {% if data.head is defined and data.head is not null %}
+                    <h1 class="display-5 fw-bold lh-1 mb-3 text-white">{{ data.head }}</h1>
+                {% endif %}
+
+                {% if data.description is defined and data.description is not null %}
+                    <p class="lead text-white">{{ data.description }}</p>
+                {% endif %}
+
+                {% if data.callToActionButton is defined and data.callToActionButton is not null %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a
+                            href="{{ data.callToActionButton.link }}"
+                            type="button"
+                            class="btn btn-light btn-lg px-2 me-md-2 rounded-5"
+                        >
+                            {{ data.callToActionButton.text }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if data.thumb is defined and data.thumb is not null %}
+                <div class="col-10 col-sm-8 col-lg-6 d-none d-md-block">
+                    <img
+                        src="{{ absolute_url(asset( data.thumb , 'img')) }}"
+                        class="d-block mx-lg-auto img-fluid"
+                        alt="creativity"
+                        loading="lazy"
                     >
-                        {{ data.callToActionButton.text }}
-                    </a>
                 </div>
-            </div>
-            <div class="col-10 col-sm-8 col-lg-6 d-none d-md-block">
-                <img
-                    src="{{ absolute_url(asset( data.thumb , 'img')) }}"
-                    class="d-block mx-lg-auto img-fluid"
-                    alt="creativity"
-                    loading="lazy"
-                >
-            </div>
+            {% endif %}
 
         </div>
     </div>
