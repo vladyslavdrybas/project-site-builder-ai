@@ -7,16 +7,20 @@ use App\Constants\RouteRequirements;
 use App\DataTransferObject\Variant\Meta\BrandDto;
 use App\DataTransferObject\Variant\Meta\CallToActionButtonDto;
 use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
+use App\DataTransferObject\Variant\Meta\FeaturesPartDataDto;
 use App\DataTransferObject\Variant\Meta\FeaturesPartDto;
 use App\DataTransferObject\Variant\Meta\FooterPartDto;
 use App\DataTransferObject\Variant\Meta\HeaderPartDataDto;
 use App\DataTransferObject\Variant\Meta\HeaderPartDto;
 use App\DataTransferObject\Variant\Meta\HeroPartDataDto;
 use App\DataTransferObject\Variant\Meta\HeroPartDto;
+use App\DataTransferObject\Variant\Meta\HowItWorksPartDataDto;
 use App\DataTransferObject\Variant\Meta\HowItWorksPartDto;
 use App\DataTransferObject\Variant\Meta\NewsletterPartDto;
 use App\DataTransferObject\Variant\Meta\PartsDto;
 use App\DataTransferObject\Variant\Meta\PricingPartDto;
+use App\DataTransferObject\Variant\Meta\SubscriptionsPartDataDto;
+use App\DataTransferObject\Variant\Meta\SubscriptionsPartDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\Variant;
@@ -64,13 +68,6 @@ dump($meta);
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
             dump('Submitted');
             dump($builderForm->getData());
-            dump($builderForm->get('header')->getData());
-            dump($builderForm->get('navigationLinksText'));
-
-            dump([
-               $builderForm->get('saveBtn')->isClicked(),
-               $builderForm->get('previewBtn')->isClicked(),
-            ]);
 
             $formData = [
                 'variantId' => $builderForm->get('variantId')->getData(),
@@ -90,6 +87,7 @@ dump($meta);
             ];
 
             dump($formData);
+            dump($builderForm->get('features')->getData());
 
             $variantMeta = $this->buildVariantMetaFromForm($formData);
             $variantMetaArray = $serializer->normalize($variantMeta);
@@ -197,27 +195,64 @@ dump($meta);
         );
 
         $features = new FeaturesPartDto(
-
+            new FeaturesPartDataDto(
+                $data['parts']['features']['head'],
+                [
+                    'feature1' => $data['parts']['features']['feature1'],
+                    'feature2' => $data['parts']['features']['feature2'],
+                    'feature3' => $data['parts']['features']['feature3'],
+                ]
+            ),
+            $data['parts']['features']['isActive'],
         );
 
         $howitworks = new HowItWorksPartDto(
+            new HowItWorksPartDataDto(
+                $data['parts']['howitworks']['head'],
+                [
+                    'step1' => $data['parts']['howitworks']['step1'],
+                    'step2' => $data['parts']['howitworks']['step2'],
+                    'step3' => $data['parts']['howitworks']['step3'],
+                ]
+            ),
+            $data['parts']['howitworks']['isActive'],
 
         );
 
         $testimonial = new TestimonialPartDto(
-
+            $data['parts']['testimonial']['head'],
+            (int) $data['parts']['testimonial']['maxReviews'],
+            $data['parts']['testimonial']['isActive']
         );
 
-        $pricing = new PricingPartDto(
-
+        $pricing = new SubscriptionsPartDto(
+            new SubscriptionsPartDataDto(
+                $data['parts']['subscriptions']['head'],
+                [
+                    'plan1' => $data['parts']['subscriptions']['plan1'],
+                    'plan2' => $data['parts']['subscriptions']['plan2'],
+                    'plan3' => $data['parts']['subscriptions']['plan3'],
+                ]
+            ),
+            $data['parts']['subscriptions']['isActive'],
         );
 
         $newsletter = new NewsletterPartDto(
-
+            $data['parts']['newsletter']['head'],
+            $data['parts']['newsletter']['description'],
+            $data['parts']['newsletter']['inputFieldPlaceholder'],
+            new CallToActionButtonDto(
+                $data['parts']['newsletter']['ctaBtnText'],
+            ),
+            $data['parts']['subscriptions']['isActive'],
         );
 
         $footer = new FooterPartDto(
-
+            $data['parts']['footer']['copyright'],
+            $data['parts']['footer']['privacyPolicyFull'],
+            $data['parts']['footer']['termsOfServiceFull'],
+            $data['parts']['footer']['socialLinks'],
+            $data['parts']['footer']['isActive'],
         );
 
         $parts = new PartsDto(
@@ -230,7 +265,15 @@ dump($meta);
             $newsletter,
             $footer,
         );
-        $design = new DesignSettingsDto();
+        $design = new DesignSettingsDto(
+            [
+                'primary' => $data['design']['primary'],
+                'secondary' => $data['design']['secondary'],
+                'success' => $data['design']['success'],
+                'error' => $data['design']['error'],
+                'info' => $data['design']['info'],
+            ]
+        );
 
         $vmDto = new VariantMetaDto(
             $data['variantId'],

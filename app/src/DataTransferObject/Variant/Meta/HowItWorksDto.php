@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\DataTransferObject\Variant\Meta;
 
-class PricingPartDto
+class HowItWorksDto
 {
     public function __construct(
-        public bool $isActive = false,
+       public ?string $head,
+       public ?string $description,
+       public ?string $thumb
     ) {}
 }

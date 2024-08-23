@@ -164,27 +164,28 @@ class VariantBuilderFormType extends AbstractType
                         [
                             'label' => 'Enabled',
                             'row_attr' => [
-                                'class' => 'form-switch px-3'
+                                'class' => 'form-switch px-3',
                             ],
-                            'data' => $data->parts->hero->isActive
+                            'data' => $data->parts->hero->isActive,
                         ]
                     )
                     ->add('head',
                         TextType::class,
                         [
-//                            'data' => $data->parts->hero->header
+                            'data' => $data->parts->hero->data->head,
                         ]
                     )
                     ->add('description',
                         TextareaType::class,
                         [
-//                            'data' => $data->parts->hero->description
+                            'data' => $data->parts->hero->data->description,
                         ]
                     )
                     ->add('ctaBtnText',
                         TextType::class,
                         [
-                            'label' => 'Action Button Text'
+                            'label' => 'Action Button Text',
+                            'data' => $data->parts->hero->data->callToActionButton->text,
                         ]
                     )
                     ->add('coverPathFile', FileType::class, [
@@ -241,6 +242,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->features->isActive,
+                        ]
+                    )
+                    ->add('head',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->features->data?->head,
                         ]
                     )
                     ->add(
@@ -252,8 +260,19 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['feature1']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+
+                                [
+                                    'data' => $data->parts->features->data?->items['feature1']?->description ?? null,
+                                ]
+                            )
                             ->add('iconPathFile', FileType::class, [
                                 'label' => 'Icon Image',
                                 'mapped' => false,
@@ -280,8 +299,19 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['feature2']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+
+                                [
+                                    'data' => $data->parts->features->data?->items['feature2']?->description ?? null,
+                                ]
+                            )
                             ->add('iconPathFile', FileType::class, [
                                 'label' => 'Icon Image',
                                 'mapped' => false,
@@ -308,8 +338,19 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['feature3']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+
+                                [
+                                    'data' => $data->parts->features->data?->items['feature3']?->description ?? null,
+                                ]
+                            )
                             ->add('iconPathFile', FileType::class, [
                                 'label' => 'Icon Image',
                                 'mapped' => false,
@@ -345,6 +386,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->howitworks->isActive,
+                        ]
+                    )
+                    ->add('head',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->howitworks->data?->head,
                         ]
                     )
                     ->add(
@@ -356,8 +404,19 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['step1']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+
+                                [
+                                    'data' => $data->parts->features->data?->items['step1']?->description ?? null,
+                                ]
+                            )
                             ->add('mediaPathFile', FileType::class, [
                                 'label' => 'Step Image or Video',
                                 'mapped' => false,
@@ -386,8 +445,19 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['step2']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+
+                                [
+                                    'data' => $data->parts->features->data?->items['step2']?->description ?? null,
+                                ]
+                            )
                             ->add('mediaPathFile', FileType::class, [
                                 'label' => 'Step Image or Video',
                                 'mapped' => false,
@@ -416,8 +486,19 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['step3']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+
+                                [
+                                    'data' => $data->parts->features->data?->items['step3']?->description ?? null,
+                                ]
+                            )
                             ->add('mediaPathFile', FileType::class, [
                                 'label' => 'Step Image or Video',
                                 'mapped' => false,
@@ -455,15 +536,22 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->testimonial->isActive
                         ]
                     )
-                    ->add('header', TextType::class, [])
+                    ->add('head',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->testimonial->head
+                        ]
+                    )
                     ->add('maxReviews',
                         NumberType::class,
                         [
                             'label' => 'Maximum Reviews',
                             'required' => false,
                             'html5' => true,
+                            'data' => $data->parts->testimonial->maxReviews ?? 1,
                             'attr' => [
                                 'min' => 1,
                                 'max' => 10,
@@ -488,6 +576,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->pricing->isActive
+                        ]
+                    )
+                    ->add('head',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->pricing->head ?? null,
                         ]
                     )
                     ->add(
@@ -499,16 +594,37 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan1']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan1']?->description ?? null,
+                                ]
+                            )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
-                                    'label' => 'Action Button Text'
+                                    'label' => 'Action Button Text',
+                                    'data' => $data->parts->features->data?->items['plan1']?->callToActionButtonDto ?? null
                                 ]
                             )
-                            ->add('price', TextType::class, [])
-                            ->add('CurrencySign', TextType::class, [])
+                            ->add('price',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan1']?->price ?? null,
+                                ]
+                            )
+                            ->add('currencySign',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan1']?->currencySign ?? null,
+                                ]
+                            )
                     )
                     ->add(
                         $builder->create(
@@ -519,16 +635,37 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan2']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan2']?->description ?? null,
+                                ]
+                            )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
-                                    'label' => 'Action Button Text'
+                                    'label' => 'Action Button Text',
+                                    'data' => $data->parts->features->data?->items['plan2']?->callToActionButtonDto ?? null
                                 ]
                             )
-                            ->add('price', TextType::class, [])
-                            ->add('CurrencySign', TextType::class, [])
+                            ->add('price',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan2']?->price ?? null,
+                                ]
+                            )
+                            ->add('currencySign',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan2']?->currencySign ?? null,
+                                ]
+                            )
                     )
                     ->add(
                         $builder->create(
@@ -539,16 +676,37 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
-                            ->add('head', TextType::class, [])
-                            ->add('description', TextareaType::class, [])
+                            ->add('head',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan3']?->head ?? null,
+                                ]
+                            )
+                            ->add('description',
+                                TextareaType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan3']?->description ?? null,
+                                ]
+                            )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
-                                    'label' => 'Action Button Text'
+                                    'label' => 'Action Button Text',
+                                    'data' => $data->parts->features->data?->items['plan3']?->callToActionButtonDto ?? null
                                 ]
                             )
-                            ->add('price', TextType::class, [])
-                            ->add('CurrencySign', TextType::class, [])
+                            ->add('price',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan3']?->price ?? null,
+                                ]
+                            )
+                            ->add('currencySign',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->features->data?->items['plan3']?->currencySign ?? null,
+                                ]
+                            )
                     )
             )
             ->add(
@@ -568,15 +726,32 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->newsletter->isActive
                         ]
                     )
-                    ->add('header', TextType::class, [])
-                    ->add('inputFieldPlaceholder', TextType::class, [])
-                    ->add('description', TextareaType::class, [])
+                    ->add('head',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->newsletter->head
+                        ]
+                    )
+                    ->add('description',
+                        TextareaType::class,
+                        [
+                            'data' => $data->parts->newsletter->description
+                        ]
+                    )
+                    ->add('inputFieldPlaceholder',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->newsletter->inputFieldPlaceholder
+                        ]
+                    )
                     ->add('ctaBtnText',
                         TextType::class,
                         [
-                            'label' => 'Action Button Text'
+                            'label' => 'Action Button Text',
+                            'data' => $data->parts->newsletter->callToActionButtonDto->text ?? null
                         ]
                     )
             )
@@ -597,12 +772,29 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
+                            'data' => $data->parts->footer->isActive,
                         ]
                     )
-                    ->add('copyright', TextType::class, [])
-                    ->add('privacyPolicyFull', TextareaType::class, [])
-                    ->add('termsOfServiceFull', TextareaType::class, [])
+                    ->add('copyright',
+                        TextType::class,
+                        [
+                            'data' => $data->parts->footer->copyright,
+                        ]
+                    )
+                    ->add('privacyPolicyFull',
+                        TextareaType::class,
+                        [
+                            'data' => $data->parts->footer->privacyPolicyFull,
 
+                        ]
+                    )
+                    ->add('termsOfServiceFull',
+                        TextareaType::class,
+                        [
+                            'data' => $data->parts->footer->termsOfServiceFull,
+
+                        ]
+                    )
                     ->add(
                         $builder->create(
                             'socialLinks',
@@ -615,19 +807,41 @@ class VariantBuilderFormType extends AbstractType
                             ->add('linkedIn',
                                 UrlType::class,
                                 [
-                                    'label' => 'LinkedIn'
+                                    'label' => 'LinkedIn',
+                                    'data' => $data->parts->footer->socialLinks['linkedIn'] ?? null,
                                 ]
                             )
-                            ->add('instagram', UrlType::class, [])
-                            ->add('youtube', UrlType::class, [])
-                            ->add('twitter', UrlType::class, [])
+                            ->add('instagram',
+                                UrlType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['instagram'] ?? null,
+                                ]
+                            )
+                            ->add('youtube',
+                                UrlType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['youtube'] ?? null,
+                                ]
+                            )
+                            ->add('twitter',
+                                UrlType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['twitter'] ?? null,
+                                ]
+                            )
                             ->add('tikTok',
                                 UrlType::class,
                                 [
-                                    'label' => 'TikTok'
+                                    'label' => 'TikTok',
+                                    'data' => $data->parts->footer->socialLinks['tikTok'] ?? null,
                                 ]
                             )
-                            ->add('facebook', UrlType::class, [])
+                            ->add('facebook',
+                                UrlType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['facebook'] ?? null,
+                                ]
+                            )
                     )
             )
             ->add(
@@ -642,18 +856,33 @@ class VariantBuilderFormType extends AbstractType
                 )
                     ->add('primary',
                         TextType::class,
+                        [
+                            'data' => $data->parts->design->colors['primary'] ?? null,
+                        ]
                     )
                     ->add('secondary',
                         TextType::class,
+                        [
+                            'data' => $data->parts->design->colors['secondary'] ?? null,
+                        ]
                     )
                     ->add('success',
                         TextType::class,
+                        [
+                            'data' => $data->parts->design->colors['success'] ?? null,
+                        ]
                     )
                     ->add('error',
                         TextType::class,
+                        [
+                            'data' => $data->parts->design->colors['error'] ?? null,
+                        ]
                     )
                     ->add('info',
                         TextType::class,
+                        [
+                            'data' => $data->parts->design->colors['info'] ?? null,
+                        ]
                     )
             )
             ->add(

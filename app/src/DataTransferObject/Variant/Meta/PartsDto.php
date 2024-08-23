@@ -11,7 +11,7 @@ class PartsDto
         public FeaturesPartDto $features,
         public HowItWorksPartDto $howitworks,
         public TestimonialPartDto $testimonial,
-        public PricingPartDto $pricing,
+        public SubscriptionsPartDto $pricing,
         public NewsletterPartDto $newsletter,
         public FooterPartDto $footer
     ) {}

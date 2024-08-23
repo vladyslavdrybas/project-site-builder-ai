@@ -3,16 +3,13 @@ declare(strict_types=1);
 
 namespace App\DataTransferObject\Variant\Meta;
 
-class NewsletterPartDto
+class SubscriptionDto
 {
     public function __construct(
         public ?string $head = null,
         public ?string $description = null,
-        public ?string $inputFieldPlaceholder = null,
         public ?CallToActionButtonDto $callToActionButtonDto = null,
-        public bool $isActive = false,
-        public int $position = 0,
-        public string $type = 'newsletter',
-        public string $template = 'testLaunch'
+        public ?string $price = null,
+        public ?string $currencySign = null,
     ) {}
 }
