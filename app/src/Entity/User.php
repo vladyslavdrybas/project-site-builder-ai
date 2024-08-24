@@ -65,10 +65,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\OrderBy(['endAt' => 'DESC'])]
     protected Collection $projects;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Media::class)]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    protected Collection $medias;
+
     public function __construct()
     {
         parent::__construct();
         $this->projects = new ArrayCollection();
+        $this->medias = new ArrayCollection();
     }
 
     public function addProject(Project $project): void
@@ -76,6 +81,16 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         if (!$this->projects->contains($project)) {
             $this->projects->add($project);
         }
+    }
+
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function setMedias(Collection $medias): void
+    {
+        $this->medias = $medias;
     }
 
     public function removeProject(Project $project): void

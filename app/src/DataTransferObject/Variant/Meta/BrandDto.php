@@ -6,7 +6,7 @@ namespace App\DataTransferObject\Variant\Meta;
 class BrandDto
 {
     public function __construct(
-        public ?string $logo = null,
+        public ?MediaDto $media = null,
         public ?string $text = null
     ) {}
 }

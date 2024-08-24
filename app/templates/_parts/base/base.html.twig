@@ -67,7 +67,7 @@
         {% endif %}
 
         {% if data.parts.testimonial is defined and data.parts.testimonial.isActive %}
-            {% include '_parts/testimonial/' ~ data.parts.testimonial.template ~ '.html.twig'  with {'data': data.parts.testimonial.data} %}
+            {% include '_parts/testimonial/' ~ data.parts.testimonial.template ~ '.html.twig'  with {'data': data.parts.testimonial} %}
         {% endif %}
 
         {% if data.parts.pricing is defined and data.parts.pricing.isActive %}
@@ -75,11 +75,11 @@
         {% endif %}
 
         {% if data.parts.newsletter is defined and data.parts.newsletter.isActive %}
-            {% include '_parts/newsletter/' ~ data.parts.newsletter.template ~ '.html.twig'  with {'data': data.parts.newsletter.data} %}
+            {% include '_parts/newsletter/' ~ data.parts.newsletter.template ~ '.html.twig'  with {'data': data.parts.newsletter} %}
         {% endif %}
 
         {% if data.parts.footer is defined and data.parts.footer.isActive %}
-            {% include '_parts/footer/' ~ data.parts.footer.template ~ '.html.twig'  with {'data': data.parts.footer.data} %}
+            {% include '_parts/footer/' ~ data.parts.footer.template ~ '.html.twig'  with {'data': data.parts.footer} %}
         {% endif %}
 
     </div>

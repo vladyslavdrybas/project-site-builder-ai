@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller\ControlPanel;
 
+use App\Builder\MediaBuilder;
 use App\Constants\RouteRequirements;
 use App\DataTransferObject\Variant\Meta\BrandDto;
 use App\DataTransferObject\Variant\Meta\CallToActionButtonDto;
@@ -16,6 +17,7 @@ use App\DataTransferObject\Variant\Meta\HeroPartDataDto;
 use App\DataTransferObject\Variant\Meta\HeroPartDto;
 use App\DataTransferObject\Variant\Meta\HowItWorksPartDataDto;
 use App\DataTransferObject\Variant\Meta\HowItWorksPartDto;
+use App\DataTransferObject\Variant\Meta\MediaDto;
 use App\DataTransferObject\Variant\Meta\NewsletterPartDto;
 use App\DataTransferObject\Variant\Meta\PartsDto;
 use App\DataTransferObject\Variant\Meta\PricingPartDto;
@@ -49,6 +51,7 @@ class VariantBuilderController extends AbstractControlPanelController
     public function show(
         Request $request,
         Variant $variant,
+        MediaBuilder $mediaBuilder,
         SerializerInterface $serializer,
         VariantRepository $variantRepository
     ): Response {
@@ -69,6 +72,115 @@ dump($meta);
             dump('Submitted');
             dump($builderForm->getData());
 
+            $sessionMedias = $request->getSession()->get('variantBuilderDataMedias');
+
+            $medias = [
+                'header' => [
+                    'brand' => $builderForm->get('header')
+                        ->get('mediaFile')
+                        ->getData()
+                        ?
+                        $mediaBuilder->mediaForVariant($builderForm->get('header')
+                            ->get('mediaFile')
+                            ->getData(), $variant, ['header', 'brand'])
+                        :
+                        $sessionMedias['header']['brand'] ?? null,
+                ],
+                'hero' => [
+                    'cover' => $builderForm->get('hero')
+                        ->get('mediaFile')
+                        ->getData()
+                        ?
+                        $mediaBuilder->mediaForVariant($builderForm->get('hero')
+                            ->get('mediaFile')
+                            ->getData(), $variant, ['hero', 'cover'])
+                        :
+                        $sessionMedias['hero']['cover'] ?? null,
+                ],
+                'features' => [
+                    'feature1' => [
+                        'icon' => $builderForm->get('features')
+                            ->get('feature1')
+                            ->get('mediaFile')
+                            ->getData()
+                            ?
+                            $mediaBuilder->mediaForVariant($builderForm->get('features')
+                                ->get('feature1')
+                                ->get('mediaFile')
+                                ->getData(), $variant, ['features', 'feature1', 'icon'])
+                            :
+                            $sessionMedias['features']['feature1']['icon'] ?? null,
+                    ],
+                    'feature2' => [
+                        'icon' => $builderForm->get('features')
+                            ->get('feature2')
+                            ->get('mediaFile')
+                            ->getData()
+                            ?
+                            $mediaBuilder->mediaForVariant($builderForm->get('features')
+                                ->get('feature2')
+                                ->get('mediaFile')
+                                ->getData(), $variant, ['features', 'feature2', 'icon'])
+                            :
+                            $sessionMedias['features']['feature2']['icon'] ?? null,
+                    ],
+                    'feature3' => [
+                        'icon' => $builderForm->get('features')
+                            ->get('feature3')
+                            ->get('mediaFile')
+                            ->getData()
+                            ?
+                            $mediaBuilder->mediaForVariant($builderForm->get('features')
+                                ->get('feature3')
+                                ->get('mediaFile')
+                                ->getData(), $variant, ['features', 'feature3', 'icon'])
+                            :
+                            $sessionMedias['features']['feature3']['icon'] ?? null,
+                    ],
+                ],
+                'howitworks' => [
+                    'step1' => [
+                        'cover' => $builderForm->get('howitworks')
+                            ->get('step1')
+                            ->get('mediaFile')
+                            ->getData()
+                            ?
+                            $mediaBuilder->mediaForVariant($builderForm->get('howitworks')
+                                ->get('step1')
+                                ->get('mediaFile')
+                                ->getData(), $variant, ['features', 'step1', 'cover'])
+                            :
+                            $sessionMedias['howitworks']['step1']['cover'] ?? null,
+                    ],
+                    'step2' => [
+                        'cover' => $builderForm->get('howitworks')
+                            ->get('step2')
+                            ->get('mediaFile')
+                            ->getData()
+                            ?
+                            $mediaBuilder->mediaForVariant($builderForm->get('howitworks')
+                                ->get('step2')
+                                ->get('mediaFile')
+                                ->getData(), $variant, ['features', 'step2', 'cover'])
+                            :
+                            $sessionMedias['howitworks']['step2']['cover'] ?? null,
+                    ],
+                    'step3' => [
+                        'cover' => $builderForm->get('howitworks')
+                            ->get('step3')
+                            ->get('mediaFile')
+                            ->getData()
+                            ?
+                            $mediaBuilder->mediaForVariant($builderForm->get('howitworks')
+                                ->get('step3')
+                                ->get('mediaFile')
+                                ->getData(), $variant, ['features', 'step3', 'cover'])
+                            :
+                            $sessionMedias['howitworks']['step3']['cover'] ?? null,
+                    ],
+                ],
+            ];
+
             $formData = [
                 'variantId' => $builderForm->get('variantId')->getData(),
                 'projectId' => $builderForm->get('projectId')->getData(),
@@ -84,13 +196,14 @@ dump($meta);
                     'footer' => $builderForm->get('footer')->getData(),
                 ],
                 'design' => $builderForm->get('designSettings')->getData(),
+                'medias' => $medias,
             ];
 
             dump($formData);
-            dump($builderForm->get('features')->getData());
 
             $variantMeta = $this->buildVariantMetaFromForm($formData);
             $variantMetaArray = $serializer->normalize($variantMeta);
+
             dump($variantMeta);
 
             if ($builderForm->get('cancelBtn')->isClicked()) {
@@ -109,6 +222,11 @@ dump($meta);
                 $request->getSession()->set(
                     'variantBuilderData',
                     $variantMetaArray
+                );
+
+                $request->getSession()->set(
+                    'variantBuilderDataMedias',
+                    $formData['medias']
                 );
             }
         }
@@ -170,7 +288,10 @@ dump($meta);
         $header = new HeaderPartDto(
           new HeaderPartDataDto(
             new BrandDto(
-                null, // file link
+                new MediaDto(
+                    $data['medias']['header']['brand']?->getId() ?? null,
+                        $data['medias']['header']['brand']?->getContent() ?? null,
+                ),
                 $data['parts']['header']['logoText'],
             ),
             new CallToActionButtonDto(
@@ -189,7 +310,11 @@ dump($meta);
                 new CallToActionButtonDto(
                     $data['parts']['hero']['ctaBtnText'],
                     '#pricing'
-                )
+                ),
+                new MediaDto(
+                    $data['medias']['hero']['cover']?->getId() ?? null,
+                    $data['medias']['hero']['cover']?->getContent() ?? null,
+                ),
             ),
             $data['parts']['hero']['isActive']
         );
@@ -222,6 +347,7 @@ dump($meta);
         $testimonial = new TestimonialPartDto(
             $data['parts']['testimonial']['head'],
             (int) $data['parts']['testimonial']['maxReviews'],
+            [],
             $data['parts']['testimonial']['isActive']
         );
 
@@ -299,251 +425,5 @@ dump($meta);
         }
 
         return $meta;
-    }
-
-    protected function builderData(
-        Variant $variant,
-        ?FormTypeInterface $builderForm = null
-    ): array {
-        return [
-            'variantId' => $variant->getRawId(),
-            'projectId' => $variant->getProject()->getRawId(),
-            'design' => [],
-            'parts' => [
-                'header' => [
-                    'isActive' => true,
-                    'position' => 0,
-                    'type' => 'header',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'brand' => [
-                            'logo' => 'brand-ai-cv.svg',
-                            'text' => 'AI/CV',
-                        ],
-                        'navigation' => [
-                            'home' => 'Home',
-                            'features' => 'Features',
-                            'testimonials' => 'Testimonials',
-                            'pricing' => 'Pricing',
-                            'contact' => 'Contact',
-                        ],
-                        'callToActionButton' => [
-                            'text' => 'Get Started',
-                            'link' => '#pricing',
-                        ],
-                    ],
-                ],
-                'hero' => [
-                    'isActive' => true,
-                    'position' => 1,
-                    'type' => 'hero',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'head' => 'Land Your Dream Job with an AI-Powered Resume',
-                        'description' => 'Let our AI create the perfect resume to showcase your skills and get you hired faster.',
-                        'callToActionButton' => [
-                            'text' => 'Create Your Resume Now',
-                            'link' => '#pricing',
-                        ],
-                        'background' => [
-                            'image' => '',
-                            'color' => '',
-                            'gradient' => '',
-                        ],
-                        'thumb' => 'undraw_online_resume_re_ru7s.svg'
-                    ],
-                ],
-                'features' => [
-                    'isActive' => true,
-                    'position' => 2,
-                    'type' => 'features',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'head' => 'We\'re here to help you feel better.',
-                        'items' => [
-                            [
-                              'thumb' => 'undraw_organize_resume_re_k45b.svg',
-                              'head' => 'AI-Powered Optimization',
-                              'description' => 'Our AI analyzes your experience and suggests improvements to make your resume stand out.',
-                            ],
-                            [
-                              'thumb' => 'undraw_personal_information_re_vw8a.svg',
-                              'head' => 'Tailored to Job Descriptions',
-                              'description' => 'Get personalized resume suggestions based on the job you’re applying for.',
-                            ],
-                            [
-                              'thumb' => 'undraw_speed_test_re_pe1f.svg',
-                              'head' => 'Quick & Easy',
-                              'description' => 'Create a professional resume in minutes with our user-friendly interface.',
-                            ],
-                        ],
-                    ],
-                ],
-                'howitworks' => [
-                    'isActive' => true,
-                    'position' => 3,
-                    'type' => 'howitworks',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'head' => 'How It Works',
-                        'items' => [
-                            [
-                                'head' => '1. Enter Your Details',
-                                'description' => 'Provide us with your work history and skills.',
-                                'thumb' => 'undraw_details_8k13.svg',
-
-                            ],
-                            [
-                                'head' => '2. Let the AI Work',
-                                'description' => 'Our AI will analyze and enhance your resume content.',
-                                'thumb' => 'undraw_file_bundle_re_6q1e.svg',
-                            ],
-                            [
-                                'head' => '3. Download & Apply',
-                                'description' => 'Download your polished resume and start applying.',
-                                'thumb' => 'undraw_export_files_re_99ar.svg',
-                            ],
-                        ],
-                    ],
-                ],
-                'testimonial' => [
-                    'isActive' => true,
-                    'position' => 4,
-                    'type' => 'testimonial',
-                    'template' => 'testLaunchCarousel',
-                    'data' => [
-                        'head' => 'Reviews',
-                        'items' => [
-                            [
-                                'head' => 'Jane Doe',
-                                'description' => '"I got my dream job thanks to this resume builder! The AI suggestions were spot on."',
-                                'thumb' => 'undraw_pic_profile_re_7g2h.svg',
-
-                            ],
-                            [
-                                'head' => 'John Smith',
-                                'description' => '"This service is amazing! I created a professional resume in just a few minutes."',
-                                'thumb' => 'undraw_profile_pic_re_iwgo.svg',
-                            ],
-                            [
-                                'head' => 'Emily Johnson',
-                                'description' => '"The AI did an incredible job tailoring my resume to the job I wanted. Highly recommend!"',
-                                'thumb' => 'undraw_female_avatar_efig.svg',
-                            ],
-                        ],
-                    ],
-                ],
-                'pricing' => [
-                    'isActive' => true,
-                    'position' => 5,
-                    'type' => 'pricing',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'head' => 'Choose Your Plan',
-                        'items' => [
-                            [
-                                'head' => 'Basic',
-                                'description' => [
-                                    '1 Resume Template',
-                                    '2 GB Storage',
-                                    'Basic AI Optimization',
-                                    'Single User',
-                                    'Sales Dashboard',
-                                    'Minimal Features',
-                                    '1000 Logs',
-                                    '',
-                                ],
-                                'callToActionButton' => [
-                                    'text' => 'Try for free now',
-                                    'link' => '#pricing',
-                                ],
-                                'price' => '9.99',
-                                'currencySign' => '$'
-                            ],
-                            [
-                                'head' => 'Pro',
-                                'description' => [
-                                    '5 Resume Templates',
-                                    'Advanced AI Optimization',
-                                    '10 GB Hosting',
-                                    '5 Users',
-                                    'Sales Dashboard',
-                                    'Premium Features',
-                                    '50,000 Logs',
-                                ],
-                                'callToActionButton' => [
-                                    'text' => 'Start Pro',
-                                    'link' => '#pricing',
-                                ],
-                                'price' => '19.99',
-                                'currencySign' => '$'
-                            ],
-                            [
-                                'head' => 'Premium',
-                                'description' => [
-                                    'Unlimited Templates',
-                                    'Premium AI Optimization',
-                                    '50 GB Hosting',
-                                    'Unlimited Users',
-                                    'Sales and Marketing Dashboard',
-                                    'Premium Features',
-                                    'Unlimited Logs',
-                                ],
-                                'callToActionButton' => [
-                                    'text' => 'Surpass All',
-                                    'link' => '#pricing',
-                                ],
-                                'price' => '29.99',
-                                'currencySign' => '$'
-                            ],
-
-                        ],
-                    ],
-                ],
-                'newsletter' => [
-                    'isActive' => true,
-                    'position' => 6,
-                    'type' => 'newsletter',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'head' => 'Stay Updated Always',
-                        'description' => 'Subscribe to our newsletter for tips on resume writing and job hunting.',
-                        'callToActionButton' => [
-                            'text' => 'Subscribe',
-                        ],
-                        'inputPlaceholder' => 'Enter your email'
-                    ],
-                ],
-                'footer' => [
-                    'isActive' => true,
-                    'position' => 7,
-                    'type' => 'footer',
-                    'template' => 'testLaunch',
-                    'data' => [
-                        'description' => 'AI Resume Builder. All Rights Reserved.',
-                        'items' => [
-                            [
-                                'alt' => 'linkedin',
-                                'link' => '#',
-                                'thumb' => '5279114_linkedin_network_social network_linkedin logo_icon.svg',
-                            ],
-                            [
-                                'alt' => 'facebook',
-                                'link' => '#',
-                                'thumb' => '5279115_chat bubble_facebook_messenger_messenger logo_icon.png',
-                            ],
-                            [
-                                'alt' => 'twitter',
-                                'link' => '#',
-                                'thumb' => '5279120_play_video_youtube_youtuble logo_icon.png',
-                            ],
-                        ],
-                        'privacyPolicy' => 'some privacy policy text',
-                        'termsOfService' => 'some terms of service text',
-                    ],
-                ],
-            ],
-
-        ];
     }
 }

@@ -73,7 +73,7 @@ class VariantBuilderFormType extends AbstractType
                             'data' => $data->parts->header->data->brand->text
                         ]
                     )
-                    ->add('logoPathFile', FileType::class, [
+                    ->add('mediaFile', FileType::class, [
                         'label' => 'Logo Image',
                         'mapped' => false,
                         'required' => false,
@@ -89,6 +89,12 @@ class VariantBuilderFormType extends AbstractType
                             ])
                         ],
                     ])
+                ->add('mediaId',
+                    HiddenType::class,
+                    [
+                        'data' => $data->parts->header->data->brand->media->id ?? null
+                    ]
+                )
             )
             ->add(
                 $builder->create(
@@ -103,49 +109,49 @@ class VariantBuilderFormType extends AbstractType
                     ->add('home',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['home']
+                            'data' => $data->parts->header->data->navigation['home'] ?? null
                         ]
                     )
                     ->add('hero',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['hero']
+                            'data' => $data->parts->header->data->navigation['hero'] ?? null
                         ]
                     )
                     ->add('features',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['features']
+                            'data' => $data->parts->header->data->navigation['features'] ?? null
                         ]
                     )
-                    ->add('howItWorks',
+                    ->add('howitworks',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['howItWorks']
+                            'data' => $data->parts->header->data->navigation['howitworks'] ?? null
                         ]
                     )
                     ->add('reviews',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['reviews']
+                            'data' => $data->parts->header->data->navigation['reviews'] ?? null
                         ]
                     )
                     ->add('pricing',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['pricing']
+                            'data' => $data->parts->header->data->navigation['pricing'] ?? null
                         ]
                     )
                     ->add('newsletter',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['newsletter']
+                            'data' => $data->parts->header->data->navigation['newsletter'] ?? null
                         ]
                     )
                     ->add('contact',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data->navigation['contact']
+                            'data' => $data->parts->header->data->navigation['contact'] ?? null
                         ]
                     )
             )
@@ -188,7 +194,7 @@ class VariantBuilderFormType extends AbstractType
                             'data' => $data->parts->hero->data->callToActionButton->text,
                         ]
                     )
-                    ->add('coverPathFile', FileType::class, [
+                    ->add('mediaFile', FileType::class, [
                         'label' => 'Presentation Image or Video',
                         'mapped' => false,
                         'required' => false,
@@ -206,24 +212,12 @@ class VariantBuilderFormType extends AbstractType
                             ])
                         ],
                     ])
-                    ->add('backgroundPathFile', FileType::class, [
-                        'label' => 'Background Image or Video',
-                        'mapped' => false,
-                        'required' => false,
-                        'constraints' => [
-                            new File([
-                                'mimeTypes' => [
-                                    'image/jpeg',
-                                    'image/jpg',
-                                    'image/png',
-                                    'image/gif',
-                                    'video/mp4',
-                                ],
-                                'maxSize' => '5M',
-                                'mimeTypesMessage' => 'Please upload a valid Image or Video',
-                            ])
-                        ],
-                    ])
+                    ->add('mediaId',
+                        HiddenType::class,
+                        [
+                            'data' => $data->parts->hero->data->media->id ?? null
+                        ]
+                    )
             )
             ->add(
                 $builder->create(
@@ -273,7 +267,7 @@ class VariantBuilderFormType extends AbstractType
                                     'data' => $data->parts->features->data?->items['feature1']?->description ?? null,
                                 ]
                             )
-                            ->add('iconPathFile', FileType::class, [
+                            ->add('mediaFile', FileType::class, [
                                 'label' => 'Icon Image',
                                 'mapped' => false,
                                 'required' => false,
@@ -289,6 +283,12 @@ class VariantBuilderFormType extends AbstractType
                                     ])
                                 ],
                             ])
+                            ->add('mediaId',
+                                HiddenType::class,
+                                [
+                                    'data' => $data->parts->features->data->items['feature1']->media->id ?? null
+                                ]
+                            )
                     )
                     ->add(
                         $builder->create(
@@ -312,7 +312,7 @@ class VariantBuilderFormType extends AbstractType
                                     'data' => $data->parts->features->data?->items['feature2']?->description ?? null,
                                 ]
                             )
-                            ->add('iconPathFile', FileType::class, [
+                            ->add('mediaFile', FileType::class, [
                                 'label' => 'Icon Image',
                                 'mapped' => false,
                                 'required' => false,
@@ -328,6 +328,12 @@ class VariantBuilderFormType extends AbstractType
                                     ])
                                 ],
                             ])
+                            ->add('mediaId',
+                                HiddenType::class,
+                                [
+                                    'data' => $data->parts->features->data->items['feature2']->media->id ?? null
+                                ]
+                            )
                     )
                     ->add(
                         $builder->create(
@@ -351,7 +357,7 @@ class VariantBuilderFormType extends AbstractType
                                     'data' => $data->parts->features->data?->items['feature3']?->description ?? null,
                                 ]
                             )
-                            ->add('iconPathFile', FileType::class, [
+                            ->add('mediaFile', FileType::class, [
                                 'label' => 'Icon Image',
                                 'mapped' => false,
                                 'required' => false,
@@ -367,6 +373,12 @@ class VariantBuilderFormType extends AbstractType
                                     ])
                                 ],
                             ])
+                            ->add('mediaId',
+                                HiddenType::class,
+                                [
+                                    'data' => $data->parts->features->data->items['feature3']->media->id ?? null
+                                ]
+                            )
                     )
             )
             ->add(
@@ -407,17 +419,17 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['step1']?->head ?? null,
+                                    'data' => $data->parts->howitworks->data?->items['step1']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->features->data?->items['step1']?->description ?? null,
+                                    'data' => $data->parts->howitworks->data?->items['step1']?->description ?? null,
                                 ]
                             )
-                            ->add('mediaPathFile', FileType::class, [
+                            ->add('mediaFile', FileType::class, [
                                 'label' => 'Step Image or Video',
                                 'mapped' => false,
                                 'required' => false,
@@ -435,6 +447,12 @@ class VariantBuilderFormType extends AbstractType
                                     ])
                                 ],
                             ])
+                            ->add('mediaId',
+                                HiddenType::class,
+                                [
+                                    'data' => $data->parts->howitworks->data->items['step1']->media->id ?? null
+                                ]
+                            )
                     )
                     ->add(
                         $builder->create(
@@ -448,17 +466,17 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['step2']?->head ?? null,
+                                    'data' => $data->parts->howitworks->data?->items['step2']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->features->data?->items['step2']?->description ?? null,
+                                    'data' => $data->parts->howitworks->data?->items['step2']?->description ?? null,
                                 ]
                             )
-                            ->add('mediaPathFile', FileType::class, [
+                            ->add('mediaFile', FileType::class, [
                                 'label' => 'Step Image or Video',
                                 'mapped' => false,
                                 'required' => false,
@@ -476,6 +494,12 @@ class VariantBuilderFormType extends AbstractType
                                     ])
                                 ],
                             ])
+                            ->add('mediaId',
+                                HiddenType::class,
+                                [
+                                    'data' => $data->parts->howitworks->data->items['step2']->media->id ?? null
+                                ]
+                            )
                     )
                     ->add(
                         $builder->create(
@@ -489,17 +513,17 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['step3']?->head ?? null,
+                                    'data' => $data->parts->howitworks->data?->items['step3']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->features->data?->items['step3']?->description ?? null,
+                                    'data' => $data->parts->howitworks->data?->items['step3']?->description ?? null,
                                 ]
                             )
-                            ->add('mediaPathFile', FileType::class, [
+                            ->add('mediaFile', FileType::class, [
                                 'label' => 'Step Image or Video',
                                 'mapped' => false,
                                 'required' => false,
@@ -517,6 +541,12 @@ class VariantBuilderFormType extends AbstractType
                                     ])
                                 ],
                             ])
+                            ->add('mediaId',
+                                HiddenType::class,
+                                [
+                                    'data' => $data->parts->howitworks->data->items['step3']->media->id ?? null
+                                ]
+                            )
                     )
             )
             ->add(
@@ -603,7 +633,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan1']?->description ?? null,
+                                    'data' => implode("\n", $data->parts->features->data?->items['plan1']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
@@ -644,7 +674,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan2']?->description ?? null,
+                                    'data' => implode("\n", $data->parts->features->data?->items['plan2']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
@@ -685,7 +715,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan3']?->description ?? null,
+                                    'data' => implode("\n", $data->parts->features->data?->items['plan3']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',

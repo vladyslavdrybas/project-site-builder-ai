@@ -9,6 +9,6 @@ class HeroPartDataDto
        public string $head,
        public string $description,
        public CallToActionButtonDto $callToActionButton,
-       public ?string $thumb = null
+       public ?MediaDto $media = null
     ) {}
 }

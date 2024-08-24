@@ -5,6 +5,8 @@ namespace App\Entity;
 
 use App\Repository\VariantRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -44,7 +46,38 @@ class Variant extends AbstractEntity
     #[ORM\Column(name: "weight", type: Types::INTEGER, options: ["default" => 50])]
     protected int $weight = 50;
 
-    protected array $tags = [];
+    /**
+     * Many Variants have Many Media.
+     * @var Collection<int, Media>
+     */
+    #[ORM\JoinTable(name: 'variant_media')]
+    #[ORM\JoinColumn(name: 'variant_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'media_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Media::class)]
+    protected Collection $medias;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->medias = new ArrayCollection();
+    }
+
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    public function setMedias(Collection $medias): void
+    {
+        $this->medias = $medias;
+    }
+
+    public function addMedia(Media $media): void
+    {
+        if (!$this->medias->contains($media)) {
+            $this->medias->add($media);
+        }
+    }
 
     public function getProject(): Project
     {

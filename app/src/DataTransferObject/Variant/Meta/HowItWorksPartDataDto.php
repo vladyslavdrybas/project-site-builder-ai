@@ -13,7 +13,7 @@ class HowItWorksPartDataDto
             $this->items[$key] = new HowItWorksDto(
                 $item['head'] ?? null,
                 $item['description'] ?? null,
-                $item['thumb'] ?? null
+                $item['media'] ?? null
             );
         }
     }

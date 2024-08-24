@@ -11,14 +11,19 @@
         {% endif %}
 
         <div class="row">
-            <p>&copy; 2024 {{ data.description }}</p>
+            {% if data.copyright is defined and data.copyright is not null %}
+            <p>&copy; 2024 {{ data.copyright }}</p>
+            {% endif %}
             <p>
                 <a role="button" class="text-black">Privacy Policy</a> |
+
                 <a role="button" class="text-black">Terms of Service</a>
             </p>
             <p>
-                {% for social in data.items %}
-                <a href="{{ social.link }}"><img src="{{ absolute_url(asset('social-icons/' ~ social.thumb, 'img')) }}" alt="{{ social.alt }}"></a>
+                {% for social in data.socialLinks %}
+                    {% if social.link is defined and social.link is not null %}
+                        <a href="{{ social.link }}"><img src="{{ absolute_url(asset('social-icons/' ~ social.media, 'img')) }}" alt="{{ social.alt }}"></a>
+                    {% endif %}
                 {% endfor %}
             </p>
         </div>

@@ -13,7 +13,7 @@ class FeaturesPartDataDto
             $this->items[$key] = new FeatureDto(
                 $item['head'] ?? null,
                 $item['description'] ?? null,
-                $item['thumb'] ?? null
+                $item['media'] ?? null
             );
         }
     }

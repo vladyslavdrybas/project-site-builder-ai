@@ -25,10 +25,10 @@
                 {% endif %}
             </div>
 
-            {% if data.thumb is defined and data.thumb is not null %}
+            {% if data.media.id is defined and data.media.id is not null %}
                 <div class="col-10 col-sm-8 col-lg-6 d-none d-md-block">
                     <img
-                        src="{{ absolute_url(asset( data.thumb , 'img')) }}"
+                        src="{{ absolute_url(asset( data.media.id , 'img')) }}"
                         class="d-block mx-lg-auto img-fluid"
                         alt="creativity"
                         loading="lazy"

@@ -11,18 +11,24 @@
         {% endif %}
 
         {% for step in data.items %}
+            {% set stepHasMedia = step.media.id is defined and step.media.id is not null %}
             <div class="row mb-5">
-                <div class="col-md-7 {% if loop.index % 2 == 0 %}order-md-2{% endif %}">
+
+                <div class="{% if stepHasMedia %}col-md-7{% endif %} {% if loop.index % 2 == 0 %}order-md-2{% endif %}">
                     <h2 class="featurette-heading fw-normal lh-1">{{ step.head }}</h2>
                     <p class="lead">{{ step.description }}</p>
                 </div>
+
+                {% if stepHasMedia %}
                 <div class="col-md-5 {% if loop.index % 2 == 0 %}order-md-1{% endif %}">
                     <img
                         class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-                        src="{{ absolute_url(asset( step.thumb, 'img')) }}"
+                        src="{{ absolute_url(asset( step.media.id, 'img')) }}"
                         alt="icon"
                     >
                 </div>
+                {% endif %}
+
             </div>
         {% endfor %}
 

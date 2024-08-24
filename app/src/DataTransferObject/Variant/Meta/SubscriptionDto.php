@@ -7,8 +7,8 @@ class SubscriptionDto
 {
     public function __construct(
         public ?string $head = null,
-        public ?string $description = null,
-        public ?CallToActionButtonDto $callToActionButtonDto = null,
+        public ?array $description = null,
+        public ?CallToActionButtonDto $callToActionButton = null,
         public ?string $price = null,
         public ?string $currencySign = null,
     ) {}

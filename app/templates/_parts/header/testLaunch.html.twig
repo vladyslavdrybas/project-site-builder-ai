@@ -3,14 +3,14 @@
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
 
-                {% if data.brand.logo is defined and data.brand.logo is not null %}
+                {% if data.brand.media.id is defined and data.brand.media.id is not null %}
                     <a class="navbar-brand" href="#">
                         <div
                             class="header-brand-logo"
                         >
                             <img
                                 class="h-100"
-                                src="{{ absolute_url(asset(data.brand.logo, 'img')) }}"
+                                src="{{ absolute_url(path('app_media_show', {'media': data.brand.media.id})) }}"
                                 alt="icon"
                             >
                         </div>

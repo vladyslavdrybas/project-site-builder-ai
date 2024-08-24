@@ -8,6 +8,6 @@ class HowItWorksDto
     public function __construct(
        public ?string $head,
        public ?string $description,
-       public ?string $thumb
+       public ?string $media
     ) {}
 }

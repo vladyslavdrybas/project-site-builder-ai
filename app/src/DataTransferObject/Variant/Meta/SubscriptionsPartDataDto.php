@@ -10,9 +10,15 @@ class SubscriptionsPartDataDto
        public array $items = []
     ) {
         foreach ($items as $key => $item) {
+            if (is_string($item['description'])) {
+                $itemDescription = explode("\n", $item['description']);
+            } else {
+                $itemDescription = null;
+            }
+
             $this->items[$key] = new SubscriptionDto(
                 $item['head'] ?? null,
-                $item['description'] ?? null,
+                    $itemDescription ?? null,
                 new CallToActionButtonDto(
                     $item['ctaBtnText'] ?? null,
                         $item['ctaBtnLink'] ?? '#checkout?p=' . urlencode($item['head'] ?? ''),

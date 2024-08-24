@@ -9,7 +9,7 @@ class NewsletterPartDto
         public ?string $head = null,
         public ?string $description = null,
         public ?string $inputFieldPlaceholder = null,
-        public ?CallToActionButtonDto $callToActionButtonDto = null,
+        public ?CallToActionButtonDto $callToActionButton = null,
         public bool $isActive = false,
         public int $position = 0,
         public string $type = 'newsletter',

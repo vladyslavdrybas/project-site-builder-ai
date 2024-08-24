@@ -15,13 +15,21 @@
 
             {% for plan in data.items %}
             <div class="col-md-4">
-                <div class="pricing-table {% if loop.index == 2 %}text-white pricing-primary{% endif %}">
+                <div class="
+                    pricing-table
+                    h-100
+                    d-flex
+                    flex-column
+                    justify-content-between
+{% if loop.index == 2 %}text-white pricing-primary{% endif %}
+                ">
                     <h3>{{ plan.head }}</h3>
 
+                    <div>
                     {% for proposal in plan.description %}
                         <p>{{ proposal }}</p>
                     {% endfor %}
-
+                    </div>
                     <div class="price {% if loop.index == 2 %}text-white{% else %}text-primary{% endif %}">{{ plan.currencySign }}{{ plan.price }}</div>
 
                     <a
