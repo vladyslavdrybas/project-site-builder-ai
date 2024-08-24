@@ -7,7 +7,6 @@ class MediaDto
 {
     public function __construct(
        public ?string $id = null,
-       public ?string $content = null,
-       public ?string $extension = null,
+       public ?string $src = null,
     ) {}
 }

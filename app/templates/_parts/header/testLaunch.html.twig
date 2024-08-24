@@ -8,11 +8,20 @@
                         <div
                             class="header-brand-logo"
                         >
-                            <img
-                                class="h-100"
-                                src="{{ absolute_url(path('app_media_show', {'media': data.brand.media.id})) }}"
-                                alt="icon"
-                            >
+                            {% if data.brand.media.src is defined and data.brand.media.src is not null %}
+                                <img
+                                    class="h-100"
+                                    src="{{ data.brand.media.src }}"
+                                    alt="icon"
+                                >
+                            {% else %}
+                                <img
+                                    class="h-100"
+                                    src="{{ absolute_url(path('app_media_show', {'media': data.brand.media.id})) }}"
+                                    alt="icon"
+                                >
+                            {% endif %}
+
                         </div>
                     </a>
                 {% else %}

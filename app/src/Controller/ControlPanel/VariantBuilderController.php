@@ -285,12 +285,23 @@ dump($meta);
     protected function buildVariantMetaFromForm(
         array $data
     ): VariantMetaDto {
+        dump($data['parts']['header']['mediaId']);
+
         $header = new HeaderPartDto(
           new HeaderPartDataDto(
             new BrandDto(
                 new MediaDto(
-                    $data['medias']['header']['brand']?->getId() ?? null,
-                        $data['medias']['header']['brand']?->getContent() ?? null,
+                    $data['medias']['header']['brand']?->getId()
+                    ?? $data['parts']['header']['mediaId']
+                    ?? null,
+                        $data['medias']['header']['brand']?->getContent() ?? false ?
+                        sprintf(
+                            'data:%s;base64,%s',
+                            $data['medias']['header']['brand']?->getExtension(),
+                            base64_encode($data['medias']['header']['brand']?->getContent() ?? '')
+                        )
+                        :
+                        null,
                 ),
                 $data['parts']['header']['logoText'],
             ),
