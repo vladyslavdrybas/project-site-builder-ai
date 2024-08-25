@@ -16,11 +16,19 @@
                     <div class="col-md-4">
                         {% if feature.media.id is defined and feature.media.id is not null %}
                             <div class="feature-icon mb-3">
-                                <img
-                                    class="img-fluid"
-                                    src="{{ absolute_url(asset( feature.media.id, 'img')) }}"
-                                    alt="icon"
-                                >
+                                {% if feature.media.content is defined and feature.media.content is not null %}
+                                    <img
+                                        class="img-fluid"
+                                        src="data:{{ feature.media.mimeType }};base64,{{ feature.media.content }}"
+                                        alt="icon"
+                                    >
+                                {% else %}
+                                    <img
+                                        class="img-fluid"
+                                        src="{{ absolute_url(path('app_media_show', {'media': feature.media.id})) }}"
+                                        alt="icon"
+                                    >
+                                {% endif %}
                             </div>
                         {% endif %}
                         <h4>{{ feature.head }}</h4>

@@ -39,15 +39,6 @@
                         </li>
                         {% endif %}
 
-                        {% if variant.meta is not null %}
-                        <li class="list-group-item">
-                            <div class="fw-bold">
-                                Meta
-                            </div>
-                            {{ variant.meta|json_encode }}
-                        </li>
-                        {% endif %}
-
                         {% if variant.startAt is not null %}
                         <li class="list-group-item">
                             <div class="fw-bold">

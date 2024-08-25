@@ -60,15 +60,6 @@ class VariantEditFormType extends AbstractType
                 'required' => true,
                 'empty_data' => $variant->getProject(), // Ensure no default value is selected
             ])
-
-            ->add('plainMeta', TextareaType::class,
-                [
-                    'label' => 'Meta data',
-                    'required' => false,
-                    'mapped' => false,
-                    'data' => $plainMeta,
-                ]
-            )
             ->add('startAt', DateTimeType::class, ['required' => false])
             ->add('endAt', DateTimeType::class, ['required' => false])
             ->add('isActive', ChoiceType::class, [

@@ -20,7 +20,7 @@
 2. https://undraw.co/illustrations
 3. https://www.drawkit.com/
 4. https://www.humaaans.com/
-5. https://icons8.com/illustrations
+5. https://icons8.com/illustrations , https://icons8.com/icons/set/social-media
 6. https://ui8.net/
 7. https://www.freepik.com/free-photos-vectors/landing-page-design
 

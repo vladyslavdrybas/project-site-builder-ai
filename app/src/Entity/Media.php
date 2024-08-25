@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\MediaRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -27,7 +30,7 @@ class Media implements EntityInterface
     #[Assert\NotBlank(message: 'Media must have owner.')]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'medias')]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id')]
-    protected User $owner;
+    protected ?User $owner = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $mimetype;
@@ -38,11 +41,22 @@ class Media implements EntityInterface
     #[ORM\Column(type: Types::INTEGER)]
     protected int $size;
 
-    #[ORM\Column(type: Types::BLOB)]
-    protected string $content;
+    #[ORM\Column(type: Types::STRING)]
+    protected string $path;
 
-    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true, 'default' => 0])]
+    #[ORM\Column(type: Types::STRING, options: ['default' => 'local'])]
+    protected string $serverAlias = 'local';
+
+    #[ORM\Column(type: Types::SMALLINT, options: ['unsigned' => true, 'default' => 0])]
     protected int $version = 0;
+
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    protected DateTimeInterface $createdAt;
+
+    #[Gedmo\Timestampable(on: 'update')]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    protected DateTimeInterface $updatedAt;
 
     /**
      * Many Media have Many Tags.
@@ -57,14 +71,28 @@ class Media implements EntityInterface
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->setCreatedAt(new DateTime());
+        $this->setUpdatedAt(new DateTime());
     }
 
-    public function generateId(): void
+    public function getPath(): string
     {
-        $this->id = hash(
-            'sha256',
-            $this->getOwner()->getRawId() . $this->getContent() . $this->getVersion()
-        );
+        return $this->path;
+    }
+
+    public function setPath(string $path): void
+    {
+        $this->path = $path;
+    }
+
+    public function getServerAlias(): string
+    {
+        return $this->serverAlias;
+    }
+
+    public function setServerAlias(string $serverAlias): void
+    {
+        $this->serverAlias = $serverAlias;
     }
 
     public function getId(): string
@@ -87,12 +115,12 @@ class Media implements EntityInterface
         $this->version = $version;
     }
 
-    public function getOwner(): User
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
 
-    public function setOwner(User $owner): void
+    public function setOwner(?User $owner = null): void
     {
         $this->owner = $owner;
     }
@@ -115,16 +143,6 @@ class Media implements EntityInterface
     public function setSize(int $size): void
     {
         $this->size = $size;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): void
-    {
-        $this->content = $content;
     }
 
     public function getExtension(): string
@@ -169,5 +187,25 @@ class Media implements EntityInterface
     public function getRawId(): string
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeInterface $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 }

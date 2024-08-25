@@ -21,5 +21,7 @@ storage/artifacts
 
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
-/phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+/public/assets/content
+!/public/assets/content/.gitignore

@@ -7,6 +7,7 @@ parameters:
   table_prefix: '%env(DATABASE_TABLES_PREFIX)%_'
   api_version: '%env(API_VERSION)%'
   service_name: '%env(SERVICE_NAME)%'
+  content_dir: '%kernel.project_dir%/public/assets/content'
 
 services:
     # default configuration for services in *this* file
@@ -16,6 +17,7 @@ services:
         bind:
           'string $projectDir': '%kernel.project_dir%'
           'string $projectEnvironment': '%kernel.environment%'
+          'string $contentDir': '%content_dir%'
           
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

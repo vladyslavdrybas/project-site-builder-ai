@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -24,8 +23,6 @@ class VariantBuilderFormType extends AbstractType
     {
         /** @var VariantMetaDto $data */
         $data = $builder->getData();
-
-        dump($data);
 
         $builder
             ->add('variantId',
@@ -83,18 +80,20 @@ class VariantBuilderFormType extends AbstractType
                                     'image/jpeg',
                                     'image/jpg',
                                     'image/png',
+                                    'image/svg',
+                                    'image/svg+xml',
                                 ],
                                 'maxSize' => '5M',
                                 'mimeTypesMessage' => 'Please upload a valid Image',
                             ])
                         ],
                     ])
-                ->add('mediaId',
-                    HiddenType::class,
-                    [
-                        'data' => $data->parts->header->data->brand->media->id ?? null
-                    ]
-                )
+                    ->add('mediaId',
+                        HiddenType::class,
+                        [
+                            'data' => $data->parts->header->data->brand->media->id ?? null
+                        ]
+                    )
             )
             ->add(
                 $builder->create(
@@ -195,7 +194,7 @@ class VariantBuilderFormType extends AbstractType
                         ]
                     )
                     ->add('mediaFile', FileType::class, [
-                        'label' => 'Presentation Image or Video',
+                        'label' => 'Presentation Image',
                         'mapped' => false,
                         'required' => false,
                         'constraints' => [
@@ -205,10 +204,12 @@ class VariantBuilderFormType extends AbstractType
                                     'image/jpg',
                                     'image/png',
                                     'image/gif',
-                                    'video/mp4',
+                                    'image/svg',
+                                    'image/svg+xml',
+//                                    'video/mp4',
                                 ],
                                 'maxSize' => '5M',
-                                'mimeTypesMessage' => 'Please upload a valid Image or Video',
+                                'mimeTypesMessage' => 'Please upload a valid Image',
                             ])
                         ],
                     ])
@@ -277,6 +278,8 @@ class VariantBuilderFormType extends AbstractType
                                             'image/jpeg',
                                             'image/jpg',
                                             'image/png',
+                                            'image/svg',
+                                            'image/svg+xml',
                                         ],
                                         'maxSize' => '3M',
                                         'mimeTypesMessage' => 'Please upload a valid Image',
@@ -322,6 +325,8 @@ class VariantBuilderFormType extends AbstractType
                                             'image/jpeg',
                                             'image/jpg',
                                             'image/png',
+                                            'image/svg',
+                                            'image/svg+xml',
                                         ],
                                         'maxSize' => '3M',
                                         'mimeTypesMessage' => 'Please upload a valid Image',
@@ -367,6 +372,8 @@ class VariantBuilderFormType extends AbstractType
                                             'image/jpeg',
                                             'image/jpg',
                                             'image/png',
+                                            'image/svg',
+                                            'image/svg+xml',
                                         ],
                                         'maxSize' => '3M',
                                         'mimeTypesMessage' => 'Please upload a valid Image',
@@ -430,7 +437,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
-                                'label' => 'Step Image or Video',
+                                'label' => 'Step Image',
                                 'mapped' => false,
                                 'required' => false,
                                 'constraints' => [
@@ -440,10 +447,12 @@ class VariantBuilderFormType extends AbstractType
                                             'image/jpg',
                                             'image/png',
                                             'image/gif',
-                                            'video/mp4',
+                                            'image/svg',
+                                            'image/svg+xml',
+//                                            'video/mp4',
                                         ],
                                         'maxSize' => '5M',
-                                        'mimeTypesMessage' => 'Please upload a valid Image or Video',
+                                        'mimeTypesMessage' => 'Please upload a valid Image',
                                     ])
                                 ],
                             ])
@@ -477,7 +486,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
-                                'label' => 'Step Image or Video',
+                                'label' => 'Step Image',
                                 'mapped' => false,
                                 'required' => false,
                                 'constraints' => [
@@ -487,10 +496,12 @@ class VariantBuilderFormType extends AbstractType
                                             'image/jpg',
                                             'image/png',
                                             'image/gif',
-                                            'video/mp4',
+                                            'image/svg',
+                                            'image/svg+xml',
+//                                            'video/mp4',
                                         ],
                                         'maxSize' => '5M',
-                                        'mimeTypesMessage' => 'Please upload a valid Image or Video',
+                                        'mimeTypesMessage' => 'Please upload a valid Image',
                                     ])
                                 ],
                             ])
@@ -524,7 +535,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
-                                'label' => 'Step Image or Video',
+                                'label' => 'Step Image',
                                 'mapped' => false,
                                 'required' => false,
                                 'constraints' => [
@@ -534,10 +545,12 @@ class VariantBuilderFormType extends AbstractType
                                             'image/jpg',
                                             'image/png',
                                             'image/gif',
-                                            'video/mp4',
+                                            'image/svg',
+                                            'image/svg+xml',
+//                                            'video/mp4',
                                         ],
                                         'maxSize' => '5M',
-                                        'mimeTypesMessage' => 'Please upload a valid Image or Video',
+                                        'mimeTypesMessage' => 'Please upload a valid Image',
                                     ])
                                 ],
                             ])
@@ -834,42 +847,84 @@ class VariantBuilderFormType extends AbstractType
                                 'required' => false,
                             ]
                         )
+                            ->add('discord',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['discord'] ?? null,
+                                ]
+                            )
+                            ->add('facebook',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['facebook'] ?? null,
+                                ]
+                            )
+                            ->add('github',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['github'] ?? null,
+                                ]
+                            )
+                            ->add('instagram',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['instagram'] ?? null,
+                                ]
+                            )
                             ->add('linkedIn',
-                                UrlType::class,
+                                TextType::class,
                                 [
                                     'label' => 'LinkedIn',
                                     'data' => $data->parts->footer->socialLinks['linkedIn'] ?? null,
                                 ]
                             )
-                            ->add('instagram',
-                                UrlType::class,
+                            ->add('medium',
+                                TextType::class,
                                 [
-                                    'data' => $data->parts->footer->socialLinks['instagram'] ?? null,
+                                    'data' => $data->parts->footer->socialLinks['medium'] ?? null,
+                                ]
+                            )
+                            ->add('reddit',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['reddit'] ?? null,
+                                ]
+                            )
+                            ->add('telegram',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['telegram'] ?? null,
                                 ]
                             )
                             ->add('youtube',
-                                UrlType::class,
+                                TextType::class,
                                 [
                                     'data' => $data->parts->footer->socialLinks['youtube'] ?? null,
                                 ]
                             )
                             ->add('twitter',
-                                UrlType::class,
+                                TextType::class,
                                 [
                                     'data' => $data->parts->footer->socialLinks['twitter'] ?? null,
                                 ]
                             )
                             ->add('tikTok',
-                                UrlType::class,
+                                TextType::class,
                                 [
                                     'label' => 'TikTok',
                                     'data' => $data->parts->footer->socialLinks['tikTok'] ?? null,
                                 ]
                             )
-                            ->add('facebook',
-                                UrlType::class,
+                            ->add('twitter',
+                                TextType::class,
                                 [
-                                    'data' => $data->parts->footer->socialLinks['facebook'] ?? null,
+                                    'data' => $data->parts->footer->socialLinks['twitter'] ?? null,
+                                ]
+                            )
+                            ->add('youtube',
+                                TextType::class,
+                                [
+                                    'data' => $data->parts->footer->socialLinks['youtube'] ?? null,
                                 ]
                             )
                     )
@@ -914,6 +969,16 @@ class VariantBuilderFormType extends AbstractType
                             'data' => $data->parts->design->colors['info'] ?? null,
                         ]
                     )
+            )
+            ->add(
+                'backBtn',
+                SubmitType::class,
+                [
+                    'label' => 'Back',
+                    'attr' => [
+                        'class' => 'btn btn-primary rounded-5',
+                    ],
+                ]
             )
             ->add(
                 'cancelBtn',

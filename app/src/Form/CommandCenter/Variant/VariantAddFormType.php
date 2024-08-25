@@ -48,13 +48,6 @@ class VariantAddFormType extends AbstractType
                 'required' => true,
                 'empty_data' => null, // Ensure no default value is selected
             ])
-            ->add('plainMeta', TextareaType::class,
-                [
-                    'label' => 'Meta data',
-                    'required' => false,
-                    'mapped' => false,
-                ]
-            )
             ->add('startAt', DateTimeType::class, ['required' => false])
             ->add('endAt', DateTimeType::class, ['required' => false])
             ->add('weight', NumberType::class, [

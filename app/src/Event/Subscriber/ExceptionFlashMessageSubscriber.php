@@ -37,7 +37,10 @@ class ExceptionFlashMessageSubscriber implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (str_starts_with($event->getRequest()->server->get('REQUEST_URI'), '/api')) {
+        if (
+            str_starts_with($event->getRequest()->server->get('REQUEST_URI'), '/api')
+            || $event->getRequest()->get('_route') === 'app_media_show'
+        ) {
             return;
         }
 

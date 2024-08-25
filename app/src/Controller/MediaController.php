@@ -21,6 +21,6 @@ class MediaController extends AbstractController
     public function show(
         Media $media
     ): BinaryFileResponse {
-        return new BinaryFileResponse($media->getContent());
+        return new BinaryFileResponse($media->getPath());
     }
 }

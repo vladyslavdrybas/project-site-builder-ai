@@ -20,9 +20,17 @@
                 <a role="button" class="text-black">Terms of Service</a>
             </p>
             <p>
-                {% for social in data.socialLinks %}
-                    {% if social.link is defined and social.link is not null %}
-                        <a href="{{ social.link }}"><img src="{{ absolute_url(asset('social-icons/' ~ social.media, 'img')) }}" alt="{{ social.alt }}"></a>
+                {% for socialName, link in data.socialLinks %}
+                    {% if link is defined and link is not null %}
+                        <a
+                            href="{{ link }}"
+                        >
+                            <img
+                                src="{{ absolute_url(asset('social-icons/' ~ socialName ~ '.png', 'img')) }}"
+                                alt="{{ socialName }}"
+                                title="{{ socialName }}"
+                            >
+                        </a>
                     {% endif %}
                 {% endfor %}
             </p>

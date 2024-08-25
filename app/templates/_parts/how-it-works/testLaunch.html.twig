@@ -1,5 +1,5 @@
 <!-- How It Works Section -->
-<section id="how-it-works" class="how-it-works bg-light">
+<section id="howitworks" class="how-it-works bg-light">
     <div class="container text-center">
 
         {% if data.head is defined and data.head is not null and data.head|length > 0 %}
@@ -21,11 +21,20 @@
 
                 {% if stepHasMedia %}
                 <div class="col-md-5 {% if loop.index % 2 == 0 %}order-md-1{% endif %}">
-                    <img
-                        class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-                        src="{{ absolute_url(asset( step.media.id, 'img')) }}"
-                        alt="icon"
-                    >
+
+                    {% if step.media.content is defined and step.media.content is not null %}
+                        <img
+                            src="data:{{ step.media.mimeType }};base64,{{ step.media.content }}"
+                            class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                            alt="icon"
+                        >
+                    {% else %}
+                        <img
+                            src="{{ absolute_url(path('app_media_show', {'media': step.media.id})) }}"
+                            class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                            alt="icon"
+                        >
+                    {% endif %}
                 </div>
                 {% endif %}
 

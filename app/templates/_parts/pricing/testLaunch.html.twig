@@ -25,13 +25,21 @@
                 ">
                     <h3>{{ plan.head }}</h3>
 
-                    <div>
-                    {% for proposal in plan.description %}
-                        <p>{{ proposal }}</p>
-                    {% endfor %}
+                    <div
+                        class="
+                        h-100
+                            d-flex
+                            flex-column
+                            justify-content-between
+                        "
+                    >
+                        <div>
+                        {% for proposal in plan.description %}
+                            <p>{{ proposal }}</p>
+                        {% endfor %}
+                        </div>
+                        <div class="price {% if loop.index == 2 %}text-white{% else %}text-primary{% endif %}">{{ plan.currencySign }}{{ plan.price }}</div>
                     </div>
-                    <div class="price {% if loop.index == 2 %}text-white{% else %}text-primary{% endif %}">{{ plan.currencySign }}{{ plan.price }}</div>
-
                     <a
                         href="{{ plan.callToActionButton.link }}"
                         class="btn btn-primary rounded-5 btn-goto-payment"

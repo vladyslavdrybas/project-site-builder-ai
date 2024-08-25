@@ -71,25 +71,30 @@ class VariantController extends AbstractControlPanelController
         $variantEditForm->handleRequest($request);
 
         if ($variantEditForm->isSubmitted() && $variantEditForm->isValid()) {
-            $meta = $variantEditForm->get('plainMeta')->getData();
+//            $meta = $variantEditForm->get('plainMeta')->getData();
 
             try {
-                if (null !== $meta) {
-                    $meta = json_decode($meta, true);
-                    if (json_last_error() > 0) {
-                        throw new InvalidArgumentException(sprintf('Json exception. %s.', json_last_error_msg()));
-                    }
+//                if (null !== $meta) {
+//                    $meta = json_decode($meta, true);
+//                    if (json_last_error() > 0) {
+//                        throw new InvalidArgumentException(sprintf('Json exception. %s.', json_last_error_msg()));
+//                    }
+//
+//                    if (!is_array($meta) || empty($meta)) {
+//                        throw new InvalidArgumentException('Json exception. Fulfilled array or nothing expected.');
+//                    }
+//
+//                    $variant->setMeta($meta);
+//                } else {
+//                    if ($variant->isActive()) {
+//                        $this->addFlash('info', 'You cannot activate variant without meta data.');
+//                        $variant->setIsActive(false);
+//                    }
+//                }
 
-                    if (!is_array($meta) || empty($meta)) {
-                        throw new InvalidArgumentException('Json exception. Fulfilled array or nothing expected.');
-                    }
-
-                    $variant->setMeta($meta);
-                } else {
-                    if ($variant->isActive()) {
-                        $this->addFlash('info', 'You cannot activate variant without meta data.');
-                        $variant->setIsActive(false);
-                    }
+                if (!is_array($variant->getMeta()) && $variant->isActive()) {
+                    $this->addFlash('info', 'You cannot activate variant without meta data.');
+                    $variant->setIsActive(false);
                 }
 
                 $variantRepository->add($variant);
@@ -128,21 +133,19 @@ class VariantController extends AbstractControlPanelController
         $variantAddForm->handleRequest($request);
 
         if ($variantAddForm->isSubmitted() && $variantAddForm->isValid()) {
-            $meta = $variantAddForm->get('plainMeta')->getData();
-
             try {
-                if (null !== $meta) {
-                    $meta = json_decode($meta, true);
-                    if (json_last_error() > 0) {
-                        throw new InvalidArgumentException(sprintf('Json exception. %s.', json_last_error_msg()));
-                    }
-
-                    if (!is_array($meta) || empty($meta)) {
-                        throw new InvalidArgumentException('Json exception. Fulfilled array or nothing expected.');
-                    }
-
-                    $variant->setMeta($meta);
-                }
+//                if (null !== $meta) {
+//                    $meta = json_decode($meta, true);
+//                    if (json_last_error() > 0) {
+//                        throw new InvalidArgumentException(sprintf('Json exception. %s.', json_last_error_msg()));
+//                    }
+//
+//                    if (!is_array($meta) || empty($meta)) {
+//                        throw new InvalidArgumentException('Json exception. Fulfilled array or nothing expected.');
+//                    }
+//
+//                    $variant->setMeta($meta);
+//                }
 
                 $variantRepository->add($variant);
                 $variantRepository->save();
