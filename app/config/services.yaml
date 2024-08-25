@@ -8,6 +8,7 @@ parameters:
   api_version: '%env(API_VERSION)%'
   service_name: '%env(SERVICE_NAME)%'
   content_dir: '%kernel.project_dir%/public/assets/content'
+  env: '%kernel.environment%'
 
 services:
     # default configuration for services in *this* file

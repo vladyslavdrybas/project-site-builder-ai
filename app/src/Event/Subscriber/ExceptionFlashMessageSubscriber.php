@@ -45,17 +45,19 @@ class ExceptionFlashMessageSubscriber implements EventSubscriberInterface
         }
 
         $exception = $event->getThrowable();
-        $code = Response::HTTP_BAD_REQUEST;
         $message = $exception->getMessage();
-        if ($exception instanceof AccessDeniedException) {
-            $code = Response::HTTP_UNAUTHORIZED;
-            $message = 'Access denied';
-        } else if ($exception instanceof NotFoundHttpException) {
-            $code = Response::HTTP_NOT_FOUND;
-            $message = '404 not found';
-        } else if ($exception instanceof MethodNotAllowedException) {
-            $code = Response::HTTP_METHOD_NOT_ALLOWED;
-            $message = 'Method not allowed';
+        if ($this->projectEnvironment === 'prod' || $this->projectEnvironment === 'production') {
+            $code = Response::HTTP_BAD_REQUEST;
+            if ($exception instanceof AccessDeniedException) {
+                $code = Response::HTTP_UNAUTHORIZED;
+                $message = 'Access denied';
+            } else if ($exception instanceof NotFoundHttpException) {
+                $code = Response::HTTP_NOT_FOUND;
+                $message = '404 not found';
+            } else if ($exception instanceof MethodNotAllowedException) {
+                $code = Response::HTTP_METHOD_NOT_ALLOWED;
+                $message = 'Method not allowed';
+            }
         }
 
         $this->flash->set('danger', $message);
