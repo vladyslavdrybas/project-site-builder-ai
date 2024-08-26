@@ -1,0 +1,14 @@
+{% extends 'base.html.twig'%}
+
+{% block content %}
+    <div class="container pt-5">
+        <div class="row pt-5">
+            <p>
+                prompt: {{ data.prompt }}
+            </p>
+            <p>
+                answer: {{ data.answer|raw }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
