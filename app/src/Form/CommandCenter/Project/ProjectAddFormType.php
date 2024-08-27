@@ -5,7 +5,7 @@ namespace App\Form\CommandCenter\Project;
 
 use App\Entity\Project;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -31,16 +31,30 @@ class ProjectAddFormType extends AbstractType
                         'required' => false,
                     ]
             )
+            ->add('tags',
+                TextType::class,
+                    [
+                        'help' => 'Separate tags via space. Short tags that will help to easy search and filter.',
+                        'required' => false,
+                        'mapped' => false,
+                        'attr' => [
+                            'class' => 'input-tags text-secondary',
+                            'data-ub-tag-separator' => ' ',
+                        ],
+                    ]
+            )
             ->add('startAt',
                 DateTimeType::class,
                 [
-                    'required' => false
+                    'required' => false,
+                    'help' => 'Automatically start show for public view all variants, if they have no other configuration.',
                 ]
             )
             ->add('endAt',
                 DateTimeType::class,
                 [
-                    'required' => false
+                    'required' => false,
+                    'help' => 'Automatically close from public view all variants, if they have no other configuration.',
                 ]
             )
             ->add(
@@ -78,53 +92,198 @@ class ProjectAddFormType extends AbstractType
                     ->add('proposal',
                         TextType::class,
                         [
-                            'help' => 'Describe proposal or features that user will get.',
+                            'help' => 'Describe proposal or unique features that user will get.',
                         ]
                     )
                     ->add('value',
                         TextareaType::class,
                         [
-                            'help' => 'Short description what value audience will get from using product.',
+                            'help' => 'Short description what value audience will get from product.',
                             'required' => false,
                         ]
                     )
-                    ->add('tone',
-                        ChoiceType::class,
+                    ->add('competitors',
+                        TextareaType::class,
                         [
-                            'help' => 'Tone of content.',
-                            'choices'  => [
-                                'formal' => 'formal',
-                                'casual' => 'casual',
-                                'authoritative' => 'authoritative',
-                                'friendly' => 'friendly',
-                                'creative' => 'creative',
-                                'business' => 'business',
-                                'convincing' => 'convincing',
-                                'urgent' => 'urgent',
-                                'persuasive' => 'persuasive',
-                            ],
-                            'multiple' => true,
+                            'label' => 'Competitors homepage links',
+                            'help' => 'Each link must be from a new line.',
+                            'required' => false,
                         ]
                     )
-                    ->add('style',
-                        ChoiceType::class,
-                        [
-                            'help' => 'Style of content.',
-                            'choices'  => [
-                                'humor' => 'humor',
-                                'straightforward' => 'straightforward',
-                                'promotional' => 'promotional',
-                                'gaming' => 'gaming',
-                                'childlike' => 'childlike',
-                                'bright' => 'bright',
-                                'optimistic' => 'optimistic',
-                                'pessimistic' => 'pessimistic',
-                                'depressive' => 'depressive',
-                                'gayish' => 'gayish',
-                                'army' => 'army',
-                            ],
-                            'multiple' => true,
-                        ]
+                    ->add(
+                        $builder->create(
+                            'tone',
+                            FormType::class,
+                            [
+                                'label' => 'Tone of content.',
+                                'required' => false,
+                                'mapped' => false,
+                                'attr' => [
+                                    'class' => 'd-flex align-items-center flex-row justify-content-start flex-wrap',
+                                ],
+                            ]
+
+                        )
+                            ->add('formal',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'formal',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('casual',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'casual',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('authoritative',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'authoritative',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('friendly',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'friendly',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('creative',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'creative',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('business',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'business',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('convincing',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'convincing',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('urgent',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'urgent',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('persuasive',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'persuasive',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+
+                    )
+                    ->add(
+                        $builder->create(
+                            'style',
+                            FormType::class,
+                            [
+                                'label' => 'Style of content.',
+                                'required' => false,
+                                'mapped' => false,
+                                'attr' => [
+                                    'class' => 'd-flex align-items-center flex-row justify-content-start flex-wrap',
+                                ],
+                            ]
+
+                        )
+                            ->add('humor',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'humor',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('straightforward',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'straightforward',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('promotional',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'promotional',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('gamer',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'gamer',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('childlike',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'childlike',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('pessimistic',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'pessimistic',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
+                            ->add('optimistic',
+                                CheckboxType::class,
+                                [
+                                    'label'    => 'optimistic',
+                                    'label_attr' => [
+                                        'class' => 'me-3',
+                                    ]
+                                ]
+                            )
                     )
             )
         ;

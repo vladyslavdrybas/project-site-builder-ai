@@ -17,6 +17,7 @@
         }
     </style>
 
+    <link href="https://cdn.jsdelivr.net/npm/use-bootstrap-tag@2.2.2/dist/use-bootstrap-tag.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ absolute_url(asset('highlight.default.min.css', 'css')) }}">
     <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap-icons.min.css', 'bootstrap')) }}">
     <link href="{{ absolute_url(asset('css/bootstrap.min.css', 'bootstrap')) }}" rel="stylesheet">
@@ -24,7 +25,7 @@
 
 </head>
 
-<body class="">
+<body class="bg-light">
 
 {% include'icons.html.twig' %}
 
@@ -59,8 +60,9 @@
     {% include 'landing-page/components/sections/footer/standard.html.twig' %}
 {% endblock %}
 
-<script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/use-bootstrap-tag@2.2.2/dist/use-bootstrap-tag.min.js"></script>
 <script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
+<script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
 
 {% block scriptsbottom %}
 <script type="application/javascript">
@@ -107,9 +109,16 @@
 
     document.addEventListener('DOMContentLoaded', (event) => {
         const codeJson = document.querySelectorAll("code.language-json");
+        const inputTags = document.querySelectorAll(".input-tags");
+
         codeJson && codeJson.forEach((el) => {
             console.log(el);
             el.innerHTML = printTheJSONInPrettyFormat(el.innerHTML);
+        });
+
+        inputTags && inputTags.forEach((el) => {
+            console.log(el);
+            UseBootstrapTag(el);
         });
     });
 

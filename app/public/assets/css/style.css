@@ -3,6 +3,7 @@ body {
     font-family: Aller Regular, Arial, sans-serif;
     /*background-color: #f7f9fc;*/
     color: #333;
+    /*background-color: #fafafa;*/
 }
 
 #first-screen,
@@ -265,6 +266,7 @@ body {
 }
 
 .form-control:focus,
+.form-control.focus,
 .form-select:focus {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
