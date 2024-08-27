@@ -38,8 +38,6 @@ class VariantEditFormType extends AbstractType
 
         $plainMeta = null === $variant->getMeta() ? '' : json_encode($variant->getMeta());
 
-        dump($plainMeta);
-
         $builder
             ->add('title', TextType::class)
             ->add('description', TextareaType::class, [

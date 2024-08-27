@@ -62,7 +62,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     protected bool $isDeleted = false;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Project::class)]
-    #[ORM\OrderBy(['endAt' => 'DESC'])]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
     protected Collection $projects;
 
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Media::class)]

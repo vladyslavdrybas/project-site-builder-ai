@@ -32,8 +32,6 @@ class HomeController extends AbstractController
     ): Response {
         $prompt = file_get_contents($projectDir . '/src/DataFixtures/data/landing_project_content.txt');
 
-        dump($prompt);
-
         $answer = null;
         if (!empty($prompt)) {
             $answer = $openAiClient->prompt($prompt);

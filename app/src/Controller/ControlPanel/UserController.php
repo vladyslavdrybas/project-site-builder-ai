@@ -58,8 +58,6 @@ class UserController extends AbstractControlPanelController
 
         try {
             if ($userEditForm->isSubmitted() && $userEditForm->isValid()) {
-                dump($user);
-
                 if ($emailBuffer !== $user->getEmail()) {
                     $user->setIsEmailVerified(false);
                 }

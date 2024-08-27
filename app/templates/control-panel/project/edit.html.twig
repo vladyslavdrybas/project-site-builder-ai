@@ -8,8 +8,17 @@
         <div class="row gx-5 justify-content-center">
             {% include 'control-panel/project/prompt-for-ai-usage.html.twig' %}
             <div class="col-md-8 col-lg-5">
-                <h1>Edit {{ project.title }}</h1>
-                {{ form(projectEditForm, {'method': 'POST'}) }}
+                <h1>{{ project.title }}</h1>
+                {{ form(projectEditForm, {'method': 'POST', 'attr': {'id': projectEditForm.vars.id}}) }}
+
+                <button
+                    class="save btn btn-primary rounded-5"
+                    type="submit"
+                    form="{{ projectEditForm.vars.id }}"
+                    value="save"
+                >
+                    Save
+                </button>
             </div>
         </div>
 

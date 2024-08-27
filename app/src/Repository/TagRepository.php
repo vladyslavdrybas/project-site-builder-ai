@@ -12,4 +12,16 @@ use App\Entity\Tag;
  */
 class TagRepository extends AbstractRepository
 {
+    /**
+     * @param array $in
+     * @return array<Tag>
+     */
+    public function findIn(array $in): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.id IN(:list)')
+            ->setParameter('list', $in)
+            ->getQuery()
+            ->getResult();
+    }
 }

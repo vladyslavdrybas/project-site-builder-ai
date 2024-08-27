@@ -7,7 +7,7 @@
             <div class="row gx-5 justify-content-center">
 
                 <div class="col-md-8 col-lg-6">
-                    <h1>View {{ project.title }}</h1>
+                    <h1>{{ project.title }}</h1>
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
@@ -29,21 +29,16 @@
                             {{ project.description }}
                         </li>
 
-                        {% if project.proposal is not null %}
+                        {% if project.promptMeta is not null %}
                         <li class="list-group-item">
                             <div class="fw-bold">
-                                Proposal
+                                Prompt Meta
                             </div>
-                            {{ project.proposal }}
-                        </li>
-                        {% endif %}
-
-                        {% if project.customerPortrait is not null %}
-                        <li class="list-group-item">
-                            <div class="fw-bold">
-                                Customer Portrait
-                            </div>
-                            {{ project.customerPortrait }}
+                            <pre class=" w-100">
+                                <code class="language-json">
+                                    {{ project.promptMeta }}
+                                </code>
+                            </pre>
                         </li>
                         {% endif %}
 

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\DataTransferObject\PromptMetaDto;
+use App\Entity\Type\JsonDataTransferObjectType;
 use App\Repository\ProjectRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,18 +25,18 @@ class Project extends AbstractEntity
     #[Assert\NotBlank(message: 'Title cannot be blank.')]
     #[Assert\Length(min: 11, max: 255)]
     #[ORM\Column(type: Types::STRING, length: 255)]
-    protected string $title;
+    protected ?string $title = null;
 
     #[Assert\NotBlank(message: 'Description cannot be blank.')]
     #[Assert\Length(min: 20, max: 65000)]
     #[ORM\Column(type: Types::TEXT)]
-    protected ?string $description;
+    protected ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    protected ?string $proposal = null;
+    #[ORM\Column(type: JsonDataTransferObjectType::NAME, nullable: true)]
+    protected ?PromptMetaDto $promptMeta = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    protected ?string $customerPortrait = null;
+    #[ORM\Column(name: "is_active", type: Types::BOOLEAN, options: ["default" => false])]
+    protected bool $isActive = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTimeInterface $startAt = null;
@@ -42,22 +44,30 @@ class Project extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTimeInterface $endAt = null;
 
-    #[ORM\Column(name: "is_active", type: Types::BOOLEAN, options: ["default" => false])]
-    protected bool $isActive = false;
-
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Variant::class)]
     #[ORM\OrderBy(['endAt' => 'DESC'])]
     protected Collection $variants;
+
+    /**
+     * Many Projects have Many Tags.
+     * @var Collection<int, Tag>
+     */
+    #[ORM\JoinTable(name: 'project_tag')]
+    #[ORM\JoinColumn(name: 'project_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Tag::class)]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    protected Collection $tags;
 
     public function __construct()
     {
         parent::__construct();
         $this->variants = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     protected ?string $teamId = null;
     protected ?string $analyticsId = null;
-    protected array $tags = [];
 
     public function getOwner(): User
     {
@@ -69,30 +79,35 @@ class Project extends AbstractEntity
         $this->owner = $owner;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): void
+    public function setTitle(?string $title = null): void
     {
         $this->title = $title;
     }
 
-    public function isActive(): bool
+    public function isEnabled(): bool
     {
         $now = new \DateTime();
-        $active = $this->isActive;
+        $enabled = $this->isActive;
 
-        if ($active && !empty($this->getStartAt())) {
-            $active = $now >= $this->getStartAt();
+        if ($enabled && !empty($this->getStartAt())) {
+            $enabled = $now >= $this->getStartAt();
         }
 
-        if ($active && !empty($this->getEndAt())) {
-            $active = $now <= $this->getEndAt();
+        if ($enabled && !empty($this->getEndAt())) {
+            $enabled = $now <= $this->getEndAt();
         }
 
-        return $active ;
+        return $enabled ;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 
     public function setIsActive(bool $isActive): void
@@ -130,26 +145,6 @@ class Project extends AbstractEntity
         $this->endAt = $endAt;
     }
 
-    public function getProposal(): ?string
-    {
-        return $this->proposal;
-    }
-
-    public function setProposal(?string $proposal): void
-    {
-        $this->proposal = $proposal;
-    }
-
-    public function getCustomerPortrait(): ?string
-    {
-        return $this->customerPortrait;
-    }
-
-    public function setCustomerPortrait(?string $customerPortrait): void
-    {
-        $this->customerPortrait = $customerPortrait;
-    }
-
     public function getVariants(): Collection
     {
         return $this->variants;
@@ -158,5 +153,37 @@ class Project extends AbstractEntity
     public function setVariants(Collection $variants): void
     {
         $this->variants = $variants;
+    }
+
+    public function getPromptMeta(): ?PromptMetaDto
+    {
+        return $this->promptMeta;
+    }
+
+    public function setPromptMeta(?PromptMetaDto $promptMeta): void
+    {
+        $this->promptMeta = $promptMeta;
+    }
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function setTags(Collection $tags): void
+    {
+        $this->tags = $tags;
+    }
+
+    public function addTag(Tag $tag): void
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->offsetSet($tag->getId(), $tag);
+        }
+    }
+
+    public function hasTagByKey(string $key): bool
+    {
+        return $this->tags->containsKey($key);
     }
 }

@@ -24,10 +24,6 @@ class VariantBuilderFormType extends AbstractType
         /** @var VariantMetaDto $data */
         $data = $builder->getData();
 
-        dump($data);
-        dump($data->parts->pricing->data?->items['plan1']?->callToActionButton->text);
-        dump($data->parts->pricing->data?->head);
-
         $builder
             ->add('variantId',
                 HiddenType::class,

@@ -139,19 +139,25 @@ class Variant extends AbstractEntity
         $this->endAt = $endAt;
     }
 
-    public function isActive(): bool
+    public function isEnabled(): bool
     {
         $now = new \DateTime();
-        $active = $this->isActive;
-        if ($active && !empty($this->getStartAt())) {
-            $active = $now >= $this->getStartAt();
+        $enabled = $this->isActive;
+
+        if ($enabled && !empty($this->getStartAt())) {
+            $enabled = $now >= $this->getStartAt();
         }
 
-        if ($active && !empty($this->getEndAt())) {
-            $active = $now <= $this->getEndAt();
+        if ($enabled && !empty($this->getEndAt())) {
+            $enabled = $now <= $this->getEndAt();
         }
 
-        return $active;
+        return $enabled ;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 
     public function setIsActive(bool $isActive): void
