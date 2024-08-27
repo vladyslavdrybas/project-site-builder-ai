@@ -81,7 +81,18 @@ class Project extends AbstractEntity
 
     public function isActive(): bool
     {
-        return $this->isActive;
+        $now = new \DateTime();
+        $active = $this->isActive;
+
+        if ($active && !empty($this->getStartAt())) {
+            $active = $now >= $this->getStartAt();
+        }
+
+        if ($active && !empty($this->getEndAt())) {
+            $active = $now <= $this->getEndAt();
+        }
+
+        return $active ;
     }
 
     public function setIsActive(bool $isActive): void

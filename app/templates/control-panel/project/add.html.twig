@@ -3,12 +3,32 @@
 
 {% block content %}
 <div class="min-vh-100 pt-5">
-    <div class="container pt-5 ">
+    <div class="container pt-5">
 
         <div class="row gx-5 justify-content-center">
             {% include 'control-panel/project/prompt-for-ai-usage.html.twig' %}
-            <div class="col-md-8 col-lg-5">
+            <div class="col-md-8 col-lg-8">
                 {{ form(projectAddForm, {'method': 'POST'}) }}
+
+
+{#                {{ form_start(projectAddForm, {'method': 'POST'}) }}#}
+
+
+{#                {{ form_row(projectAddForm.features, {'label' : false}) }}#}
+
+{#                {{ form_row(builderForm.previewBtn) }}#}
+
+
+{#                {{ form_end(projectAddForm) }}#}
+
+                <button
+                    class="save btn btn-primary rounded-5"
+                    type="submit"
+                    form="{{ projectAddForm.vars.id }}"
+                    value="save"
+                >
+                    Save
+                </button>
             </div>
         </div>
 

@@ -49,10 +49,14 @@
         {% include 'landing-page/components/sections/testimonial/carousel.html.twig' %}
         {% include 'landing-page/components/sections/pricing/standard-3-in-row.html.twig' %}
         {% include 'landing-page/components/sections/newsletter/standard.html.twig' %}
-        {% include 'landing-page/components/sections/footer/standard.html.twig' %}
     </div>
 
+{#    make fake checkout as modal window#}
     {% include 'landing-page/components/sections/checkout/simple.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+    {% include 'landing-page/components/sections/footer/standard.html.twig' %}
 {% endblock %}
 
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
