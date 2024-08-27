@@ -24,6 +24,10 @@ class VariantBuilderFormType extends AbstractType
         /** @var VariantMetaDto $data */
         $data = $builder->getData();
 
+        dump($data);
+        dump($data->parts->pricing->data?->items['plan1']?->callToActionButton->text);
+        dump($data->parts->pricing->data?->head);
+
         $builder
             ->add('variantId',
                 HiddenType::class,
@@ -625,7 +629,7 @@ class VariantBuilderFormType extends AbstractType
                     ->add('head',
                         TextType::class,
                         [
-                            'data' => $data->parts->pricing->head ?? null,
+                            'data' => $data->parts->pricing->data?->head ?? null,
                         ]
                     )
                     ->add(
@@ -640,32 +644,32 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan1']?->head ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan1']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => implode("\n", $data->parts->features->data?->items['plan1']->description ?? []) ?? null,
+                                    'data' => implode("\n", $data->parts->pricing->data?->items['plan1']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->features->data?->items['plan1']?->callToActionButtonDto ?? null
+                                    'data' => $data->parts->pricing->data?->items['plan1']?->callToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan1']?->price ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan1']?->price ?? null,
                                 ]
                             )
                             ->add('currencySign',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan1']?->currencySign ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan1']?->currencySign ?? null,
                                 ]
                             )
                     )
@@ -681,32 +685,32 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan2']?->head ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan2']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => implode("\n", $data->parts->features->data?->items['plan2']->description ?? []) ?? null,
+                                    'data' => implode("\n", $data->parts->pricing->data?->items['plan2']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->features->data?->items['plan2']?->callToActionButtonDto ?? null
+                                    'data' => $data->parts->pricing->data?->items['plan2']?->callToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan2']?->price ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan2']?->price ?? null,
                                 ]
                             )
                             ->add('currencySign',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan2']?->currencySign ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan2']?->currencySign ?? null,
                                 ]
                             )
                     )
@@ -722,32 +726,32 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan3']?->head ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan3']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => implode("\n", $data->parts->features->data?->items['plan3']->description ?? []) ?? null,
+                                    'data' => implode("\n", $data->parts->pricing->data?->items['plan3']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->features->data?->items['plan3']?->callToActionButtonDto ?? null
+                                    'data' => $data->parts->pricing->data?->items['plan3']?->callToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan3']?->price ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan3']?->price ?? null,
                                 ]
                             )
                             ->add('currencySign',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['plan3']?->currencySign ?? null,
+                                    'data' => $data->parts->pricing->data?->items['plan3']?->currencySign ?? null,
                                 ]
                             )
                     )

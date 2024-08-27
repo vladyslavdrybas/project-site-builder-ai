@@ -12,6 +12,8 @@ class SubscriptionsPartDataDto
         foreach ($items as $key => $item) {
             if (is_string($item['description'])) {
                 $itemDescription = explode("\n", $item['description']);
+            } elseif (is_array($item['description'])) {
+                $itemDescription = $item['description'];
             } else {
                 $itemDescription = null;
             }
@@ -20,8 +22,8 @@ class SubscriptionsPartDataDto
                 $item['head'] ?? null,
                     $itemDescription ?? null,
                 new CallToActionButtonDto(
-                    $item['ctaBtnText'] ?? null,
-                        $item['ctaBtnLink'] ?? '#checkout?p=' . urlencode($item['head'] ?? ''),
+                    $item['ctaBtnText'] ?? $item['callToActionButton']['text'] ?? null,
+                        $item['ctaBtnLink'] ?? $item['callToActionButton']['link'] ?? '#checkout?p=' . urlencode($item['head'] ?? ''),
                 ),
                 $item['price'] ?? null,
                 $item['currencySign'] ?? null,

@@ -1,14 +1,6 @@
-{% if isLink is defined and isLink == true %}
-    <a
-        href="{{ absolute_url(path('security_login')) }}"
-        class="btn btn-light rounded-5 {% if classes is defined %}{{ classes }}{% endif %}"
-    >
-        Login
-    </a>
-{% else %}
-    <button
-        class="btn btn-light rounded-5 {% if classes is defined %}{{ classes }}{% endif %}"
-        >
-        Login
-    </button>
-{% endif %}
+<a
+    href="{{ absolute_url(path('security_login')) }}"
+    class="btn btn-light rounded-5"
+>
+    Login
+</a>

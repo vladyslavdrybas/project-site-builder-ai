@@ -41,6 +41,10 @@
 
                 {% include 'landing-page/components/buttons/subscription.html.twig' with {'classes': 'ms-auto'} %}
 
+                {% if app.user is null %}
+                    {% include 'landing-page/components/buttons/login.html.twig' with {'classes': 'ms-auto'} %}
+                {% endif %}
+
             </div>
 
         </div>

@@ -35,13 +35,15 @@
                 <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
                     <div class="container">
                         <div class="testimonial carousel-caption">
+                            {% if item.media is defined and item.media is not empty %}
                             <img
                                 src="{{ absolute_url(asset( item.media, 'img')) }}"
                                 alt="{{ item.head }}"
                                 class="rounded-circle mb-3"
                             >
-                            <p>{{ item.description }}</p>
-                            <h5>{{ item.head }}</h5>
+                            {% endif %}
+                            <p>{{ item.description ?? item.review }}</p>
+                            <h5>{{ item.head ?? item.name }}</h5>
                         </div>
                     </div>
                 </div>

@@ -401,6 +401,7 @@ class VariantBuilderController extends AbstractControlPanelController
         Variant $variant
     ): array {
         $meta = $variant->getMeta();
+        dump($meta);
 
         if (!isset($meta['variantId'])) {
             $meta['variantId'] = $variant->getRawId();

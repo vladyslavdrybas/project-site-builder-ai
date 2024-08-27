@@ -6,8 +6,8 @@ namespace App\DataTransferObject\Variant\Meta;
 class FeatureDto
 {
     public function __construct(
-       public ?string $head,
-       public ?string $description,
-       public ?MediaDto $media
+       public ?string $head = null,
+       public ?string $description = null,
+       public ?MediaDto $media = null
     ) {}
 }
