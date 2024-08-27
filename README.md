@@ -31,3 +31,16 @@
 4. color palette generator https://mycolor.space/?hex=%233C9CFD&sub=1
 5. font https://www.fontsquirrel.com/fonts/aller
 6. mailer https://mailpit.axllent.org/docs/
+7. power words for content build https://optinmonster.com/700-power-words-that-will-boost-your-conversions/
+
+### Advices
+
+Adding an FAQ: Putting an FAQ section at the bottom would be great, especially for such finance-related stuff where people often have many questions.
+
+The first thing we have are ten popular copywriting frameworks with their definitions, ideal usage scenarios, and an example to make things clearer.
+![img.png](docs/copywriting-frameworks.png)
+![img.png](docs/product-page-and-landing-page-difference.png)
+
+
+Consider spicing things up with new elements like VR, AR, or 3D images. Shopify's research showed a 94% increase in conversions with these visuals.
+

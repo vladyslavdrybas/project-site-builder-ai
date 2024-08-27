@@ -1,0 +1,897 @@
+[
+  {
+    "variantTitle": "Launch Your Idea Faster with AI",
+    "projectTitle": "QuickLaunch SaaS",
+    "parts": {
+      "header": {
+        "data": {
+          "brand": {
+            "text": "QuickLaunch"
+          },
+          "callToActionButton": {
+            "text": "Launch Your Idea"
+          },
+          "navigation": {
+            "home": "Base",
+            "hero": "Why QuickLaunch",
+            "features": "Features",
+            "howitworks": "How It Works",
+            "reviews": "Testimonials",
+            "pricing": "Pricing",
+            "newsletter": "Get Updates",
+            "contact": "Contact"
+          }
+        }
+      },
+      "hero": {
+        "data": {
+          "headline": "Launch Your Ideas in Days, Not Months",
+          "subheadline": "Use our AI-driven platform to build, test, and refine your concepts swiftly.",
+          "callToActionButton": {
+            "text": "Try It Free"
+          }
+        }
+      },
+      "features": {
+        "data": {
+          "headline": "Why QuickLaunch?",
+          "items": {
+            "feature1": {
+              "headline": "Rapid Prototyping",
+              "description": "Create and test landing pages in minutes using AI."
+            },
+            "feature2": {
+              "headline": "Detailed Analytics",
+              "description": "Understand your audience with comprehensive data insights."
+            },
+            "feature3": {
+              "headline": "Seamless Collaboration",
+              "description": "Work with like-minded innovators to improve and validate your ideas."
+            }
+          }
+        }
+      },
+      "howitworks": {
+        "data": {
+          "headline": "How QuickLaunch Works",
+          "items": {
+            "step1": {
+              "headline": "Step 1: Design Your Page",
+              "description": "Use our AI tools to create a landing page that resonates with your audience."
+            },
+            "step2": {
+              "headline": "Step 2: Test and Learn",
+              "description": "Run A/B tests to discover what works best for your idea."
+            },
+            "step3": {
+              "headline": "Step 3: Optimize and Launch",
+              "description": "Use the data collected to refine your idea and move forward with confidence."
+            }
+          }
+        }
+      },
+      "testimonials": {
+        "headline": "What Our Users Say",
+        "maxReviews": 7,
+        "items": [
+          {
+            "name": "Jane D.",
+            "review": "“QuickLaunch is my go-to for testing new ideas. The speed and accuracy of the AI are unbeatable!”"
+          },
+          {
+            "name": "Mike H.",
+            "review": "“The analytics helped me understand exactly what my audience wanted. I couldn’t have done it without QuickLaunch.”"
+          },
+          {
+            "name": "Laura P.",
+            "review": "“Being able to collaborate with others in the community has been a huge benefit. I’ve learned so much!”"
+          }
+        ]
+      },
+      "productSubscriptions": {
+        "data": {
+          "headline": "Pick Your QuickLaunch Plan",
+          "items": {
+            "plan1": {
+              "headline": "Starter",
+              "features": [
+                "1 Landing Page",
+                "Basic Analytics",
+                "AI Content Generation"
+              ],
+              "callToActionButton": {
+                "text": "Start Free"
+              },
+              "price": "15",
+              "currencySign": "$"
+            },
+            "plan2": {
+              "headline": "Professional",
+              "features": [
+                "3 Landing Pages",
+                "Advanced Analytics",
+                "AI Content + Optimization"
+              ],
+              "callToActionButton": {
+                "text": "Upgrade Now"
+              },
+              "price": "39",
+              "currencySign": "$"
+            },
+            "plan3": {
+              "headline": "Enterprise",
+              "features": [
+                "Unlimited Pages",
+                "Custom Analytics",
+                "AI Content + Full SEO",
+                "Consultation with Expert"
+              ],
+              "callToActionButton": {
+                "text": "Get Enterprise"
+              },
+              "price": "89",
+              "currencySign": "$"
+            }
+          }
+        }
+      },
+      "newsletter": {
+        "headline": "Stay in the Loop",
+        "subheadline": "Sign up to receive tips and updates on how to launch your ideas faster.",
+        "inputFieldPlaceholder": "Enter your email",
+        "callToActionButton": {
+          "text": "Sign Up"
+        }
+      }
+    }
+  },
+  {
+    "variantTitle": "Test Your Ideas Before You Invest",
+    "projectTitle": "IdeaValidator",
+    "parts": {
+      "header": {
+        "data": {
+          "brand": {
+            "text": "IdeaValidator"
+          },
+          "callToActionButton": {
+            "text": "Validate Now"
+          },
+          "navigation": {
+            "home": "Base",
+            "hero": "Why Validate",
+            "features": "Features",
+            "howitworks": "How It Works",
+            "reviews": "Testimonials",
+            "pricing": "Plans",
+            "newsletter": "Get Updates",
+            "contact": "Contact"
+          }
+        }
+      },
+      "hero": {
+        "data": {
+          "headline": "Validate Your Ideas with AI-Powered Testing",
+          "subheadline": "Don’t waste resources. Test your ideas first with our AI-driven platform.",
+          "callToActionButton": {
+            "text": "Start Validating"
+          }
+        }
+      },
+      "features": {
+        "data": {
+          "headline": "Key Benefits of IdeaValidator",
+          "items": {
+            "feature1": {
+              "headline": "Cost-Effective Testing",
+              "description": "Quickly validate your ideas without breaking the bank."
+            },
+            "feature2": {
+              "headline": "Data-Driven Insights",
+              "description": "Make informed decisions based on real customer feedback."
+            },
+            "feature3": {
+              "headline": "Collaborative Environment",
+              "description": "Join a community of creators to share knowledge and resources."
+            }
+          }
+        }
+      },
+      "howitworks": {
+        "data": {
+          "headline": "How to Validate Your Idea",
+          "items": {
+            "step1": {
+              "headline": "Step 1: Set Up Your Test",
+              "description": "Use our AI tools to create a landing page tailored to your concept."
+            },
+            "step2": {
+              "headline": "Step 2: Analyze Results",
+              "description": "Run tests and analyze the feedback to gauge interest."
+            },
+            "step3": {
+              "headline": "Step 3: Optimize and Launch",
+              "description": "Use the insights to refine your idea before full-scale development."
+            }
+          }
+        }
+      },
+      "testimonials": {
+        "headline": "What Our Users Are Saying",
+        "maxReviews": 7,
+        "items": [
+          {
+            "name": "Oliver J.",
+            "review": "“IdeaValidator saved me time and money. I now have a clear path forward for my startup.”"
+          },
+          {
+            "name": "Sophia L.",
+            "review": "“The AI tools are incredibly intuitive and effective. I was able to validate my idea in a matter of days.”"
+          },
+          {
+            "name": "Ethan K.",
+            "review": "“The data insights provided by IdeaValidator were crucial in helping me pivot my business plan.”"
+          }
+        ]
+      },
+      "productSubscriptions": {
+        "data": {
+          "headline": "Choose Your Plan",
+          "items": {
+            "plan1": {
+              "headline": "Basic",
+              "features": [
+                "1 Landing Page",
+                "Simple Analytics",
+                "AI Content Creation"
+              ],
+              "callToActionButton": {
+                "text": "Get Started"
+              },
+              "price": "12",
+              "currencySign": "$"
+            },
+            "plan2": {
+              "headline": "Standard",
+              "features": [
+                "3 Landing Pages",
+                "Advanced Analytics",
+                "AI Content + SEO"
+              ],
+              "callToActionButton": {
+                "text": "Choose Standard"
+              },
+              "price": "35",
+              "currencySign": "$"
+            },
+            "plan3": {
+              "headline": "Premium",
+              "features": [
+                "Unlimited Pages",
+                "Custom Analytics",
+                "AI Content + Full SEO",
+                "Consultation with Expert"
+              ],
+              "callToActionButton": {
+                "text": "Go Premium"
+              },
+              "price": "75",
+              "currencySign": "$"
+            }
+          }
+        }
+      },
+      "newsletter": {
+        "headline": "Never Miss an Update",
+        "subheadline": "Subscribe for the latest tips and tools for validating your ideas.",
+        "inputFieldPlaceholder": "Enter your email address",
+        "callToActionButton": {
+          "text": "Subscribe"
+        }
+      }
+    }
+  },
+  {
+    "variantTitle": "Bring Your Ideas to Life with AI",
+    "projectTitle": "IdeaForge",
+    "parts": {
+      "header": {
+        "data": {
+          "brand": {
+            "text": "IdeaForge"
+          },
+          "callToActionButton": {
+            "text": "Forge Your Idea"
+          },
+          "navigation": {
+            "home": "Base",
+            "hero": "Why Forge",
+            "features": "Features",
+            "howitworks": "How It Works",
+            "reviews": "Testimonials",
+            "pricing": "Pricing",
+            "newsletter": "Get Updates",
+            "contact": "Contact"
+          }
+        }
+      },
+      "hero": {
+        "data": {
+          "headline": "Turn Concepts into Reality with AI-Powered Testing",
+          "subheadline": "Build, test, and refine your ideas effortlessly with our AI platform.",
+          "callToActionButton": {
+            "text": "Start Forging"
+          }
+        }
+      },
+      "features": {
+        "data": {
+          "headline": "Why Use IdeaForge?",
+          "items": {
+            "feature1": {
+              "headline": "Instant Testing",
+              "description": "Create and test landing pages in a matter of minutes using AI."
+            },
+            "feature2": {
+              "headline": "Comprehensive Insights",
+              "description": "Gather detailed feedback to make informed decisions."
+            },
+            "feature3": {
+              "headline": "Collaborative Tools",
+              "description": "Work with other innovators to sharpen and perfect your ideas."
+            }
+          }
+        }
+      },
+      "howitworks": {
+        "data": {
+          "headline": "How IdeaForge Works",
+          "items": {
+            "step1": {
+              "headline": "Step 1: Create Your Landing Page",
+              "description": "Use our AI-driven tools to craft a landing page that speaks to your target audience."
+            },
+            "step2": {
+              "headline": "Step 2: Test Your Idea",
+              "description": "Run A/B tests to identify the most effective version of your concept."
+            },
+            "step3": {
+              "headline": "Step 3: Refine and Launch",
+              "description": "Use the insights gained to perfect your idea before moving to full development."
+            }
+          }
+        }
+      },
+      "testimonials": {
+        "headline": "What Our Users Are Saying",
+        "maxReviews": 7,
+        "items": [
+          {
+            "name": "Noah C.",
+            "review": "“IdeaForge is a game-changer! I was able to test and launch my product faster than I ever imagined.”"
+          },
+          {
+            "name": "Mia W.",
+            "review": "“The AI tools made creating a landing page so simple. I had my page up and running in no time.”"
+          },
+          {
+            "name": "Liam P.",
+            "review": "“The collaborative features allowed me to connect with other creators and refine my idea even further.”"
+          }
+        ]
+      },
+      "productSubscriptions": {
+        "data": {
+          "headline": "Pick Your Plan",
+          "items": {
+            "plan1": {
+              "headline": "Starter",
+              "features": [
+                "1 Landing Page",
+                "Basic Insights",
+                "AI Content Creation"
+              ],
+              "callToActionButton": {
+                "text": "Get Started"
+              },
+              "price": "10",
+              "currencySign": "$"
+            },
+            "plan2": {
+              "headline": "Advanced",
+              "features": [
+                "5 Landing Pages",
+                "Advanced Insights",
+                "AI Content + SEO"
+              ],
+              "callToActionButton": {
+                "text": "Choose Advanced"
+              },
+              "price": "30",
+              "currencySign": "$"
+            },
+            "plan3": {
+              "headline": "Pro",
+              "features": [
+                "Unlimited Pages",
+                "Custom Insights",
+                "AI Content + Full SEO",
+                "Consultation with Expert"
+              ],
+              "callToActionButton": {
+                "text": "Go Pro"
+              },
+              "price": "70",
+              "currencySign": "$"
+            }
+          }
+        }
+      },
+      "newsletter": {
+        "headline": "Keep Innovating",
+        "subheadline": "Subscribe for the latest tools and tips to bring your ideas to life.",
+        "inputFieldPlaceholder": "Enter your email",
+        "callToActionButton": {
+          "text": "Subscribe"
+        }
+      }
+    }
+  },
+  {
+    "variantTitle": "Validate Ideas Fast with AI",
+    "projectTitle": "IdeaBoost",
+    "parts": {
+      "header": {
+        "data": {
+          "brand": {
+            "text": "IdeaBoost"
+          },
+          "callToActionButton": {
+            "text": "Boost Your Idea"
+          },
+          "navigation": {
+            "home": "Base",
+            "hero": "Why Boost",
+            "features": "Features",
+            "howitworks": "How It Works",
+            "reviews": "Testimonials",
+            "pricing": "Plans",
+            "newsletter": "Subscribe",
+            "contact": "Contact"
+          }
+        }
+      },
+      "hero": {
+        "data": {
+          "headline": "Boost Your Ideas with AI-Powered Validation",
+          "subheadline": "Use our platform to test, validate, and improve your ideas quickly.",
+          "callToActionButton": {
+            "text": "Start Boosting"
+          }
+        }
+      },
+      "features": {
+        "data": {
+          "headline": "Why IdeaBoost?",
+          "items": {
+            "feature1": {
+              "headline": "Rapid Validation",
+              "description": "Get quick feedback on your ideas using our AI-powered tools."
+            },
+            "feature2": {
+              "headline": "Actionable Data",
+              "description": "Use real data to refine and perfect your concept."
+            },
+            "feature3": {
+              "headline": "Collaborate with Peers",
+              "description": "Work with other innovators to enhance your ideas and strategies."
+            }
+          }
+        }
+      },
+      "howitworks": {
+        "data": {
+          "headline": "How IdeaBoost Works",
+          "items": {
+            "step1": {
+              "headline": "Step 1: Build Your Page",
+              "description": "Create a landing page with AI tools designed to attract your target audience."
+            },
+            "step2": {
+              "headline": "Step 2: Test and Validate",
+              "description": "Run A/B tests to gather feedback and refine your idea."
+            },
+            "step3": {
+              "headline": "Step 3: Implement Insights",
+              "description": "Use the data collected to optimize your idea for success."
+            }
+          }
+        }
+      },
+      "testimonials": {
+        "headline": "Our Users Love IdeaBoost",
+        "maxReviews": 7,
+        "items": [
+          {
+            "name": "Emma J.",
+            "review": "“IdeaBoost made it so easy to validate my idea. I’m now moving forward with confidence!”"
+          },
+          {
+            "name": "James L.",
+            "review": "“The AI tools are fantastic. They helped me create a professional landing page in no time.”"
+          },
+          {
+            "name": "Ava M.",
+            "review": "“Collaborating with others on the platform has been invaluable. I’ve learned so much!”"
+          }
+        ]
+      },
+      "productSubscriptions": {
+        "data": {
+          "headline": "Choose Your Plan",
+          "items": {
+            "plan1": {
+              "headline": "Basic",
+              "features": [
+                "1 Landing Page",
+                "Basic Data",
+                "AI Content Creation"
+              ],
+              "callToActionButton": {
+                "text": "Start Now"
+              },
+              "price": "14",
+              "currencySign": "$"
+            },
+            "plan2": {
+              "headline": "Pro",
+              "features": [
+                "3 Landing Pages",
+                "Advanced Data",
+                "AI Content + SEO"
+              ],
+              "callToActionButton": {
+                "text": "Choose Pro"
+              },
+              "price": "34",
+              "currencySign": "$"
+            },
+            "plan3": {
+              "headline": "Enterprise",
+              "features": [
+                "Unlimited Pages",
+                "Custom Data",
+                "AI Content + Full SEO",
+                "Consultation with Expert"
+              ],
+              "callToActionButton": {
+                "text": "Go Enterprise"
+              },
+              "price": "64",
+              "currencySign": "$"
+            }
+          }
+        }
+      },
+      "newsletter": {
+        "headline": "Get the Latest Updates",
+        "subheadline": "Sign up for tips and tools to boost your ideas.",
+        "inputFieldPlaceholder": "Enter your email",
+        "callToActionButton": {
+          "text": "Sign Up"
+        }
+      }
+    }
+  },
+  {
+    "variantTitle": "Test, Validate, Succeed with AI",
+    "projectTitle": "IdeaLaunch",
+    "parts": {
+      "header": {
+        "data": {
+          "brand": {
+            "text": "IdeaLaunch"
+          },
+          "callToActionButton": {
+            "text": "Launch Now"
+          },
+          "navigation": {
+            "home": "Base",
+            "hero": "Why Launch",
+            "features": "Features",
+            "howitworks": "How It Works",
+            "reviews": "Testimonials",
+            "pricing": "Pricing",
+            "newsletter": "Subscribe",
+            "contact": "Contact"
+          }
+        }
+      },
+      "hero": {
+        "data": {
+          "headline": "Turn Your Concepts into Reality with AI",
+          "subheadline": "Test, validate, and refine your ideas with our AI-powered platform.",
+          "callToActionButton": {
+            "text": "Get Started Today"
+          }
+        }
+      },
+      "features": {
+        "data": {
+          "headline": "Why Choose IdeaLaunch?",
+          "items": {
+            "feature1": {
+              "headline": "Quick Validation",
+              "description": "Get immediate feedback on your ideas with AI-driven testing."
+            },
+            "feature2": {
+              "headline": "Insightful Analytics",
+              "description": "Use in-depth analytics to understand what works and what doesn’t."
+            },
+            "feature3": {
+              "headline": "Community Collaboration",
+              "description": "Engage with other innovators to improve your ideas."
+            }
+          }
+        }
+      },
+      "howitworks": {
+        "data": {
+          "headline": "How IdeaLaunch Works",
+          "items": {
+            "step1": {
+              "headline": "Step 1: Create Your Page",
+              "description": "Build a landing page with our AI tools to showcase your concept."
+            },
+            "step2": {
+              "headline": "Step 2: Validate with Data",
+              "description": "Run A/B tests to gather valuable feedback from potential customers."
+            },
+            "step3": {
+              "headline": "Step 3: Refine and Launch",
+              "description": "Use the insights to perfect your idea and bring it to market."
+            }
+          }
+        }
+      },
+      "testimonials": {
+        "headline": "What Our Users Say",
+        "maxReviews": 7,
+        "items": [
+          {
+            "name": "Ella R.",
+            "review": "“IdeaLaunch helped me validate my idea quickly and efficiently. I’m thrilled with the results.”"
+          },
+          {
+            "name": "William S.",
+            "review": "“The analytics were incredibly detailed and gave me the confidence to move forward with my product.”"
+          },
+          {
+            "name": "Charlotte B.",
+            "review": "“Collaborating with others on IdeaLaunch was a game-changer. My idea is now better than ever.”"
+          }
+        ]
+      },
+      "productSubscriptions": {
+        "data": {
+          "headline": "Select Your Plan",
+          "items": {
+            "plan1": {
+              "headline": "Basic",
+              "features": [
+                "1 Landing Page",
+                "Basic Insights",
+                "AI Content Creation"
+              ],
+              "callToActionButton": {
+                "text": "Get Started"
+              },
+              "price": "15",
+              "currencySign": "$"
+            },
+            "plan2": {
+              "headline": "Advanced",
+              "features": [
+                "3 Landing Pages",
+                "Advanced Insights",
+                "AI Content + SEO"
+              ],
+              "callToActionButton": {
+                "text": "Choose Advanced"
+              },
+              "price": "35",
+              "currencySign": "$"
+            },
+            "plan3": {
+              "headline": "Pro",
+              "features": [
+                "Unlimited Pages",
+                "Custom Insights",
+                "AI Content + Full SEO",
+                "Consultation with Expert"
+              ],
+              "callToActionButton": {
+                "text": "Go Pro"
+              },
+              "price": "80",
+              "currencySign": "$"
+            }
+          }
+        }
+      },
+      "newsletter": {
+        "headline": "Stay Ahead of the Curve",
+        "subheadline": "Subscribe for the latest updates on idea testing and validation.",
+        "inputFieldPlaceholder": "Enter your email",
+        "callToActionButton": {
+          "text": "Subscribe"
+        }
+      }
+    }
+  },
+  {
+    "variantTitle": "Test Your Big Idea with AI",
+    "projectTitle": "Idea Tester SaaS",
+    "parts": {
+      "header": {
+        "data": {
+          "brand": {
+            "text": "Idea Tester"
+          },
+          "callToActionButton": {
+            "text": "Start Testing Now"
+          },
+          "navigation": {
+            "home": "Base",
+            "hero": "Why Test",
+            "features": "Features",
+            "howitworks": "Process",
+            "reviews": "Testimonials",
+            "pricing": "Pricing",
+            "newsletter": "Subscribe",
+            "contact": "Contact"
+          }
+        }
+      },
+      "hero": {
+        "data": {
+          "headline": "Turn Your Ideas Into Reality with AI Testing",
+          "subheadline": "Test your concepts with our AI-powered platform before you invest time and money in development.",
+          "callToActionButton": {
+            "text": "Get Started for Free"
+          }
+        }
+      },
+      "features": {
+        "data": {
+          "headline": "Why Choose Idea Tester?",
+          "items": {
+            "feature1": {
+              "headline": "Quick A/B Testing",
+              "description": "Run experiments fast to see which version of your idea resonates best with your audience."
+            },
+            "feature2": {
+              "headline": "AI-Powered Content",
+              "description": "Let our AI generate engaging copy for your landing page that connects with your target audience."
+            },
+            "feature3": {
+              "headline": "Collaborate with Creators",
+              "description": "Find and collaborate with other innovators who share your passion for building the next big thing."
+            }
+          }
+        }
+      },
+      "howitworks": {
+        "data": {
+          "headline": "How It Works",
+          "items": {
+            "step1": {
+              "headline": "Step 1: Build Your Landing Page",
+              "description": "Use our AI-powered builder to create a landing page tailored to your idea in minutes."
+            },
+            "step2": {
+              "headline": "Step 2: Run A/B Tests",
+              "description": "Test different versions of your page to find out what works best with your audience."
+            },
+            "step3": {
+              "headline": "Step 3: Gather Insights",
+              "description": "Collect and analyze customer data to refine your idea and strategy before full-scale development."
+            }
+          }
+        }
+      },
+      "testimonials": {
+        "headline": "Success Stories from Our Users",
+        "maxReviews": 7,
+        "items": [
+          {
+            "name": "Emily R.",
+            "review": "“I had a million ideas but no way to test them quickly. Idea Tester made it easy and fun to see what sticks. I’m now launching my third project!”"
+          },
+          {
+            "name": "John M.",
+            "review": "“I was skeptical at first, but the AI-generated content was spot-on. It saved me tons of time, and my landing pages look professional.”"
+          },
+          {
+            "name": "Lisa T.",
+            "review": "“The collaboration feature is a game-changer. I’ve met other creators who’ve helped me refine my ideas and make them stronger.”"
+          },
+          {
+            "name": "Carlos S.",
+            "review": "“The A/B testing feature helped me find the perfect pitch for my startup. I feel so much more confident going into development.”"
+          },
+          {
+            "name": "Nina K.",
+            "review": "“I didn’t have the budget for a big marketing campaign, but Idea Tester’s tools gave me the insights I needed to attract investors.”"
+          },
+          {
+            "name": "Ben P.",
+            "review": "“The platform is super user-friendly, and the AI suggestions are top-notch. I’m blown away by how much easier it is to test ideas now.”"
+          },
+          {
+            "name": "Sophia W.",
+            "review": "“Idea Tester helped me validate my concept in a fraction of the time it would have taken otherwise. I’m already seeing results!”"
+          }
+        ]
+      },
+      "productSubscriptions": {
+        "data": {
+          "headline": "Choose Your Plan",
+          "items": {
+            "plan1": {
+              "headline": "Starter",
+              "features": [
+                "1 Active Landing Page",
+                "Basic A/B Testing",
+                "AI Content Generation",
+                "Community Access"
+              ],
+              "callToActionButton": {
+                "text": "Start Free Trial"
+              },
+              "price": "19",
+              "currencySign": "$"
+            },
+            "plan2": {
+              "headline": "Pro",
+              "features": [
+                "3 Active Landing Pages",
+                "Advanced A/B Testing",
+                "AI Content + SEO Optimization",
+                "Priority Support"
+              ],
+              "callToActionButton": {
+                "text": "Go Pro"
+              },
+              "price": "49",
+              "currencySign": "$"
+            },
+            "plan3": {
+              "headline": "Expert",
+              "features": [
+                "Unlimited Landing Pages",
+                "Custom A/B Testing",
+                "AI Content + Full SEO",
+                "Consultations with a Professional Developer",
+                "Dedicated Account Manager"
+              ],
+              "callToActionButton": {
+                "text": "Become an Expert"
+              },
+              "price": "99",
+              "currencySign": "$"
+            }
+          }
+        }
+      },
+      "newsletter": {
+        "headline": "Stay Updated",
+        "subheadline": "Subscribe to get the latest tips and tools to turn your ideas into reality.",
+        "inputFieldPlaceholder": "Enter your contact email",
+        "callToActionButton": {
+          "text": "Subscribe Now"
+        }
+      }
+    }
+  }
+]
