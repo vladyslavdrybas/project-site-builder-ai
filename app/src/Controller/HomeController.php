@@ -27,16 +27,20 @@ class HomeController extends AbstractController
 
     #[Route('/prompt', name: '_prompt', methods: ['GET'])]
     public function prompt(
-        Request $request,
-        OpenAiClient $openAiClient
+        OpenAiClient $openAiClient,
+        string $projectDir
     ): Response {
-        $prompt = $request->query->get('prompt');
+        $prompt = file_get_contents($projectDir . '/src/DataFixtures/data/landing_project_content.txt');
 
         dump($prompt);
 
         $answer = null;
-        if (null !== $prompt) {
+        if (!empty($prompt)) {
             $answer = $openAiClient->prompt($prompt);
+        }
+
+        if (is_array($answer)) {
+            $answer = $answer['choices'][0]['message']['content'];
         }
 
         return $this->render(

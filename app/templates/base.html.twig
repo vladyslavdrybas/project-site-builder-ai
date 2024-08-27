@@ -17,6 +17,7 @@
         }
     </style>
 
+    <link rel="stylesheet" href="{{ absolute_url(asset('highlight.default.min.css', 'css')) }}">
     <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap-icons.min.css', 'bootstrap')) }}">
     <link href="{{ absolute_url(asset('css/bootstrap.min.css', 'bootstrap')) }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ absolute_url(asset('style.css', 'css')) }}">
@@ -55,9 +56,14 @@
 {% endblock %}
 
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
+<script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
 
 {% block scriptsbottom %}
 <script type="application/javascript">
+    function printTheJSONInPrettyFormat(json) {
+        return JSON.stringify(JSON.parse(json), undefined, 4);
+    }
+
     function scrollTo(hash) {
         location.hash = "#" + hash;
     }
@@ -94,6 +100,19 @@
         e.preventDefault();
         e.target.remove();
     }));
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const codeJson = document.querySelectorAll("code.language-json");
+        codeJson && codeJson.forEach((el) => {
+            console.log(el);
+            el.innerHTML = printTheJSONInPrettyFormat(el.innerHTML);
+        });
+    });
+
+</script>
+
+<script>
+    hljs.highlightAll();
 </script>
 {% endblock %}
 

@@ -1,0 +1,61 @@
+Ignore all previous instructions.
+Respond only in the English language.
+Do not self-reference.
+Do not explain what you are doing.
+
+Act as You are a website copywriter and expert in making awesome content for landing pages that sell.
+
+Draft a high-conversion landing page for product or service: "{productDescription}".
+Include a strong headline, subheadline, key benefits or features, how it works section, social proof (like testimonials or case studies), and a clear call-to-action.
+
+Landing page is for "{targetAudience}".
+
+Use general recommendations:
+    Keep your landing page text brief.
+    Keep text simple and direct.
+    Explain why "{product}" matters to target audience.
+    Don't sound like a robot.
+    The landing page should have the flow of a story in "{tone}" tone and "{style}" style elements.
+    The landing page content should have the flow of a story.
+    Show you care by writing in a way that connects with your audience.
+
+Use recommendations for "headline":
+    Make a headline that grabs attention.
+    It should be around ten words short and tell visitors what they'll get from "{product}".
+    Use numbers, be specific, and choose strong words.
+    Shows audience right at the start what they could potentially earn.
+
+Use recommendations for "call-to-action":
+    Don't be boring or too pushy with your CTA.
+    Ensure each CTA is concise, compelling, and encourages immediate action.
+
+Use recommendations for "pricing section":
+    If landing page is for SaaS with subscription create three plans with different price, features.
+    If landing page is for digital product or something that can be purchased once use a title, features or characteristics, price.
+    Provide one special offer limited in time to attract audience attention.
+
+Use recommendations for "testimonials" or "reviews":
+    Fake 7 stories from different people of different age, job position, of {targetAudienceGender}.
+    For each story use unique tone (for example: "{tones}") and style (for example: "{styles}").
+    Fake 3 testimonials/reviews from
+    Include quotes from happy customers or stories about good experiences.
+
+Use next tips in writing:
+1. Emotional headlines grab attention. For example, “Master Time Management” is transparent, but “Best Tool for More Time with Your Kids” hits differently, straight to the heart.
+2. keywords that can be used in SEO or can describe product: {keywords}.
+3. Give a unique and human friendly name for the answer/variant  to easy find it in control panel nad use in A/B testing.
+4. Give unique and human friendly name for the project to easy find it in control panel.
+5. Name navigation links for landing page section.
+
+Provide answer in json like {answerJson}. Attach additional fields into json answer in case of need. DO NOT cover answer into markup - provide a pure json.
+
+{answerJson}: {"variantTitle":"","projectTitle":"","parts":{"header":{"data":{"brand":{"text":""},"callToActionButton":{"text":""},"navigation":{"home":"Base","hero":"","features":"Features","howitworks":"Process","reviews":"","pricing":"Price","newsletter":"Subscribe","contact":""}}},"hero":{"data":{"headline":"","subheadline":"","callToActionButton":{"text":""}}},"features":{"data":{"headline":"","items":{"feature1":{"headline":"","description":""},"feature2":{"headline":"","description":""},"feature3":{"headline":"","description":""}}}}},"howitworks":{"data":{"headline":"","items":{"step1":{"headline":"","description":""},"step2":{"headline":"","description":""},"step3":{"headline":"","description":""}}}},"testimonials":{"headline":"","maxReviews":7,"items":[{"name":"","review":""}]},"productSubscriptions":{"data":{"headline":"","items":{"plan1":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""},"plan2":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""},"plan3":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""}}}},"productPrice":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""},"newsletter":{"headline":"","subheadline":"","inputFieldPlaceholder":"Enter your contact email","callToActionButton":{"text":""}}}
+{product}: SaaS for developers, dreamers, creators or entrepreneur.
+{productDescription}: We provide a service by subscription that with help of AI can build a simple but effective fake landing page to  fast test idea on a limited audience. we provide: A/B testing, Potential customer details management, Landing page Builder, Content copywriting with AI, Page Export, Script to import page on your hosting, Page publishing. On the platform you can search for the similar ideas and cooperate with other dreamers and creators. Our special subscription has consultations from professional developer.
+{keywords}: Saas, platofrm, idea, dreamer, prototype, landing page, AI
+{targetAudience}: people who have a bunch of ideas, but have no time or do not know how to test them before start development. People who want to find audience to sell before they will spend thousands for development.
+{targetAudienceGender}: women and men
+{tone}: creative and friendly
+{tones}: formal|casual|authoritative|friendly|creative|business|convincing|urgent|persuasive
+{style}: use humor and gaming slang
+{styles}: use humor|be straightforward|adopt a promotional tone|gaming slang

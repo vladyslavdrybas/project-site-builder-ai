@@ -657,7 +657,7 @@ class VariantBuilderFormType extends AbstractType
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->pricing->data?->items['plan1']?->callToActionButton->text ?? null
+                                    'data' => $data->parts->pricing->data?->items['plan1']?->calwlToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',

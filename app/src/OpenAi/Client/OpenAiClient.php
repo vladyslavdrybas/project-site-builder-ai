@@ -26,11 +26,19 @@ class OpenAiClient
                     'Content-Type' => 'application/json',
                 ],
                 'json' => [
-                    'model' => 'gpt-3.5-turbo',
+                    'model' => 'gpt-4o-mini', // cheapest
+//                    'model' => 'gpt-3.5-turbo-0125',
+//                    'model' => 'gpt-3.5-turbo',
 //                    'model' => 'gpt-4o-mini-2024-07-18',
                     'messages' => [
-                        ["role" => "system", "content" => "You are a helpful assistant."],
-                        ["role" => "user", "content" => $prompt],
+                        [
+                            "role" => "system",
+                            "content" => "You are a helpful assistant."
+                        ],
+                        [
+                            "role" => "user",
+                            "content" => $prompt
+                        ],
                     ],
                 ],
             ]

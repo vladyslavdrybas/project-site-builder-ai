@@ -32,6 +32,7 @@
 5. font https://www.fontsquirrel.com/fonts/aller
 6. mailer https://mailpit.axllent.org/docs/
 7. power words for content build https://optinmonster.com/700-power-words-that-will-boost-your-conversions/
+8. highlihgt code https://highlightjs.org/
 
 ### Advices
 

@@ -303,3 +303,33 @@ body {
     height: 2.1rem;
     width: auto;
 }
+
+.code-json {
+    background: #f2f2f2;
+    /*background: hsl(225deg 9.52% 8.24%);*/
+    padding: 0.89rem;
+    /* first line not indented */
+    & > .line {
+        margin-left: 0;
+    }
+    .line {
+        margin-left: 1rem;
+    }
+    .key {
+        margin-right: 0.5rem;
+        color: black;
+        font-weight: 600;
+    }
+    .string {
+        color: green;
+    }
+    .number {
+        color: blue;
+    }
+    .boolean {
+        color: purple;
+    }
+    .null {
+        color: red;
+    }
+}

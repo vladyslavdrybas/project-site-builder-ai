@@ -6,9 +6,16 @@
             <p>
                 prompt: {{ data.prompt }}
             </p>
-            <p>
-                answer: {{ data.answer|raw }}
-            </p>
+
+            <div>
+                    answer:
+                <pre class=" w-100">
+                    <code class="language-json">
+                        {{ data.answer }}
+                    </code>
+                </pre>
+            </div>
+
         </div>
     </div>
 {% endblock %}

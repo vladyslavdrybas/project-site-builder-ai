@@ -99,14 +99,14 @@ class VariantBuilderController extends AbstractControlPanelController
             $variantMetaArray = $serializer->normalize($variantMeta);
 
             if ($builderForm->get('backBtn')->isClicked()) {
-                return $this->redirectToRoute('cp_variant_list');
+                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
             }
 
             if ($builderForm->get('cancelBtn')->isClicked()) {
                 $request->getSession()->remove('variantBuilderData');
                 $request->getSession()->remove('variantBuilderDataMedias');
 
-                return $this->redirectToRoute('cp_variant_list');
+                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
             }
 
             if ($builderForm->get('saveBtn')->isClicked()) {
@@ -401,7 +401,6 @@ class VariantBuilderController extends AbstractControlPanelController
         Variant $variant
     ): array {
         $meta = $variant->getMeta();
-        dump($meta);
 
         if (!isset($meta['variantId'])) {
             $meta['variantId'] = $variant->getRawId();
