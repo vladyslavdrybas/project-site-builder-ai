@@ -56,7 +56,6 @@ class AppFixtures extends Fixture
             $project->setOwner($user);
             $project->setTitle($variantArray['projectTitle']);
             $project->setDescription($productDescription);
-            $project->setCustomerPortrait($targetAudience);
 
             $manager->persist($project);
 
@@ -68,9 +67,6 @@ class AppFixtures extends Fixture
 
             $manager->persist($variant);
         }
-
-        // $product = new Product();
-        // $manager->persist($product);
 
         $manager->flush();
     }

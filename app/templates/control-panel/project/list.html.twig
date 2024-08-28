@@ -28,6 +28,7 @@
                         <th>description</th>
                         <th>start at</th>
                         <th>end at</th>
+                        <th>variants</th>
                         <th>actions</th>
                     </tr>
 
@@ -51,6 +52,16 @@
                                 <td>
                                     {% if project.endAt is not null %}
                                         {{ project.endAt|date('d/m/Y H:i') }}
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if project.variants is not null %}
+                                        <a
+                                            href="{{ absolute_url(path('cp_variant_list_project', {'project': project.id})) }}"
+                                        >
+                                            {{ project.variants|length }}
+                                        </a>
                                     {% endif %}
                                 </td>
 

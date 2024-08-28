@@ -28,14 +28,14 @@ class PromptMetaFormType extends AbstractType
                 ]
             )
             ->add('productDescription',
-                TextType::class,
+                TextareaType::class,
                 [
                     'label' => 'Describe project with more details.',
                     'data' => $dto?->productDescription,
                 ]
             )
             ->add('targetAudience',
-                TextType::class,
+                TextareaType::class,
                 [
                     'label' => 'Describe your audience. Portrait of your customer',
                     'help' => 'example: people who have a bunch of ideas, but have no time or do not know how to test them before start development.',
@@ -43,7 +43,7 @@ class PromptMetaFormType extends AbstractType
                 ]
             )
             ->add('proposal',
-                TextType::class,
+                TextareaType::class,
                 [
                     'label' => 'Describe proposal or unique features that user will get.',
                     'help' => 'example: you can fast and easy generate content and start promoting your idea to collect audience and find collaborators.',

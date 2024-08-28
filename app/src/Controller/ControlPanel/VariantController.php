@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller\ControlPanel;
 
 use App\Constants\RouteRequirements;
+use App\DataTransferObject\Variant\SearchFilterDto;
+use App\Entity\Project;
 use App\Entity\Variant;
 use App\Form\CommandCenter\Variant\VariantAddFormType;
 use App\Form\CommandCenter\Variant\VariantEditFormType;
@@ -18,7 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
     "/v",
     name: "cp_variant",
     requirements: [
-        'variant' => RouteRequirements::UUID->value
+        'variant' => RouteRequirements::UUID->value,
+        'project' => RouteRequirements::UUID->value
     ]
 )]
 class VariantController extends AbstractControlPanelController
@@ -40,19 +43,48 @@ class VariantController extends AbstractControlPanelController
     }
 
     #[Route(
-        path: '',
-        name: '_list',
+        path: '/lu',
+        name: '_list_user',
         methods: ['GET']
     )]
-    public function list(
-        VariantRepository $variantRepository,
+    public function listUserVariants(
+        VariantRepository $variantRepository
     ): Response {
-        $variants = $variantRepository->findAllForUser($this->getUser());
+        $searchFilterDto = new SearchFilterDto(
+            $this->getUser()->getRawId()
+        );
+
+        $variants = $variantRepository->findAllForUser($searchFilterDto);
 
         return $this->render(
             'control-panel/variant/list.html.twig',
             [
                 'variants' => $variants,
+            ]
+        );
+    }
+
+    #[Route(
+        path: '/lp/{project}',
+        name: '_list_project',
+        methods: ['GET']
+    )]
+    public function listProjectVariants(
+        VariantRepository $variantRepository,
+        Project $project
+    ): Response {
+        $searchFilterDto = new SearchFilterDto(
+            $this->getUser()->getRawId(),
+            $project?->getRawId()
+        );
+
+        $variants = $variantRepository->findAllForUser($searchFilterDto);
+
+        return $this->render(
+            'control-panel/variant/list.html.twig',
+            [
+                'variants' => $variants,
+                'project' => $project,
             ]
         );
     }

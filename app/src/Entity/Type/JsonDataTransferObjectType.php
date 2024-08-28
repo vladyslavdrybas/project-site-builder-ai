@@ -42,7 +42,6 @@ class JsonDataTransferObjectType extends JsonType
         } catch (\Exception $e) {
             throw ConversionException::conversionFailed($value, $this->getName(), $e);
         }
-
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string

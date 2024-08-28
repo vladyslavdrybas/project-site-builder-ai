@@ -42,7 +42,7 @@ class ProjectController extends AbstractControlPanelController
     }
 
     #[Route(
-        path: '',
+        path: '/lu',
         name: '_list',
         methods: ['GET']
     )]

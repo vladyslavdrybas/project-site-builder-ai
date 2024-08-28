@@ -8,9 +8,12 @@
 
                 <div class="col-md-5 col-lg-3">
                     <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ user.username }}</li>
+
                         {% if user.firstname is not null or user.lastname is not null %}
                             <li class="list-group-item">{{ user.firstname }} {{ user.lastname }}</li>
                         {% endif %}
+
                         <li
                             class="list-group-item"
 

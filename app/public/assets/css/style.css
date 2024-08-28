@@ -291,6 +291,11 @@ body {
     height: 0.8rem;
 }
 
+.bi-1 {
+    width: 1rem;
+    height: 1rem;
+}
+
 .border-r-1 {
     border: none;
     border-right: solid;
