@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace App\Form\CommandCenter\Variant;
 
 use App\Entity\Project;
-use App\Entity\User;
 use App\Entity\Variant;
-use App\Exceptions\AccessDenied;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -27,10 +25,6 @@ class VariantAddFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $this->security->getUser();
-
-        if (!$user instanceof User) {
-            throw new AccessDenied();
-        }
 
         $builder
             ->add('title', TextType::class)

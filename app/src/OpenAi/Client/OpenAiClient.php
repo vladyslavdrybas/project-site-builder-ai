@@ -48,8 +48,6 @@ class OpenAiClient
         if ($response->getStatusCode() === 200) {
             $content = $response->toArray();
 
-            dump($content);
-
             return $content;
         }
 

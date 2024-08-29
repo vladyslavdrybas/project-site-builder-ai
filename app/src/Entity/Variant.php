@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\DataTransferObject\Variant\VariantPromptMetaDto;
+use App\Entity\Type\JsonDataTransferObjectType;
 use App\Repository\VariantRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,14 +34,26 @@ class Variant extends AbstractEntity
     #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $meta = null;
 
+    #[ORM\Column(type: JsonDataTransferObjectType::NAME, nullable: true)]
+    protected ?VariantPromptMetaDto $promptMeta = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    protected ?string $promptTemplate = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTimeInterface $startAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTimeInterface $endAt = null;
 
-    #[ORM\Column(name: "is_active", type: Types::BOOLEAN, options: ["default" => false])]
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
     protected bool $isActive = false;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
+    protected bool $isAiMade = false;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => true])]
+    protected bool $isVisible = true;
 
     #[Assert\LessThanOrEqual(100)]
     #[Assert\GreaterThanOrEqual(0)]
@@ -56,10 +70,23 @@ class Variant extends AbstractEntity
     #[ORM\ManyToMany(targetEntity: Media::class)]
     protected Collection $medias;
 
+    #[ORM\OneToOne(mappedBy: 'variant', targetEntity: VariantPrompt::class)]
+    protected ?VariantPrompt $prompt = null;
+
     public function __construct()
     {
         parent::__construct();
         $this->medias = new ArrayCollection();
+    }
+
+    public function getPrompt(): ?VariantPrompt
+    {
+        return $this->prompt;
+    }
+
+    public function setPrompt(?VariantPrompt $prompt): void
+    {
+        $this->prompt = $prompt;
     }
 
     public function getMedias(): Collection
@@ -173,5 +200,45 @@ class Variant extends AbstractEntity
     public function setWeight(int $weight): void
     {
         $this->weight = $weight;
+    }
+
+    public function isAiMade(): bool
+    {
+        return $this->isAiMade;
+    }
+
+    public function setIsAiMade(bool $isAiMade): void
+    {
+        $this->isAiMade = $isAiMade;
+    }
+
+    public function getPromptMeta(): ?VariantPromptMetaDto
+    {
+        return $this->promptMeta;
+    }
+
+    public function setPromptMeta(?VariantPromptMetaDto $promptMeta): void
+    {
+        $this->promptMeta = $promptMeta;
+    }
+
+    public function getPromptTemplate(): ?string
+    {
+        return $this->promptTemplate;
+    }
+
+    public function setPromptTemplate(?string $promptTemplate): void
+    {
+        $this->promptTemplate = $promptTemplate;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): void
+    {
+        $this->isVisible = $isVisible;
     }
 }

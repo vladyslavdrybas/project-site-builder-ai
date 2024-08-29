@@ -410,6 +410,23 @@ class VariantBuilderController extends AbstractControlPanelController
             $meta['projectId'] = $variant->getProject()->getRawId();
         }
 
+        if (!isset($meta['design'])) {
+            $meta['design'] = new DesignSettingsDto();
+        }
+
+        if (!isset($meta['parts'])) {
+            $meta['parts'] = new PartsDto(
+                new HeaderPartDto(),
+                new HeroPartDto(),
+                new FeaturesPartDto(),
+                new HowItWorksPartDto(),
+                new TestimonialPartDto(),
+                new SubscriptionsPartDto(),
+                new NewsletterPartDto(),
+                new FooterPartDto()
+            );
+        }
+
         return $meta;
     }
 

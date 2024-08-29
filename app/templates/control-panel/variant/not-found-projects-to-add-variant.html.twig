@@ -1,0 +1,20 @@
+{% extends 'control-panel/index.html.twig'%}
+
+{% block content %}
+<div class="min-vh-100 pt-5 pb-5">
+    <div class="container pt-5 ">
+        <h1>
+            Cannot add variant yet
+        </h1>
+        <p>
+            You have no projects. Please, add at least one.
+        </p>
+        <a
+            class="btn btn-primary"
+            href="{{ absolute_url(path('cp_project_add')) }}"
+        >
+            Project Add
+        </a>
+    </div>
+</div>
+{% endblock %}

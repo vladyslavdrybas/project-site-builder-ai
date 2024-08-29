@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\DataTransferObject;
+namespace App\DataTransferObject\Variant;
 
 use App\Entity\Type\IDataTransferObjectType;
 
-class PromptMetaDto implements IDataTransferObjectType
+class VariantPromptMetaDto implements IDataTransferObjectType
 {
     public function __construct(
         public ?string $productShortDescription = null,

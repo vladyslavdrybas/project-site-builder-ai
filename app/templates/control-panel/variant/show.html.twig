@@ -7,7 +7,7 @@
             <div class="row gx-5 justify-content-center">
 
                 <div class="col-md-8 col-lg-6">
-                    <h1>View {{ variant.title }}</h1>
+                    <h1>{{ variant.title }}</h1>
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
@@ -89,14 +89,15 @@
                             <svg class="bi bi-08"><use xlink:href="#pen-fill"/></svg>
                         </a>
 
-
-                        <a
-                            class="btn btn-primary rounded-5"
-                            href="{{ absolute_url(path('cp_variant_builder', {variant: variant.id})) }}"
-                            title="view"
-                        >
-                            <svg class="bi bi-08"><use xlink:href="#building-fill"/></svg>
-                        </a>
+                        {% if (variant.meta is not null and variant.isAiMade == true) or variant.isAiMade == false %}
+                            <a
+                                class="btn btn-primary rounded-5"
+                                href="{{ absolute_url(path('cp_variant_builder', {variant: variant.id})) }}"
+                                title="view"
+                            >
+                                <svg class="bi bi-08"><use xlink:href="#building-fill"/></svg>
+                            </a>
+                        {% endif %}
                     </div>
 
                 </div>

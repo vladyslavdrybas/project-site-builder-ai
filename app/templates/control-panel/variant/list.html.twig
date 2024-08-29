@@ -6,15 +6,23 @@
         <div class="container pt-4">
 
             <div class="row justify-content-start mb-3">
-                <div class="d-flex justify-content-start align-items-center">
+                <div class="d-flex justify-content-start align-items-center flex-row">
                     <a
                         href="{{ absolute_url(path('cp_variant_add')) }}"
                         type="button"
-                        class="btn btn-md btn-primary rounded-5"
+                        class="btn btn-md btn-primary"
+                        title="Add variant"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
-                        </svg>
+                        <svg class="bi bi-1"><use xlink:href="#plus-square-fill"/></svg>
+                    </a>
+
+                    <a
+                        href="{{ absolute_url(path('cp_variant_add_with_ai')) }}"
+                        type="button"
+                        class="btn btn-md btn-primary"
+                        title="AI variant generation"
+                    >
+                        <svg class="bi bi-1"><use xlink:href="#cpu-fill"/></svg>
                     </a>
                 </div>
             </div>
@@ -45,7 +53,7 @@
                                     {{ variant.isActive ? 'active' : 'pending' }}
                                 </td>
                                 <td>
-                                    {{ variant.description }}
+                                    <p class="pre-line">{{ variant.description }}</p>
                                 </td>
                                 <td>
                                     {% if variant.startAt is not null %}
@@ -60,26 +68,29 @@
 
                                 <td>
                                     <a
-                                        class="btn btn-primary rounded-5"
+                                        class="btn btn-primary"
                                         href="{{ absolute_url(path('cp_variant_edit', {variant: variant.id})) }}"
                                         title="edit"
                                     >
                                         <svg class="bi bi-08"><use xlink:href="#pen-fill"/></svg>
                                     </a>
                                     <a
-                                        class="btn btn-primary rounded-5"
+                                        class="btn btn-primary"
                                         href="{{ absolute_url(path('cp_variant_show', {variant: variant.id})) }}"
                                         title="view"
                                     >
                                         <svg class="bi bi-08"><use xlink:href="#eye-fill"/></svg>
                                     </a>
-                                    <a
-                                        class="btn btn-primary rounded-5"
-                                        href="{{ absolute_url(path('cp_variant_builder', {variant: variant.id})) }}"
-                                        title="view"
-                                    >
-                                        <svg class="bi bi-08"><use xlink:href="#building-fill"/></svg>
-                                    </a>
+                                    {% if (variant.meta is not null and variant.isAiMade == true) or variant.isAiMade == false %}
+                                        <a
+                                            class="btn btn-primary"
+                                            href="{{ absolute_url(path('cp_variant_builder', {variant: variant.id})) }}"
+                                            title="view"
+                                        >
+                                            <svg class="bi bi-08"><use xlink:href="#building-fill"/></svg>
+                                        </a>
+                                    {% endif %}
+
                                 </td>
                             </tr>
 

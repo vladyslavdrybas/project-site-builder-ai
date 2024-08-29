@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Controller\ControlPanel;
 
 use App\Constants\RouteRequirements;
-use App\DataTransferObject\PromptMetaDto;
+use App\DataTransferObject\Variant\VariantPromptMetaDto;
 use App\Entity\Project;
 use App\Entity\Tag;
 use App\Form\CommandCenter\Project\ProjectAddFormType;
@@ -192,11 +192,11 @@ class ProjectController extends AbstractControlPanelController
             }
         }
 
-        /** @var ?PromptMetaDto $promptMeta */
+        /** @var ?VariantPromptMetaDto $promptMeta */
         $promptMeta = $project->getPromptMeta();
         $promptMeta->tone = $tone;
         $promptMeta->style = $style;
-        $promptMeta = PromptMetaDto::fromArray((array)$promptMeta);
+        $promptMeta = VariantPromptMetaDto::fromArray((array)$promptMeta);
         $project->setPromptMeta($promptMeta);
 
         return $project;

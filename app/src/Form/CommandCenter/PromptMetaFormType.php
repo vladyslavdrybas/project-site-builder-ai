@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Form\CommandCenter;
 
-use App\DataTransferObject\PromptMetaDto;
+use App\DataTransferObject\Variant\VariantPromptMetaDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -16,7 +16,7 @@ class PromptMetaFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var PromptMetaDto $dto */
+        /** @var VariantPromptMetaDto $dto */
         $dto = $builder->getData();
 
         $builder->add('productShortDescription',
@@ -260,7 +260,7 @@ class PromptMetaFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => PromptMetaDto::class,
+            'data_class' => VariantPromptMetaDto::class,
         ]);
     }
 }

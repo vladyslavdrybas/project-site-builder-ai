@@ -15,7 +15,7 @@ use App\Entity\Variant;
  */
 class VariantRepository extends AbstractRepository
 {
-    public function findAllForUser(SearchFilterDto $params): array {
+    public function findAllForUser(SearchFilterDto $params, bool $ignoreAiInProgress = true): array {
         $query = $this->createQueryBuilder('t')
             ->join(
                 't.project',

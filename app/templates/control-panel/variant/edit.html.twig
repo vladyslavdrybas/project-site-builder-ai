@@ -7,7 +7,18 @@
 
         <div class="row gx-5 justify-content-center">
             <div class="col-md-8 col-lg-5">
-                <h1>Edit {{ variant.title }}</h1>
+
+                <a
+                    class="text-decoration-none text-black"
+                    href="{{ absolute_url(path('cp_variant_show', {'variant': variant.id})) }}"
+                    title="view variant"
+                >
+                    <h1>
+                        {{ variant.title }}
+
+                        <svg class="bi bi-1"><use xlink:href="#box-arrow-up-right"/></svg>
+                    </h1>
+                </a>
                 {{ form(variantEditForm, {'method': 'POST'}) }}
             </div>
         </div>

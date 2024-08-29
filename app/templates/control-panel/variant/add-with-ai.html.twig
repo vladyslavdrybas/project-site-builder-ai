@@ -1,0 +1,25 @@
+{% extends 'control-panel/index.html.twig'%}
+
+{% block content %}
+    <div class="min-vh-100 pt-5">
+        <div class="container pt-5 ">
+
+            <div class="row gx-5 justify-content-center">
+                <div class="col-md-8 col-lg-5">
+                    <h1>Select project to generate variant for</h1>
+                    {{ form(form, {'method': 'POST', 'attr': {'id': form.vars.id}}) }}
+
+                    <button
+                        class="save btn btn-primary rounded-5"
+                        type="submit"
+                        form="{{ form.vars.id }}"
+                        value="save"
+                    >
+                        Next
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

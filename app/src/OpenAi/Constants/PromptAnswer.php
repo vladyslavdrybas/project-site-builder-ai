@@ -1,0 +1,9 @@
+<?php
+declare(strict_types=1);
+
+namespace App\OpenAi\Constants;
+
+enum PromptAnswer: string
+{
+    case VARIANT_FULL = '{"variantTitle":"","projectTitle":"","parts":{"header":{"data":{"brand":{"text":""},"callToActionButton":{"text":""},"navigation":{"home":"Base","hero":"","features":"Features","howitworks":"Process","reviews":"","pricing":"Price","newsletter":"Subscribe","contact":""}}},"hero":{"data":{"headline":"","subheadline":"","callToActionButton":{"text":""}}},"features":{"data":{"headline":"","items":{"feature1":{"headline":"","description":""},"feature2":{"headline":"","description":""},"feature3":{"headline":"","description":""}}}}},"howitworks":{"data":{"headline":"","items":{"step1":{"headline":"","description":""},"step2":{"headline":"","description":""},"step3":{"headline":"","description":""}}}},"testimonials":{"headline":"","maxReviews":7,"items":[{"name":"","review":""}]},"productSubscriptions":{"data":{"headline":"","items":{"plan1":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""},"plan2":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""},"plan3":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""}}}},"productPrice":{"headline":"","features":[],"callToActionButton":{"text":""},"price":"","currencySign":""},"newsletter":{"headline":"","subheadline":"","inputFieldPlaceholder":"Enter your contact email","callToActionButton":{"text":""}}}';
+}

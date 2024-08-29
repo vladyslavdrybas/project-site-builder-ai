@@ -27,6 +27,41 @@ use Symfony\Component\Routing\Attribute\Route;
 class VariantController extends AbstractControlPanelController
 {
     #[Route(
+        path: '/add',
+        name: '_add',
+        methods: ['GET', 'POST']
+    )]
+    public function add(
+        Request $request,
+        VariantRepository $variantRepository
+    ): Response {
+        $variant = new Variant();
+        $variantAddForm = $this->createForm(VariantAddFormType::class, $variant);
+        $variantAddForm->handleRequest($request);
+
+        if ($variantAddForm->isSubmitted() && $variantAddForm->isValid()) {
+            try {
+                $variantRepository->add($variant);
+                $variantRepository->save();
+                $this->addFlash('success', sprintf('Variant "%s" created.', $variant->getTitle()));
+
+                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+            } catch (InvalidArgumentException $e) {
+                $this->addFlash('error', $e->getMessage());
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Variant creation unknown error.');
+            }
+        }
+
+        return $this->render(
+            'control-panel/variant/add.html.twig',
+            [
+                'variantAddForm' => $variantAddForm,
+            ]
+        );
+    }
+
+    #[Route(
         path: '/{variant}',
         name: '_show',
         methods: ['GET']
@@ -103,26 +138,7 @@ class VariantController extends AbstractControlPanelController
         $variantEditForm->handleRequest($request);
 
         if ($variantEditForm->isSubmitted() && $variantEditForm->isValid()) {
-//            $meta = $variantEditForm->get('plainMeta')->getData();
-
             try {
-//                if (null !== $meta) {
-//                    $meta = json_decode($meta, true);
-//                    if (json_last_error() > 0) {
-//                        throw new InvalidArgumentException(sprintf('Json exception. %s.', json_last_error_msg()));
-//                    }
-//
-//                    if (!is_array($meta) || empty($meta)) {
-//                        throw new InvalidArgumentException('Json exception. Fulfilled array or nothing expected.');
-//                    }
-//
-//                    $variant->setMeta($meta);
-//                } else {
-//                    if ($variant->isActive()) {
-//                        $this->addFlash('info', 'You cannot activate variant without meta data.');
-//                        $variant->setIsActive(false);
-//                    }
-//                }
 
                 if (!is_array($variant->getMeta()) && $variant->isActive()) {
                     $this->addFlash('info', 'You cannot activate variant without meta data.');
@@ -147,54 +163,6 @@ class VariantController extends AbstractControlPanelController
             [
                 'variantEditForm' => $variantEditForm,
                 'variant' => $variant,
-            ]
-        );
-    }
-
-    #[Route(
-        path: '/add',
-        name: '_add',
-        methods: ['GET', 'POST']
-    )]
-    public function add(
-        Request $request,
-        VariantRepository $variantRepository
-    ): Response {
-        $variant = new Variant();
-        $variantAddForm = $this->createForm(VariantAddFormType::class, $variant);
-        $variantAddForm->handleRequest($request);
-
-        if ($variantAddForm->isSubmitted() && $variantAddForm->isValid()) {
-            try {
-//                if (null !== $meta) {
-//                    $meta = json_decode($meta, true);
-//                    if (json_last_error() > 0) {
-//                        throw new InvalidArgumentException(sprintf('Json exception. %s.', json_last_error_msg()));
-//                    }
-//
-//                    if (!is_array($meta) || empty($meta)) {
-//                        throw new InvalidArgumentException('Json exception. Fulfilled array or nothing expected.');
-//                    }
-//
-//                    $variant->setMeta($meta);
-//                }
-
-                $variantRepository->add($variant);
-                $variantRepository->save();
-                $this->addFlash('success', sprintf('Variant "%s" created.', $variant->getTitle()));
-
-                return $this->redirectToRoute('cp_variant_list');
-            } catch (InvalidArgumentException $e) {
-                $this->addFlash('error', $e->getMessage());
-            } catch (Exception $e) {
-                $this->addFlash('error', 'Variant creation unknown error.');
-            }
-        }
-
-        return $this->render(
-            'control-panel/variant/add.html.twig',
-            [
-                'variantAddForm' => $variantAddForm,
             ]
         );
     }

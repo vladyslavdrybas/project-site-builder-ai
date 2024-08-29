@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\DataTransferObject\PromptMetaDto;
+use App\DataTransferObject\Variant\VariantPromptMetaDto;
 use App\Entity\Type\JsonDataTransferObjectType;
 use App\Repository\ProjectRepository;
 use DateTimeInterface;
@@ -33,7 +33,7 @@ class Project extends AbstractEntity
     protected ?string $description = null;
 
     #[ORM\Column(type: JsonDataTransferObjectType::NAME, nullable: true)]
-    protected ?PromptMetaDto $promptMeta = null;
+    protected ?VariantPromptMetaDto $promptMeta = null;
 
     #[ORM\Column(name: "is_active", type: Types::BOOLEAN, options: ["default" => false])]
     protected bool $isActive = false;
@@ -155,12 +155,12 @@ class Project extends AbstractEntity
         $this->variants = $variants;
     }
 
-    public function getPromptMeta(): ?PromptMetaDto
+    public function getPromptMeta(): ?VariantPromptMetaDto
     {
         return $this->promptMeta;
     }
 
-    public function setPromptMeta(?PromptMetaDto $promptMeta): void
+    public function setPromptMeta(?VariantPromptMetaDto $promptMeta): void
     {
         $this->promptMeta = $promptMeta;
     }
