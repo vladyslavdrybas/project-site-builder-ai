@@ -24,7 +24,11 @@
 6. https://ui8.net/
 7. https://www.freepik.com/free-photos-vectors/landing-page-design
 
-### Tools
+### Design example - clean and minimal
+1. https://wirestock.io/docs/api
+2. https://photoai.com/
+
+## Tools
 1. background remove https://www.remove.bg/upload
 2. favicon create https://favicon.io/favicon-converter/
 3. css gradients https://cssgradient.io/
@@ -35,7 +39,17 @@
 8. highlihgt code https://highlightjs.org/
 9. front input tags https://use-bootstrap-tag.js.org/methods.html
 
-### Advices
+## Photostocks API
+
+#### Free
+1. api collections https://publicapis.dev/category/photography
+2. NASA api collections, photos included https://api.nasa.gov/
+3. lorem ipsum photos https://picsum.photos/
+4. free stock api https://pixabay.com/api/docs/
+5. free stock api https://unsplash.com/documentation#search-photos
+6. free stock api https://www.pexels.com/api/documentation/#photos-search
+
+## Advices
 
 Adding an FAQ: Putting an FAQ section at the bottom would be great, especially for such finance-related stuff where people often have many questions.
 
