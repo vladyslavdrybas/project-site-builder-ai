@@ -1,0 +1,12 @@
+<section name="testimonials">
+<instructions type="section-specific">
+    * Fake 7 stories from different people of different age, job position, of target audience.
+    * For each story use unique tone and level of emotions.
+    * Each testimonial is a happy customer's story about good user experiences.
+    * Testimonial must be short like a message. Usually it is from 20 to 100 words.
+    * Testimonial must create a desire to subscribe.
+    * Testimonial must be look like a real user response, so do not try to make it perfect and do not idealise product.
+    * If we have partners section will be great to have a few reviews from our partners. ONLY if we have 'partners' section.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

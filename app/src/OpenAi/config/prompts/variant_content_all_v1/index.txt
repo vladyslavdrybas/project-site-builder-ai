@@ -1,0 +1,52 @@
+Ignore all previous instructions.
+Respond only in the English language.
+Do not self-reference.
+Do not explain what you are doing.
+To achieve best results analyze product input data and follow instructions.
+Some parts of my  can contain XML-similar structure.
+Words have power, so try to convince audience that our proposal is best on the market, and they need product.
+
+{{role}}
+
+{{inputData}}
+
+{{instructions}}
+
+{{headline}}
+
+{{callToAction}}
+
+Generate Landing Page content with next sections:
+<sections>
+
+{{partHeader}}
+
+{{partHeroWithCallToAction}}
+
+{{partFeatures}}
+
+{{partWhoUseIt}}
+
+{{partReasonsToUse}}
+
+{{partHowItWorks}}
+
+{{partPartners}}
+
+{{partTestimonials}}
+
+{{partWorkExample}}
+
+{{partSubscriptionPlans}}
+
+{{partProductPrice}}
+
+{{partNewsletterSubscription}}
+
+{{partAboutUs}}
+
+{{partFrequentlyAskedQuestions}}
+
+</sections>
+
+{{answerRequest}}

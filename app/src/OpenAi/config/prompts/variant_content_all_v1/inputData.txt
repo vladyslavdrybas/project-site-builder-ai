@@ -1,0 +1,10 @@
+<inputData>
+Input data:
+    1. Draft a high-conversion landing page for product.
+    2. Product short description to do some assumptions: '{{productShortDescription}}'.
+    3. Product description for more details and deep understanding: '{{productDescription}}'.
+    4. Landing page target audience: '{{targetAudience}}'. Gender: '{{targetAudienceGender}}'.
+    5. Product propose to audience: '{{proposal}}'.
+    6. Audience can get a value by using provided product. Value is: '{{productValue}}'.
+    7. Product competitors are '{{competitors}}'. Use info about competitors to write most valuable content.
+</inputData>

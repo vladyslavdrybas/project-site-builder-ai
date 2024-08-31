@@ -1,0 +1,12 @@
+<section name="productPrice">
+<instructions type="section-specific">
+    * Whole this section must scream "buy me".
+    * Provide a product description that best describe features and value.
+    * Subtitle text evokes such a feelings as you must buy it now, you will lose such an opportunity, that is your best decision of the life.
+    * Action button must evokes interest to click and feeling that you are doing something important in your life.
+    * Guess how much product can cost and add a price of it somewhere in this section. Highlight the price.
+    * Also store that price in a separate JSON field.
+    * For field 'price' use numbers only. currency sign save into field 'currencySign'.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

@@ -1,0 +1,7 @@
+<section name="aboutUs">
+<instructions type="section-specific">
+    * Description of 200-300 words should explain our audience goals of product and main values they can get.
+    * Split Description into paragraphs, where first paragraph always catch attention by explaining product values in a few sentences.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

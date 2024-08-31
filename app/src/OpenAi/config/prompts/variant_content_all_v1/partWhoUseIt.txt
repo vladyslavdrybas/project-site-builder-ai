@@ -1,0 +1,12 @@
+<section name="whoUseIt">
+<instructions type="section-specific">
+    * It is short section with a headline and subheadline with a purpose of attract visitor for further scrolling.
+    * Draw a portraits of potential customers.
+    * Describe their problems and how product can solve them.
+    * Compress it into a few paragraphs.
+    * Use 100 to 300 words.
+    * Show visitor from our target audience that he has something similar with customers from this section and that he also can solve his issues by using our product.
+    * Call-to-action button must show visitors affinity with described customers and push him to click.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

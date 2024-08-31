@@ -5,6 +5,7 @@ namespace App\Command;
 use App\DataTransferObject\Ai\PromptDto;
 use App\OpenAi\Business\OpenAiPromptManager;
 use App\Repository\VariantPromptRepository;
+use DateTime;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -42,11 +43,20 @@ class PromptsRunCommand extends Command
 
         foreach ($prompts as $prompt) {
             try {
+                $requestAt = new DateTime('now');
+                $start = microtime(true);
+
                 $dto = new PromptDto($prompt->getPrompt(), $prompt->getPromptTemplate());
                 $answer = $this->aiPromptManager->requestPrompt($dto);
 
+                $end = microtime(true);
+
+                $promptRequestExecutionTime = (int) ($end - $start) * 1000;
+
                 $prompt->setPromptAnswer($answer);
                 $prompt->setIsDone(true);
+                $prompt->setRequestAt($requestAt);
+                $prompt->setExecutionMilliseconds($promptRequestExecutionTime);
 
                 $this->variantPromptRepository->add($prompt);
                 $this->variantPromptRepository->save();

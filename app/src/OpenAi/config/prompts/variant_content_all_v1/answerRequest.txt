@@ -1,0 +1,4 @@
+Provide answer in JSON.
+DO NOT cover answer into markup - provide a pure JSON.
+Combine JSON from all sections into one huge JSON with next structure: "{parts: {<key>:<value>,...}}".
+Where <key> is a name of section and <value> is JSON with content for that section.

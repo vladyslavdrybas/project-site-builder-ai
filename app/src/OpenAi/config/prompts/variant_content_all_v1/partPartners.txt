@@ -1,0 +1,10 @@
+<section name="partners">
+<instructions type="section-specific">
+    * This is a small section with a links on our partners.
+    * This section should arouse in visitor enthusiasm for the product based on the authority of well-known brands.
+    * Find popular brands that may use our product.
+    * Get brands name and link on their logo in good quality.
+    * For each brand: write short description of the brand (no more than 50 words), reason why brand use our product (no more than 100 words), how brand can use product (up to 100 words), product features can be useful for brand (up to 100 words, separated by semicolon).
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

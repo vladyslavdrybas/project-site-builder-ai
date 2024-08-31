@@ -1,0 +1,14 @@
+<section name="howItWorks">
+<instructions type="section-specific">
+    * This section is not a description of strict instructions or rules, but rather a way to rephrase and expand features section.
+    * This section is our chance to interact with user, explain product advantages by following him throw process of using it.
+    * This section may not have call to action, but for sure must call the interest of visitors to read further and get more info in next sections.
+    * How it works section should in easy way explain audience how they can achieve benefits from product usage.
+    * Step can have a structure of list or be a paragraph of text.
+    * If you need to give instructions to follow better use list.
+    * If you want to give explanation of some process or feature usage better use paragraph.
+    * I do not recommend mix list and paragraph in one step.
+    * Each step should contain at leas 50 words.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

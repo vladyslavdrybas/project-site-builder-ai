@@ -1,0 +1,11 @@
+<instructions type="general">
+Apply these instructions to write content for whole landing page:
+    1. Keep your landing page text brief.
+    2. Keep text simple and direct.
+    3. Explain why product matters to target audience. Use product proposal and value.
+    4. Don't sound like a robot.
+    5. Content is written in '{{tone}}' tones with elements of '{{style}}'.
+    6. The landing page content should have the flow of a story.
+    7. Show you care by writing in a way that connects with your audience.
+    8. Emotional headlines grab and time limitation attention. Do not hesitate to use this advice.
+</instructions>

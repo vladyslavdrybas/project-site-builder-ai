@@ -1,0 +1,11 @@
+<section name="hero">
+<instructions type="section-specific">
+    * Hero is the first thing people see when they visit website.
+    * Hero section is the area that immediately shows up on the screen under brand logo and navigation menu.
+    * Make the people that see it feel something.
+    * Headline should stand out on the page and differentiate site from your competitors.
+    * Headline and Subheadline of the hero together should explain in short and simple form next: product offer, why trust us, benefits of chose, action to do.
+    * Headline of hero also should grab the interest of visitor and push them to stay and read more about product.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

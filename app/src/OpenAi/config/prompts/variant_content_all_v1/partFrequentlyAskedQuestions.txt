@@ -1,0 +1,12 @@
+<section name="faq">
+<instructions type="section-specific">
+    * Read from our competitors or try to guess what questions audience can ask to get more info about product and its values.
+    * Read from our competitors or try to guess what issues customers can get by using product.
+    * Create a list with 10 most popular questions you think audience and customers can ask.
+    * Provide answers on that questions.
+    * Each answer should be no longer than 200 words.
+    * Use polite and coaching tone with elements of instructions and explanations.
+    * Try to answer as simple as possible, so person who never used product before can understand what do you mean.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

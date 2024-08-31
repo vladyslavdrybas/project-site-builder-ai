@@ -1,0 +1,12 @@
+<section name="header">
+<instructions type="section-specific">
+    * Header has brand Name that in one word or acronym or abbreviation describes product proposal and/or values.
+    * Brand name must scream to audience that product they are reading about is the best for them, most powerful on the market.
+    * Brand name must show audience that they will get exclusive and luxury product.
+    * Brand name must show audience that product can solve their needs.
+    * Header also has navigation that describes page content best.
+    * Use no more than 2 words for one navigation title.
+    * Expand JSON answer via additional fields if 'navigation' field does not contain proper link on page section.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

@@ -7,6 +7,7 @@ class PromptDto
 {
     public function __construct(
         public string $text,
-        public string $template
+        public string $template,
+        public ?array $activeParts = []
     ) {}
 }

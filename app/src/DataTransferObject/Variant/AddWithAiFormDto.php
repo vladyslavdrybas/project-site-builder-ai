@@ -11,5 +11,6 @@ class AddWithAiFormDto
     public function __construct(
         public Collection $projects,
         public ?Project $project = null,
+        public ?array $parts = [],
     ) {}
 }

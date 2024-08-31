@@ -1,0 +1,11 @@
+<section name="workExample">
+<instructions type="section-specific">
+    * Show a few real life cases our product can solve.
+    * If it is some digital product you can imagine our team participation in hackatons, or some startup battles.
+    * Describe how product did it.
+    * Describe who was involved and why did they like it.
+    * Use normal wight description from 100 to 300 words.
+    * Do not try to concentrate visitor's attraction on this section too much, better attract him, but make him scroll further to know more.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

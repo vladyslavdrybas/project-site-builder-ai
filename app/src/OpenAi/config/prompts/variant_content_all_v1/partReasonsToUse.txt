@@ -1,0 +1,14 @@
+<section name="reasonToUse">
+<instructions type="section-specific">
+    * Not a huge section similar to features.
+    * Main idea is to catch attention of the visitor on the main features of the product that can fit specially to him.
+    * Try to guess what the main point can be for our target audience to use our product.
+    * Answer on the question: What pain points we can take off from our target audience if they will start to use our product?
+    * Explain to our target audience that product they will buy from us is incredible and it's features will make their life/work/rest easier.
+    * Do not try to cover all possible pain points.
+    * Make one of the point most valuable to close via our product. Describe that point with more attention, and highlight it on the background of others.
+    * Content must be easy read and understand. Use fleshy headlines. Description no more than 200 words, but do not make it too short.
+    * Section have one call-to-action button calls to get rid of this problematic points just by using our product.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

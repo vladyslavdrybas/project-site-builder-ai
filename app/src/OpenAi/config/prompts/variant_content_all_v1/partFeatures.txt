@@ -1,0 +1,10 @@
+<section name="features">
+<instructions type="section-specific">
+    * Feature is a part of product that BEST fits target audience expectations and/or goals.
+    * Feature also can be the product value that competitors do not provide, or we do it better than them.
+    * Feature must be unique and value for the audience based on product goals, proposal and values.
+    * Feature description contain from 10 to 50 words.
+    * it must be short, clean and simple to understand.
+    * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

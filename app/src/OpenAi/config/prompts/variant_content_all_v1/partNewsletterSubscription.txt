@@ -1,0 +1,5 @@
+<section name="newsletter">
+<instructions type="section-specific">
+    1. Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
+</instructions>
+</section>

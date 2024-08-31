@@ -48,7 +48,19 @@ class VariantAiGeneratorController extends AbstractControlPanelController
             return $this->render('not-found-projects-to-add-variant.html.twig');
         }
 
-        $formDto = new AddWithAiFormDto($projects);
+        $formDto = new AddWithAiFormDto(
+            $projects,
+            null,
+            [
+                'header' => true,
+                'heroWithCallToAction' => true,
+                'reasonsToUse' => true,
+                'testimonials' => true,
+                'subscriptionPlans' => true,
+                'newsletterSubscription' => true,
+            ]
+        );
+
         $form = $this->createForm(VariantAddWithAiFormType::class, $formDto);
         $form->handleRequest($request);
 
@@ -92,11 +104,10 @@ class VariantAiGeneratorController extends AbstractControlPanelController
             $variant->setPromptTemplate($this->getPromptTemplate());
             $variant->setIsVisible(false);
 
-            dump($variant);
-
             $prompt = $aiPromptManager->convertVariantPromptMetaToPrompt(
                 $variant->getPromptMeta(),
-                $variant->getPromptTemplate()
+                $variant->getPromptTemplate(),
+                $data->parts
             );
 
             $variantPrompt = new VariantPrompt();
@@ -104,11 +115,7 @@ class VariantAiGeneratorController extends AbstractControlPanelController
             $variantPrompt->setPromptMeta($variant->getPromptMeta());
             $variantPrompt->setPromptTemplate($prompt->template);
             $variantPrompt->setPrompt($prompt->text);
-
-            dump($prompt);
-
-//            $aiAnswer = $aiPromptManager->requestPrompt($prompt);
-//            dump($aiAnswer);
+            $variantPrompt->setActiveParts($prompt->activeParts);
 
             try {
                 $variantPromptRepository->add($variantPrompt);
@@ -120,6 +127,7 @@ class VariantAiGeneratorController extends AbstractControlPanelController
             } catch (InvalidArgumentException $e) {
                 $this->addFlash('error', $e->getMessage());
             } catch (Exception $e) {
+                dump($e);
                 $this->addFlash('error', 'Variant creation unknown error.');
             }
         }
