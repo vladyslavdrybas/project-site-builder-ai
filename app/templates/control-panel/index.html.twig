@@ -1,12 +1,8 @@
 {% extends 'base.html.twig'%}
 
 {% block header %}
-    <div id="header" class="fixed-top">
+    <div id="header" class="fixed-top z-3">
         {% include "control-panel/components/header/fixed-top.html.twig" %}
-
-        <div>
-            {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
-        </div>
     </div>
 {% endblock %}
 
@@ -22,6 +18,5 @@
 
 {% block footer %}
     <div id="footer" class="footer pt-5">
-
     </div>
 {% endblock %}
