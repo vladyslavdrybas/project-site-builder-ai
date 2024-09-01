@@ -32,74 +32,40 @@
 <div id="home"></div>
 
 {% block header %}
-<div id="header" class="fixed-top">
+<div id="header" class="fixed-top z-3">
     {% include "landing-page/components/sections/header/fixed-top.html.twig" %}
-
-    <div>
-        {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
-    </div>
 </div>
 {% endblock %}
 
+<div id="notification-flash-messages" class="pt-3 mt-5 position-absolute top-0 z-2 w-100">
+{#    <div class="container">#}
+{#        <div class="row">#}
+            {% embed "_notification/flash/messages.flash.html.twig" %}{% endembed %}
+{#        </div>#}
+{#    </div>/#}
+</div>
+
+<div class="position-relative z-0">
 {% block content %}
-    <div id="page-landing">
-{#        {% include "landing-page/components/sections/header/fixed-top.html.twig" %}#}
-        {% include 'landing-page/components/sections/first-screen/hero-with-button-and-cover.html.twig' %}
-        {% include 'landing-page/components/sections/features/3-in-row.html.twig' %}
-        {% include 'landing-page/components/sections/how-it-works/3-in-column-with-covers.html.twig' %}
-        {% include 'landing-page/components/sections/testimonial/carousel.html.twig' %}
-        {% include 'landing-page/components/sections/pricing/standard-3-in-row.html.twig' %}
-        {% include 'landing-page/components/sections/newsletter/standard.html.twig' %}
-    </div>
-
-{#    make fake checkout as modal window#}
-    {% include 'landing-page/components/sections/checkout/simple.html.twig' %}
 {% endblock %}
+</div>
 
+<div class="position-relative z-0">
 {% block footer %}
     {% include 'landing-page/components/sections/footer/standard.html.twig' %}
 {% endblock %}
+</div>
 
 <script src="{{ absolute_url(asset('use-bootstrap-tag.min.js', 'js')) }}"></script>
 <script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
 
-{% block scriptsbottom %}
-<script type="application/javascript">
+<script>
     function printTheJSONInPrettyFormat(json) {
         return JSON.stringify(JSON.parse(json), undefined, 4);
     }
 
-    function scrollTo(hash) {
-        location.hash = "#" + hash;
-    }
-
-    const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
-    const btnBackToLanding = document.getElementById("btn-back-to-landing");
-    const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");
-    const alerts = document.querySelectorAll(".alert");
-    const pageLanding = document.getElementById("page-landing");
-    const pageCheckout = document.getElementById("page-checkout");
-
-    btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {
-        console.log(this);
-        e.preventDefault();
-    });
-
-    btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {
-        console.log(this);
-        e.preventDefault();
-        pageLanding && pageLanding.classList.toggle("d-none");
-        pageCheckout && pageCheckout.classList.toggle("d-none");
-        scrollTo('pricing');
-    });
-
-    btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
-        console.log(this);
-        e.preventDefault();;
-        pageLanding && pageLanding.classList.toggle("d-none");
-        pageCheckout && pageCheckout.classList.toggle("d-none");
-    }));
+    const alerts = document.querySelectorAll(".alert")
 
     alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {
         console.log(this);
@@ -120,13 +86,13 @@
             console.log(el);
             UseBootstrapTag(el);
         });
-    });
+    })
 
-</script>
-
-<script>
+    // prettify code json
     hljs.highlightAll();
 </script>
+
+{% block scriptsbottom %}
 {% endblock %}
 
 </body>

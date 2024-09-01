@@ -1,1 +1,51 @@
 {% extends 'base.html.twig'%}
+
+{% block content %}
+    <div id="page-landing">
+        {#        {% include "landing-page/components/sections/header/fixed-top.html.twig" %}#}
+        {% include 'landing-page/components/sections/first-screen/hero-with-button-and-cover.html.twig' %}
+        {% include 'landing-page/components/sections/features/3-in-row.html.twig' %}
+        {% include 'landing-page/components/sections/how-it-works/3-in-column-with-covers.html.twig' %}
+        {% include 'landing-page/components/sections/testimonial/carousel.html.twig' %}
+        {% include 'landing-page/components/sections/pricing/standard-3-in-row.html.twig' %}
+        {% include 'landing-page/components/sections/newsletter/standard.html.twig' %}
+    </div>
+
+    {#    make fake checkout as modal window#}
+    {% include 'landing-page/components/sections/checkout/simple.html.twig' %}
+{% endblock %}
+
+{% block scriptsbottom %}
+    <script type="application/javascript">
+        function scrollTo(hash) {
+            location.hash = "#" + hash;
+        }
+
+        const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
+        const btnBackToLanding = document.getElementById("btn-back-to-landing");
+        const btnGoToPayment = document.querySelectorAll(".btn-goto-payment");
+        const pageLanding = document.getElementById("page-landing");
+        const pageCheckout = document.getElementById("page-checkout");
+
+        btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {
+            console.log(this);
+            e.preventDefault();
+        });
+
+        btnBackToLanding && btnBackToLanding.addEventListener('click', function (e) {
+            console.log(this);
+            e.preventDefault();
+            pageLanding && pageLanding.classList.toggle("d-none");
+            pageCheckout && pageCheckout.classList.toggle("d-none");
+            scrollTo('pricing');
+        });
+
+        btnGoToPayment && btnGoToPayment.forEach((e) => e.addEventListener('click', function (e) {
+            console.log(this);
+            e.preventDefault();
+            pageLanding && pageLanding.classList.toggle("d-none");
+            pageCheckout && pageCheckout.classList.toggle("d-none");
+        }));
+    </script>
+
+{% endblock %}
