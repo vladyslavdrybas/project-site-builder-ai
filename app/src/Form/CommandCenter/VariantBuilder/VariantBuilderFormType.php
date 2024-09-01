@@ -54,20 +54,20 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->header->isActive
+                            'data' => $data->parts->header?->isActive
                         ]
                     )
                     ->add('ctaBtnText',
                         TextType::class,
                         [
                             'label' => 'Action Button Text',
-                            'data' => $data->parts->header->data?->callToActionButton->text
+                            'data' => $data->parts->header?->data?->callToActionButton->text
                         ]
                     )
                     ->add('logoText',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->brand->text
+                            'data' => $data->parts->header?->data?->brand->text
                         ]
                     )
                     ->add('mediaFile', FileType::class, [
@@ -91,7 +91,7 @@ class VariantBuilderFormType extends AbstractType
                     ->add('mediaId',
                         HiddenType::class,
                         [
-                            'data' => $data->parts->header->data?->brand->media->id ?? null
+                            'data' => $data->parts->header?->data?->brand->media->id ?? null
                         ]
                     )
             )
@@ -108,49 +108,49 @@ class VariantBuilderFormType extends AbstractType
                     ->add('home',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['home'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['home'] ?? null
                         ]
                     )
                     ->add('hero',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['hero'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['hero'] ?? null
                         ]
                     )
                     ->add('features',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['features'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['features'] ?? null
                         ]
                     )
                     ->add('howitworks',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['howitworks'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['howitworks'] ?? null
                         ]
                     )
                     ->add('reviews',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['reviews'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['reviews'] ?? null
                         ]
                     )
                     ->add('pricing',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['pricing'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['pricing'] ?? null
                         ]
                     )
                     ->add('newsletter',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['newsletter'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['newsletter'] ?? null
                         ]
                     )
                     ->add('contact',
                         TextType::class,
                         [
-                            'data' => $data->parts->header->data?->navigation['contact'] ?? null
+                            'data' => $data->parts->header?->data?->navigation['contact'] ?? null
                         ]
                     )
             )
@@ -171,26 +171,26 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3',
                             ],
-                            'data' => $data->parts->hero->isActive,
+                            'data' => $data->parts->hero?->isActive,
                         ]
                     )
                     ->add('head',
                         TextType::class,
                         [
-                            'data' => $data->parts->hero->data?->head,
+                            'data' => $data->parts->hero?->data?->head,
                         ]
                     )
                     ->add('description',
                         TextareaType::class,
                         [
-                            'data' => $data->parts->hero->data?->description,
+                            'data' => $data->parts->hero?->data?->description,
                         ]
                     )
                     ->add('ctaBtnText',
                         TextType::class,
                         [
                             'label' => 'Action Button Text',
-                            'data' => $data->parts->hero->data?->callToActionButton->text,
+                            'data' => $data->parts->hero?->data?->callToActionButton->text,
                         ]
                     )
                     ->add('mediaFile', FileType::class, [
@@ -216,7 +216,7 @@ class VariantBuilderFormType extends AbstractType
                     ->add('mediaId',
                         HiddenType::class,
                         [
-                            'data' => $data->parts->hero->data?->media->id ?? null
+                            'data' => $data->parts->hero?->data?->media->id ?? null
                         ]
                     )
             )
@@ -237,13 +237,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->features->isActive,
+                            'data' => $data->parts->features?->isActive,
                         ]
                     )
                     ->add('head',
                         TextType::class,
                         [
-                            'data' => $data->parts->features->data?->head,
+                            'data' => $data->parts->features?->data?->head,
                         ]
                     )
                     ->add(
@@ -258,14 +258,14 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['feature1']?->head ?? null,
+                                    'data' => $data->parts->features?->data?->items['feature1']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->features->data?->items['feature1']?->description ?? null,
+                                    'data' => $data->parts->features?->data?->items['feature1']?->description ?? null,
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
@@ -289,7 +289,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('mediaId',
                                 HiddenType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['feature1']->media->id ?? null
+                                    'data' => $data->parts->features?->data?->items['feature1']->media->id ?? null
                                 ]
                             )
                     )
@@ -305,14 +305,14 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['feature2']?->head ?? null,
+                                    'data' => $data->parts->features?->data?->items['feature2']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->features->data?->items['feature2']?->description ?? null,
+                                    'data' => $data->parts->features?->data?->items['feature2']?->description ?? null,
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
@@ -336,7 +336,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('mediaId',
                                 HiddenType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['feature2']->media->id ?? null
+                                    'data' => $data->parts->features?->data?->items['feature2']->media->id ?? null
                                 ]
                             )
                     )
@@ -352,14 +352,14 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['feature3']?->head ?? null,
+                                    'data' => $data->parts->features?->data?->items['feature3']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->features->data?->items['feature3']?->description ?? null,
+                                    'data' => $data->parts->features?->data?->items['feature3']?->description ?? null,
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
@@ -383,7 +383,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('mediaId',
                                 HiddenType::class,
                                 [
-                                    'data' => $data->parts->features->data?->items['feature3']->media->id ?? null
+                                    'data' => $data->parts->features?->data?->items['feature3']->media->id ?? null
                                 ]
                             )
                     )
@@ -405,13 +405,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->howitworks->isActive,
+                            'data' => $data->parts->howitworks?->isActive,
                         ]
                     )
                     ->add('head',
                         TextType::class,
                         [
-                            'data' => $data->parts->howitworks->data?->head,
+                            'data' => $data->parts->howitworks?->data?->head,
                         ]
                     )
                     ->add(
@@ -426,14 +426,14 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step1']?->head ?? null,
+                                    'data' => $data->parts->howitworks?->data?->items['step1']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step1']?->description ?? null,
+                                    'data' => $data->parts->howitworks?->data?->items['step1']?->description ?? null,
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
@@ -459,7 +459,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('mediaId',
                                 HiddenType::class,
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step1']->media->id ?? null
+                                    'data' => $data->parts->howitworks?->data?->items['step1']->media->id ?? null
                                 ]
                             )
                     )
@@ -475,14 +475,14 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step2']?->head ?? null,
+                                    'data' => $data->parts->howitworks?->data?->items['step2']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step2']?->description ?? null,
+                                    'data' => $data->parts->howitworks?->data?->items['step2']?->description ?? null,
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
@@ -508,7 +508,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('mediaId',
                                 HiddenType::class,
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step2']->media->id ?? null
+                                    'data' => $data->parts->howitworks?->data?->items['step2']->media->id ?? null
                                 ]
                             )
                     )
@@ -524,14 +524,14 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step3']?->head ?? null,
+                                    'data' => $data->parts->howitworks?->data?->items['step3']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
 
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step3']?->description ?? null,
+                                    'data' => $data->parts->howitworks?->data?->items['step3']?->description ?? null,
                                 ]
                             )
                             ->add('mediaFile', FileType::class, [
@@ -557,7 +557,7 @@ class VariantBuilderFormType extends AbstractType
                             ->add('mediaId',
                                 HiddenType::class,
                                 [
-                                    'data' => $data->parts->howitworks->data?->items['step3']->media->id ?? null
+                                    'data' => $data->parts->howitworks?->data?->items['step3']->media->id ?? null
                                 ]
                             )
                     )
@@ -579,13 +579,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->testimonial->isActive
+                            'data' => $data->parts->testimonial?->isActive
                         ]
                     )
                     ->add('head',
                         TextType::class,
                         [
-                            'data' => $data->parts->testimonial->head
+                            'data' => $data->parts->testimonial?->head
                         ]
                     )
                     ->add('maxReviews',
@@ -594,7 +594,7 @@ class VariantBuilderFormType extends AbstractType
                             'label' => 'Maximum Reviews',
                             'required' => false,
                             'html5' => true,
-                            'data' => $data->parts->testimonial->maxReviews ?? 1,
+                            'data' => $data->parts->testimonial?->maxReviews ?? 1,
                             'attr' => [
                                 'min' => 1,
                                 'max' => 10,
@@ -619,13 +619,13 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->pricing->isActive
+                            'data' => $data->parts->pricing?->isActive
                         ]
                     )
                     ->add('head',
                         TextType::class,
                         [
-                            'data' => $data->parts->pricing->data?->head ?? null,
+                            'data' => $data->parts->pricing?->data?->head ?? null,
                         ]
                     )
                     ->add(
@@ -640,32 +640,32 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan1']?->head ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan1']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => implode("\n", $data->parts->pricing->data?->items['plan1']->description ?? []) ?? null,
+                                    'data' => implode("\n", $data->parts->pricing?->data?->items['plan1']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->pricing->data?->items['plan1']?->calwlToActionButton->text ?? null
+                                    'data' => $data->parts->pricing?->data?->items['plan1']?->calwlToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan1']?->price ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan1']?->price ?? null,
                                 ]
                             )
                             ->add('currencySign',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan1']?->currencySign ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan1']?->currencySign ?? null,
                                 ]
                             )
                     )
@@ -681,32 +681,32 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan2']?->head ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan2']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => implode("\n", $data->parts->pricing->data?->items['plan2']->description ?? []) ?? null,
+                                    'data' => implode("\n", $data->parts->pricing?->data?->items['plan2']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->pricing->data?->items['plan2']?->callToActionButton->text ?? null
+                                    'data' => $data->parts->pricing?->data?->items['plan2']?->callToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan2']?->price ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan2']?->price ?? null,
                                 ]
                             )
                             ->add('currencySign',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan2']?->currencySign ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan2']?->currencySign ?? null,
                                 ]
                             )
                     )
@@ -722,32 +722,32 @@ class VariantBuilderFormType extends AbstractType
                             ->add('head',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan3']?->head ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan3']?->head ?? null,
                                 ]
                             )
                             ->add('description',
                                 TextareaType::class,
                                 [
-                                    'data' => implode("\n", $data->parts->pricing->data?->items['plan3']->description ?? []) ?? null,
+                                    'data' => implode("\n", $data->parts->pricing?->data?->items['plan3']->description ?? []) ?? null,
                                 ]
                             )
                             ->add('ctaBtnText',
                                 TextType::class,
                                 [
                                     'label' => 'Action Button Text',
-                                    'data' => $data->parts->pricing->data?->items['plan3']?->callToActionButton->text ?? null
+                                    'data' => $data->parts->pricing?->data?->items['plan3']?->callToActionButton->text ?? null
                                 ]
                             )
                             ->add('price',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan3']?->price ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan3']?->price ?? null,
                                 ]
                             )
                             ->add('currencySign',
                                 TextType::class,
                                 [
-                                    'data' => $data->parts->pricing->data?->items['plan3']?->currencySign ?? null,
+                                    'data' => $data->parts->pricing?->data?->items['plan3']?->currencySign ?? null,
                                 ]
                             )
                     )
@@ -769,7 +769,7 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->newsletter->isActive
+                            'data' => $data->parts->newsletter?->isActive
                         ]
                     )
                     ->add('head',
@@ -815,7 +815,7 @@ class VariantBuilderFormType extends AbstractType
                             'row_attr' => [
                                 'class' => 'form-switch px-3'
                             ],
-                            'data' => $data->parts->footer->isActive,
+                            'data' => $data->parts->footer?->isActive,
                         ]
                     )
                     ->add('copyright',

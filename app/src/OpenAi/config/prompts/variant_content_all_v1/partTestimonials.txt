@@ -1,6 +1,8 @@
 <section name="testimonials">
 <instructions type="section-specific">
+    * Fake 7 (seven) items.
     * Fake 7 stories from different people of different age, job position, of target audience.
+    * Use real names for the reviewers. Do not any celebrity names, film or cartoon hero names, do not use book hero names.
     * For each story use unique tone and level of emotions.
     * Each testimonial is a happy customer's story about good user experiences.
     * Testimonial must be short like a message. Usually it is from 20 to 100 words.

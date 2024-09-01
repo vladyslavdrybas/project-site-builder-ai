@@ -7,6 +7,7 @@ use App\DataTransferObject\Ai\PromptDto;
 use App\DataTransferObject\Variant\VariantPromptMetaDto;
 use App\OpenAi\Client\OpenAiClient;
 use App\OpenAi\Constants\PromptAnswer;
+use Exception;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -50,7 +51,9 @@ class OpenAiPromptManager
             'partHeroWithCallToAction' => PromptAnswer::VARIANT_HERO->value,
             'partFeatures' => PromptAnswer::VARIANT_FEATURES->value,
             'partHowItWorks' => PromptAnswer::VARIANT_HOW_IT_WORKS->value,
-            'partTestimonials' => PromptAnswer::VARIANT_TESTIMONIALS->value,
+            'partTestimonials' => PromptAnswer::VARIANT_SIMPLE_DESCRIPTION_ITEMS->value,
+            'partFrequentlyAskedQuestions' => PromptAnswer::VARIANT_SIMPLE_DESCRIPTION_ITEMS->value,
+            'partAboutUs' => PromptAnswer::VARIANT_SIMPLE_DESCRIPTION_ITEMS->value,
             'partSubscriptionPlans' => PromptAnswer::VARIANT_PRICING_SUBSCRIPTION->value,
             'partNewsletterSubscription' => PromptAnswer::VARIANT_NEWSLETTER->value,
             'partReasonsToUse' => PromptAnswer::VARIANT_REASONS_TO_USE->value,
@@ -94,7 +97,7 @@ class OpenAiPromptManager
             if (!empty($jsonStructures[$partName])) {
                 $partPromptText = str_replace('{{jsonStructure}}', $jsonStructures[$partName], $partPromptText);
             } else {
-                $partPromptText = str_replace('{{jsonStructure}}', '{"data":{"headline":<string>,"subheadline":<string>, ...}}', $partPromptText);
+                $partPromptText = str_replace('{{jsonStructure}}', PromptAnswer::VARIANT_PART->value, $partPromptText);
             }
 
             if (empty($partPromptText)) {
@@ -154,5 +157,27 @@ class OpenAiPromptManager
         }
 
         return $dto;
+    }
+
+    public function convertPromptJsonAnswerToArray(array $data): array
+    {
+        $content = $data['choices'][0]['message']['content'] ?? null;
+        if (empty($content)) {
+            dump('prompt answer content not found.');
+            // TODO add logging
+
+            return [];
+        }
+
+        $content = json_decode($content, true);
+
+        if (json_last_error()) {
+            dump(json_last_error_msg());
+            // TODO add logging
+
+            return [];
+        }
+
+        return $content;
     }
 }

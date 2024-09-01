@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\DataTransferObject\Variant\Meta;
 
-class BrandDto
+class TestimonialDto
 {
     public function __construct(
-        public ?string $text = null,
-        public ?MediaDto $media = null
+       public ?string $headline = null,
+       public ?string $description = null,
     ) {}
 }

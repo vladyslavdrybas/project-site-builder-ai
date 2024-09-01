@@ -151,6 +151,8 @@ class VariantBuilderController extends AbstractControlPanelController
             }
         }
 
+        dump($meta);
+
         return $this->render(
             'control-panel/variant/builder/index.html.twig',
             [
@@ -254,8 +256,8 @@ class VariantBuilderController extends AbstractControlPanelController
         $header = new HeaderPartDto(
           new HeaderPartDataDto(
             new BrandDto(
-                $headerMedia,
                 $data['parts']['header']['logoText'],
+                $headerMedia,
             ),
             new CallToActionButtonDto(
                 $data['parts']['header']['ctaBtnText'],
@@ -282,6 +284,7 @@ class VariantBuilderController extends AbstractControlPanelController
         $features = new FeaturesPartDto(
             new FeaturesPartDataDto(
                 $data['parts']['features']['head'],
+                $data['parts']['features']['subheadline'] ?? null,
                 [
                     'feature1' =>
                         $data['parts']['features']['feature1']
@@ -308,6 +311,7 @@ class VariantBuilderController extends AbstractControlPanelController
         $howitworks = new HowItWorksPartDto(
             new HowItWorksPartDataDto(
                 $data['parts']['howitworks']['head'],
+                $data['parts']['howitworks']['subheadline'] ?? null,
                 [
                     'step1' => $data['parts']['howitworks']['step1']
                         +
@@ -332,6 +336,7 @@ class VariantBuilderController extends AbstractControlPanelController
 
         $testimonial = new TestimonialPartDto(
             $data['parts']['testimonial']['head'],
+            $data['parts']['testimonial']['subheadline'] ?? null,
             (int) $data['parts']['testimonial']['maxReviews'],
             [],
             $data['parts']['testimonial']['isActive']
@@ -340,6 +345,7 @@ class VariantBuilderController extends AbstractControlPanelController
         $pricing = new SubscriptionsPartDto(
             new SubscriptionsPartDataDto(
                 $data['parts']['subscriptions']['head'],
+                $data['parts']['subscriptions']['subheadline'] ?? null,
                 [
                     'plan1' => $data['parts']['subscriptions']['plan1'],
                     'plan2' => $data['parts']['subscriptions']['plan2'],
@@ -351,6 +357,7 @@ class VariantBuilderController extends AbstractControlPanelController
 
         $newsletter = new NewsletterPartDto(
             $data['parts']['newsletter']['head'],
+            $data['parts']['newsletter']['subheadline'] ?? null,
             $data['parts']['newsletter']['description'],
             $data['parts']['newsletter']['inputFieldPlaceholder'],
             new CallToActionButtonDto(

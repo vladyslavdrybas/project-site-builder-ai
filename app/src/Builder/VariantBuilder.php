@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
+use App\DataTransferObject\PromptAnswer\Parts\SimpleDescriptionDto;
+use App\DataTransferObject\PromptAnswer\Parts\SubscriptionPlanDto;
 use App\DataTransferObject\Variant\Meta\BrandDto;
 use App\DataTransferObject\Variant\Meta\CallToActionButtonDto;
 use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
@@ -21,10 +23,12 @@ use App\DataTransferObject\Variant\Meta\NewsletterPartDto;
 use App\DataTransferObject\Variant\Meta\PartsDto;
 use App\DataTransferObject\Variant\Meta\SubscriptionsPartDataDto;
 use App\DataTransferObject\Variant\Meta\SubscriptionsPartDto;
+use App\DataTransferObject\Variant\Meta\TestimonialDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\Variant;
 use Symfony\Component\Serializer\SerializerInterface;
+use App\DataTransferObject\PromptAnswer\Parts\PartsDto as PromptAnswerPartsDto;
 
 class VariantBuilder
 {
@@ -36,145 +40,156 @@ class VariantBuilder
         Variant $variant,
         array $data
     ): Variant {
-        if (empty($data['parts']['howitworks']) && !empty($data['howitworks'])) {
-            $data['parts']['howitworks'] = $data['howitworks'];
-            unset($data['howitworks']);
-        }
-        if (empty($data['parts']['testimonials']) && !empty($data['testimonials'])) {
-            $data['parts']['testimonials'] = $data['testimonials'];
-            unset($data['testimonials']);
-        }
-        if (empty($data['parts']['productSubscriptions']) && !empty($data['productSubscriptions'])) {
-            $data['parts']['productSubscriptions'] = $data['productSubscriptions'];
-            unset($data['productSubscriptions']);
-        }
-        if (empty($data['parts']['productPrice']) && !empty($data['productPrice'])) {
-            $data['parts']['productPrice'] = $data['productPrice'];
-            unset($data['productPrice']);
-        }
-        if (empty($data['parts']['newsletter']) && !empty($data['newsletter'])) {
-            $data['parts']['newsletter'] = $data['newsletter'];
-            unset($data['newsletter']);
+        $expectedParts = [
+            'header',
+            'heroWithCallToAction',
+            'reasonsToUse',
+            'testimonials',
+            'subscriptionPlans',
+            'newsletterSubscription',
+            'features',
+            'whoUseIt',
+            'howItWorks',
+            'partners',
+            'workExample',
+            'productPrice',
+            'aboutUs',
+            'frequentlyAskedQuestions'
+        ];
+
+        if (empty($data['parts'])) {
+            $data['parts'] = [];
         }
 
-        $header = new HeaderPartDto(
-            new HeaderPartDataDto(
-                new BrandDto(
-                    null,
-                    $data['parts']['header']['data']['brand']['text'] ?? null,
+        foreach ($expectedParts as $expectedPart) {
+            if (empty($data['parts'][$expectedPart]) && !empty($data[$expectedPart])) {
+                $data['parts'][$expectedPart] = $data[$expectedPart];
+                unset($data[$expectedPart]);
+            }
+        }
+
+        /** @var PromptAnswerPartsDto $promptPartsDto */
+        $promptPartsDto = $this->serializer->denormalize($data['parts'], PromptAnswerPartsDto::class);
+
+        $header = null;
+        if ($promptPartsDto->header) {
+            $header = new HeaderPartDto(
+                new HeaderPartDataDto(
+                    new BrandDto(
+                        $promptPartsDto->header->brand->text,
+                    ),
+                    new CallToActionButtonDto(
+                        $promptPartsDto->header->callToActionButton->text,
+                        $promptPartsDto->header->callToActionButton->link
+                    ),
+                    $promptPartsDto->header->navigation
                 ),
+                true,
+            );
+        }
+
+        $hero = null;
+        if ($promptPartsDto->hero) {
+            $hero = new HeroPartDto(
+                new HeroPartDataDto(
+                    $promptPartsDto->hero->headline,
+                    $promptPartsDto->hero->subheadline,
+                    new CallToActionButtonDto(
+                        $promptPartsDto->hero->callToActionButton->text,
+                        $promptPartsDto->hero->callToActionButton->link
+                    ),
+                ),
+                true
+            );
+        }
+
+        $features = null;
+        if ($promptPartsDto->features) {
+            $features = new FeaturesPartDto(
+                new FeaturesPartDataDto(
+                    $promptPartsDto->features->headline,
+                    $promptPartsDto->features->subheadline,
+                    $promptPartsDto->features->items
+                        ->map(fn(SimpleDescriptionDto $item) => new FeatureDto(
+                            $item->headline,
+                            $item->description
+                        ))
+                        ->toArray(),
+                ),
+                true
+            );
+        }
+
+        $howItWorks = null;
+        if ($promptPartsDto->howItWorks) {
+            $howItWorks = new HowItWorksPartDto(
+                new HowItWorksPartDataDto(
+                    $promptPartsDto->howItWorks->headline,
+                    $promptPartsDto->howItWorks->subheadline,
+                    $promptPartsDto->howItWorks->items
+                        ->map(fn(SimpleDescriptionDto $item) => new HowItWorksDto(
+                            $item->headline,
+                            $item->description
+                        ))
+                        ->toArray(),
+                ),
+                true
+            );
+        }
+
+        $testimonials = null;
+        if ($promptPartsDto->testimonials) {
+            $testimonials = new TestimonialPartDto(
+                $promptPartsDto->testimonials->headline,
+                $promptPartsDto->testimonials->subheadline,
+                $promptPartsDto->testimonials->items->count(),
+                $promptPartsDto->testimonials->items
+                    ->map(fn(SimpleDescriptionDto $item) => new TestimonialDto(
+                        $item->headline,
+                        $item->description
+                    ))
+                    ->toArray(),
+                true
+            );
+        }
+
+        $pricing = null;
+        if ($promptPartsDto->subscriptionPlans) {
+            $pricing = new SubscriptionsPartDto(
+                new SubscriptionsPartDataDto(
+                    $promptPartsDto->subscriptionPlans->headline,
+                    $promptPartsDto->subscriptionPlans->subheadline,
+                    $promptPartsDto->subscriptionPlans->items
+                        ->map(fn(SubscriptionPlanDto $item) => [
+                            'head' => $item->headline,
+                            'description' => $item->features->toArray(),
+                            'ctaBtnText' => $item->callToActionButton->text,
+                            'price' => $item->price,
+                            'currencySign' => $item->currencySign,
+                        ])
+                        ->toArray()
+                ),
+                true
+            );
+        }
+
+        $newsletter = null;
+        if ($promptPartsDto->newsletter) {
+            $newsletter = new NewsletterPartDto(
+                $promptPartsDto->newsletter->headline,
+                $promptPartsDto->newsletter->subheadline,
+                $promptPartsDto->newsletter->subheadline,
+                $promptPartsDto->newsletter->inputFieldPlaceholder,
                 new CallToActionButtonDto(
-                    $data['parts']['header']['data']['callToActionButton']['text'] ?? null,
-                    '#pricing'
+                    $promptPartsDto->newsletter->callToActionButton->text,
+                    $promptPartsDto->newsletter->callToActionButton->link
                 ),
-                $data['parts']['header']['data']['navigation']
-            ),
-            true,
-        );
-
-        $hero = new HeroPartDto(
-            new HeroPartDataDto(
-                $data['parts']['hero']['data']['headline'] ?? null,
-                $data['parts']['hero']['data']['subheadline'] ?? null,
-                new CallToActionButtonDto(
-                    $data['parts']['hero']['data']['callToActionButton']['text'] ?? null,
-                    '#pricing'
-                ),
-            ),
-            true
-        );
-
-        $features = new FeaturesPartDto(
-            new FeaturesPartDataDto(
-                $data['parts']['features']['data']['headline'] ?? null,
-                [
-                    'feature1' => new FeatureDto(
-                        $data['parts']['features']['data']['items']['feature1']['headline'] ?? null,
-                        $data['parts']['features']['data']['items']['feature1']['description'] ?? null
-                    ),
-                    'feature2' => new FeatureDto(
-                        $data['parts']['features']['data']['items']['feature2']['headline'] ?? null,
-                        $data['parts']['features']['data']['items']['feature2']['description'] ?? null
-                    ),
-                    'feature3' => new FeatureDto(
-                        $data['parts']['features']['data']['items']['feature3']['headline'] ?? null,
-                        $data['parts']['features']['data']['items']['feature3']['description'] ?? null
-                    ),
-                ]
-            ),
-            true
-        );
-
-        $howitworks = new HowItWorksPartDto(
-            new HowItWorksPartDataDto(
-                $data['parts']['howitworks']['data']['headline'] ?? null,
-                [
-                    'step1' => new HowItWorksDto(
-                        $data['parts']['howitworks']['data']['items']['step1']['headline'] ?? null,
-                        $data['parts']['howitworks']['data']['items']['step1']['description'] ?? null
-                    ),
-                    'step2' => new HowItWorksDto(
-                        $data['parts']['howitworks']['data']['items']['step2']['headline'] ?? null,
-                        $data['parts']['howitworks']['data']['items']['step2']['description'] ?? null
-                    ),
-                    'step3' => new HowItWorksDto(
-                        $data['parts']['howitworks']['data']['items']['step3']['headline'] ?? null,
-                        $data['parts']['howitworks']['data']['items']['step3']['description'] ?? null
-                    ),
-                ]
-            ),
-            true
-        );
-
-        $testimonial = new TestimonialPartDto(
-            $data['parts']['testimonials']['headline'] ?? null,
-            (int) $data['parts']['testimonials']['maxReviews'],
-            $data['parts']['testimonials']['items'],
-            true
-        );
-
-        $pricing = new SubscriptionsPartDto(
-            new SubscriptionsPartDataDto(
-                $data['parts']['productSubscriptions']['data']['headline'] ?? null,
-                [
-                    'plan1' => [
-                        'head' => $data['parts']['productSubscriptions']['data']['items']['plan1']['headline'] ?? null,
-                        'description' => $data['parts']['productSubscriptions']['data']['items']['plan1']['features'] ?? null,
-                        'ctaBtnText' => $data['parts']['productSubscriptions']['data']['items']['plan1']['callToActionButton']['text'] ?? null,
-                        'price' => $data['parts']['productSubscriptions']['data']['items']['plan1']['price'],
-                        'currencySign' => $data['parts']['productSubscriptions']['data']['items']['plan1']['currencySign'],
-                    ],
-                    'plan2' => [
-                        'head' => $data['parts']['productSubscriptions']['data']['items']['plan2']['headline'] ?? null,
-                        'description' => $data['parts']['productSubscriptions']['data']['items']['plan2']['features'] ?? null,
-                        'ctaBtnText' => $data['parts']['productSubscriptions']['data']['items']['plan2']['callToActionButton']['text'] ?? null,
-                        'price' => $data['parts']['productSubscriptions']['data']['items']['plan2']['price'],
-                        'currencySign' => $data['parts']['productSubscriptions']['data']['items']['plan2']['currencySign'],
-                    ],
-                    'plan3' => [
-                        'head' => $data['parts']['productSubscriptions']['data']['items']['plan3']['headline'] ?? null,
-                        'description' => $data['parts']['productSubscriptions']['data']['items']['plan3']['features'] ?? null,
-                        'ctaBtnText' => $data['parts']['productSubscriptions']['data']['items']['plan3']['callToActionButton']['text'] ?? null,
-                        'price' => $data['parts']['productSubscriptions']['data']['items']['plan3']['price'],
-                        'currencySign' => $data['parts']['productSubscriptions']['data']['items']['plan3']['currencySign'],
-                    ],
-                ]
-            ),
-            true
-        );
-
-        $newsletter = new NewsletterPartDto(
-            $data['parts']['newsletter']['headline'] ?? null,
-            $data['parts']['newsletter']['subheadline'] ?? null,
-            $data['parts']['newsletter']['inputFieldPlaceholder'] ?? null,
-            new CallToActionButtonDto(
-                $data['parts']['newsletter']['callToActionButton']['text'] ?? null,
-            ),
-            true
-        );
+                true
+            );
+        }
 
         $footer = new FooterPartDto(
-            $data['variantTitle'],
+            'copyright.',
             null,
             null,
             [
@@ -187,8 +202,8 @@ class VariantBuilder
             $header,
             $hero,
             $features,
-            $howitworks,
-            $testimonial,
+            $howItWorks,
+            $testimonials,
             $pricing,
             $newsletter,
             $footer,
@@ -203,9 +218,19 @@ class VariantBuilder
             $design
         );
 
-        $variantMetaArray = $this->serializer->normalize($meta);
+        $variantMetaArray = $this->serializer->normalize($meta, 'json');
 
         $variant->setMeta($variantMetaArray);
+
+
+
+        $variant->setTitle(
+            $promptPartsDto->hero?->header ?? $promptPartsDto->hero?->hero ?? $variant->getTitle()
+        );
+
+        $variant->setDescription(
+            $promptPartsDto->hero?->subheadline ?? 'Ai generated. Data ready.'
+        );
 
         return $variant;
     }

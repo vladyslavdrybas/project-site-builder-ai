@@ -7,6 +7,7 @@ class SubscriptionsPartDataDto
 {
     public function __construct(
        public ?string $head = null,
+       public ?string $subheadline = null,
        public array $items = []
     ) {
         foreach ($items as $key => $item) {

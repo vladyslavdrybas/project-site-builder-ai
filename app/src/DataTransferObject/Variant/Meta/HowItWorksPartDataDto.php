@@ -7,6 +7,7 @@ class HowItWorksPartDataDto
 {
     public function __construct(
        public ?string $head = null,
+       public ?string $subheadline = null,
        /** @var array<HowItWorksDto> $items*/
        public array $items = []
     ) {}

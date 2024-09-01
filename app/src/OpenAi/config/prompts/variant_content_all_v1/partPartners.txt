@@ -1,5 +1,7 @@
 <section name="partners">
 <instructions type="section-specific">
+    * Get 10 (ten) items.
+    * Get 10 happy partners.
     * This is a small section with a links on our partners.
     * This section should arouse in visitor enthusiasm for the product based on the authority of well-known brands.
     * Find popular brands that may use our product.

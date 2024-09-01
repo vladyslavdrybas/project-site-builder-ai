@@ -21,9 +21,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class PromptsRunCommand extends Command
 {
     public function __construct(
-        protected ParameterBagInterface $parameterBag,
-        protected OpenAiPromptManager $aiPromptManager,
-        protected VariantPromptRepository $variantPromptRepository,
+        protected readonly ParameterBagInterface $parameterBag,
+        protected readonly OpenAiPromptManager $aiPromptManager,
+        protected readonly VariantPromptRepository $variantPromptRepository,
         protected ?string $name = null
     ) {
         parent::__construct($name);

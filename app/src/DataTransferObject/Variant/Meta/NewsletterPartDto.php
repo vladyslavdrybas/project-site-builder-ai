@@ -7,6 +7,7 @@ class NewsletterPartDto
 {
     public function __construct(
         public ?string $head = null,
+        public ?string $subheadline = null,
         public ?string $description = null,
         public ?string $inputFieldPlaceholder = null,
         public ?CallToActionButtonDto $callToActionButton = null,

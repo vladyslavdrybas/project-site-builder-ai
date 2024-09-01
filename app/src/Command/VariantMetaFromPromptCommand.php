@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Builder\VariantBuilder;
-use App\DataTransferObject\Ai\PromptDto;
+use App\OpenAi\Business\OpenAiPromptManager;
 use App\Repository\VariantRepository;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,6 +23,7 @@ class VariantMetaFromPromptCommand extends Command
         protected readonly ParameterBagInterface $parameterBag,
         protected readonly VariantRepository $variantRepository,
         protected readonly VariantBuilder $variantBuilder,
+        protected readonly OpenAiPromptManager $aiPromptManager,
         protected ?string $name = null
     ) {
         parent::__construct($name);
@@ -48,27 +49,22 @@ class VariantMetaFromPromptCommand extends Command
         foreach ($variants as $variant) {
             try {
                 $prompt = $variant->getPrompt();
-                $data = $prompt->getPromptAnswer()['choices'][0]['message']['content'] ?? null;
 
-                if (null === $data) {
-                    dump('cannot find meta in the prompt answer.');
+                if (empty($prompt)) {
+                    dump('cannot find prompt in variant.');
+                    continue;
+                }
+                $data = $this->aiPromptManager->convertPromptJsonAnswerToArray($prompt->getPromptAnswer());
+
+                if (empty($data)) {
+                    dump([
+                        'prompt' => $prompt->getId(),
+                        'error' => 'cannot find meta in the prompt answer.',
+                    ]);
                     continue;
                 }
 
-                $data = json_decode($data, true);
-
                 $variant = $this->variantBuilder->buildVariantMetaFromPromptArray($variant, $data);
-
-                if (null !== $data['parts']['hero']['data']['headline'] ?? null) {
-                    $variant->setDescription(
-                        sprintf(
-                            "%s\n%s\n%s",
-                            $data['parts']['hero']['data']['headline'],
-                            $data['parts']['hero']['data']['subheadline'],
-                            $data['parts']['hero']['data']['callToActionButton']['text']
-                        )
-                    );
-                }
 
                 $this->variantRepository->add($variant);
                 $this->variantRepository->save();

@@ -24,7 +24,6 @@ class AppFixtures extends Fixture
         $faker = Factory::create();
         $variants = json_decode(file_get_contents(__DIR__ . '/data/variants.json'), true);
         $productDescription = trim(file_get_contents(__DIR__ . '/data/product_description.txt'));
-        $targetAudience = trim(file_get_contents(__DIR__ . '/data/target_audience.txt'));
 
         $user = $this->userBuilder->base(
             $faker->email(),

@@ -7,6 +7,7 @@ class FeaturesPartDataDto
 {
     public function __construct(
        public ?string $head = null,
+       public ?string $subheadline = null,
         /** @var array<FeatureDto> $items*/
        public array $items = []
     ) {}

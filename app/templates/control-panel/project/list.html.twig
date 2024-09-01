@@ -57,11 +57,22 @@
 
                                 <td>
                                     {% if project.variants is not null %}
-                                        <a
-                                            href="{{ absolute_url(path('cp_variant_list_project', {'project': project.id})) }}"
-                                        >
-                                            {{ project.variants|length }}
-                                        </a>
+                                            {% if project.variants|length == 0 %}
+                                                <a
+                                                    href="{{ absolute_url(path('cp_variant_list_project', {'project': project.id})) }}"
+                                                    class="btn btn-primary rounded-5"
+                                                    title="Add variant"
+                                                >
+                                                    <svg class="bi bi-1"><use xlink:href="#plus-square-fill"/></svg>
+                                                </a>
+                                            {% else %}
+                                                <a
+                                                    href="{{ absolute_url(path('cp_variant_list_project', {'project': project.id})) }}"
+                                                >
+                                                    {{ project.variants|length }}
+                                                </a>
+                                            {% endif %}
+
                                     {% endif %}
                                 </td>
 
