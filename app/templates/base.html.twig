@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap.min.css', 'bootstrap')) }}">
     <link rel="stylesheet" href="{{ absolute_url(asset('style.css', 'css')) }}">
 
+    {% block headstylesheets %}
+    {% endblock %}
 </head>
 
 <body class="bg-light">

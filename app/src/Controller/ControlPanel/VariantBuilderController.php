@@ -28,6 +28,7 @@ use App\Entity\Media;
 use App\Entity\Variant;
 use App\Form\CommandCenter\VariantBuilder\VariantBuilderFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +61,8 @@ class VariantBuilderController extends AbstractControlPanelController
     public function show(
         Request $request,
         Variant $variant,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        string $projectDir
     ): Response {
 
         $meta = $this->getVariantMeta($request, $variant);
@@ -151,7 +153,37 @@ class VariantBuilderController extends AbstractControlPanelController
             }
         }
 
-        dump($meta);
+
+        $sidebar = [];
+        $finder = new Finder();
+        $finder->files()
+            ->in( $projectDir . '/templates/control-panel/variant/builder/sidebar')
+            ->name('*.tab.html.twig');
+        ;
+
+        if ($finder->hasResults()) {
+            foreach ($finder as $file) {
+                $name = str_replace('.tab.html.twig', '', $file->getFilename());
+                $path = str_replace($projectDir . '/templates/', '', $file->getPathname());
+
+                $order = explode('---', $name);
+                $order = (int)$order[0];
+
+                $name = str_replace($order . '---', '', $name);
+                $id = 'sidebar--' . $name;
+
+                $sidebar[$order] = [
+                    'order' => $order,
+                    'id' => $id,
+                    'name' => ucfirst(str_replace('-', ' ', $name)),
+                    'path' => $path,
+                ];
+            }
+        }
+
+        uasort($sidebar, function($prev, $next) {
+            return $prev['order'] <=> $next['order'];
+        });
 
         return $this->render(
             'control-panel/variant/builder/index.html.twig',
@@ -159,6 +191,7 @@ class VariantBuilderController extends AbstractControlPanelController
                 'variant' => $variant,
                 'builderForm' => $builderForm,
                 'data' => $meta,
+                'sidebar' => $sidebar,
             ]
         );
     }

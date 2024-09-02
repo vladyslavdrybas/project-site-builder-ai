@@ -1,4 +1,5 @@
 {% extends 'control-panel/index.html.twig'%}
+
 {% block header %}{% endblock %}
 
 {% block content %}
@@ -8,19 +9,7 @@
             margin: 0;
             padding: 0;
         }
-
-        .gutter {
-            width: 10px;
-            height: 100%;
-            /*background: #666;*/
-            position: absolute;
-            top: 0;
-            right: 0;
-            cursor: col-resize;
-            box-shadow: 0px 8px 8px 3px rgba(96, 94, 94, 0.34), inset 0 0 5px rgba(0, 0, 255, 0.34);
-        }
     </style>
-
     <div class="container-fluid vh-100">
         <div class="row d-flex flex-row flex-nowrap">
             <div
@@ -31,47 +20,115 @@
                     scroll-primary
                     col-md-4
                     col-lg-3
-                    h-100
-                    p-1
-                    overflow-y-auto
-                    vh-100
+                    min-vh-100
                     position-relative
                     pe-2
+                    p-0
                 "
             >
+                <div
+                    class="d-flex align-items-start h-100"
+                >
+                    <div
+                        id="tools-icon"
+                        class="tools-icon nav flex-column nav-pills bg-dark h-100"
+                        role="tablist"
+                        aria-orientation="vertical"
+                    >
+                        {% for sidebarTab in sidebar %}
+                            <button
+                                class="
+                                    mt-2
+                                    w-100
+                                    btn
+                                    border-0
+                                    text-white
+                                    text-center
+                                    {% if loop.index == 1 %}active{% endif %}
+                                "
+                                id="{{ sidebarTab.id }}-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#{{ sidebarTab.id }}"
+                                type="button"
+                                role="tab"
+                                aria-controls="{{ sidebarTab.id }}"
+                                aria-selected="true"
+                            >
+                                <svg class="bi bi-1"><use xlink:href="#icon-{{ sidebarTab.id }}"/></svg>
+                                <br>
+                                <span class="icon-text">{{ sidebarTab.name }}</span>
+                            </button>
+                        {% endfor %}
 
-                {{ form_start(builderForm, {'method': 'POST'}) }}
-
-                    {% include 'control-panel/variant/builder/sidebar/header.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/navigation.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/hero.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/features.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/how-it-works.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/testimonial.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/subscriptions.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/newsletter.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/footer.html.twig' %}
-
-                    {% include 'control-panel/variant/builder/sidebar/design-settings.html.twig' %}
-
-                    <div class="d-flex flex-row justify-content-between  mt-3">
-                        {{ form_row(builderForm.cancelBtn) }}
-                        {{ form_row(builderForm.backBtn) }}
-                        {{ form_row(builderForm.saveBtn) }}
-                        {{ form_row(builderForm.previewBtn) }}
+                        <button
+                            class="btn border-0 text-white"
+                            id="sidebar--save-tab"
+                            data-bs-toggle="pill"
+                            data-bs-target="#sidebar--save"
+                            type="button"
+                            role="tab"
+                            aria-controls="sidebar--save"
+                            aria-selected="true"
+                        >
+                            <svg class="bi bi-1"><use xlink:href="#icon-sidebar--save"/></svg>
+                            <br>
+                            <span class="icon-text">Save</span>
+                        </button>
                     </div>
 
-                {{ form_end(builderForm) }}
+                    {{ form_start(builderForm, {'method': 'POST',
+                        'attr': {
+                            'id': builderForm.vars.id,
+                            'class': 'tab-content bg-secondary h-100 w-100 p-1 pe-0'
+                        }
+                    }) }}
+                        {% for sidebarTab in sidebar %}
+                            <div
+                                id="{{ sidebarTab.id }}"
+                                class="
+                                    tab-pane
+                                    fade
+                                    show
+                                    overflow-y-auto
+                                    vh-100
+                                    pe-2
+                                    {% if loop.index == 1 %}active{% endif %}
+                                "
+                                role="tabpanel"
+                                aria-labelledby="{{ sidebarTab.id }}-tab"
+                            >
+                                {% include sidebarTab.path %}
+                            </div>
+                        {% endfor %}
 
-                <div id="cp-gutter" class="gutter bg-secondary"></div>
+                        <div
+                            id="sidebar--save"
+                            class="
+                                tab-pane
+                                fade
+                                show
+                                overflow-y-auto
+                                vh-100
+                                pe-2
+                            "
+                            role="tabpanel"
+                            aria-labelledby="sidebar--save-tab"
+                        >
+                            <div class="d-flex flex-column justify-content-center mt-3">
+                                {{ form_row(builderForm.cancelBtn) }}
+                                {{ form_row(builderForm.backBtn) }}
+                                {{ form_row(builderForm.saveBtn) }}
+                                {{ form_row(builderForm.previewBtn) }}
+                            </div>
+                        </div>
+                    {{ form_end(builderForm) }}
+                </div>
+
+                <div
+                    id="cp-gutter"
+                    class="gutter bg-secondary"
+                >
+                </div>
             </div>
 
             <div

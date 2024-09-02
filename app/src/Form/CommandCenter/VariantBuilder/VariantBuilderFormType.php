@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Form\CommandCenter\VariantBuilder;
 
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
+use App\Form\DescriptionFormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -181,7 +182,7 @@ class VariantBuilderFormType extends AbstractType
                         ]
                     )
                     ->add('description',
-                        TextareaType::class,
+                        DescriptionFormType::class,
                         [
                             'data' => $data->parts->hero?->data?->description,
                         ]
@@ -262,7 +263,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
 
                                 [
                                     'data' => $data->parts->features?->data?->items['feature1']?->description ?? null,
@@ -309,7 +310,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
 
                                 [
                                     'data' => $data->parts->features?->data?->items['feature2']?->description ?? null,
@@ -430,7 +431,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
 
                                 [
                                     'data' => $data->parts->howitworks?->data?->items['step1']?->description ?? null,
@@ -528,7 +529,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
 
                                 [
                                     'data' => $data->parts->howitworks?->data?->items['step3']?->description ?? null,
@@ -644,7 +645,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
                                 [
                                     'data' => implode("\n", $data->parts->pricing?->data?->items['plan1']->description ?? []) ?? null,
                                 ]
@@ -685,7 +686,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
                                 [
                                     'data' => implode("\n", $data->parts->pricing?->data?->items['plan2']->description ?? []) ?? null,
                                 ]
@@ -726,7 +727,7 @@ class VariantBuilderFormType extends AbstractType
                                 ]
                             )
                             ->add('description',
-                                TextareaType::class,
+                                DescriptionFormType::class,
                                 [
                                     'data' => implode("\n", $data->parts->pricing?->data?->items['plan3']->description ?? []) ?? null,
                                 ]
@@ -779,7 +780,7 @@ class VariantBuilderFormType extends AbstractType
                         ]
                     )
                     ->add('description',
-                        TextareaType::class,
+                        DescriptionFormType::class,
                         [
                             'data' => $data->parts->newsletter->description
                         ]
@@ -825,14 +826,14 @@ class VariantBuilderFormType extends AbstractType
                         ]
                     )
                     ->add('privacyPolicyFull',
-                        TextareaType::class,
+                        DescriptionFormType::class,
                         [
                             'data' => $data->parts->footer->privacyPolicyFull,
 
                         ]
                     )
                     ->add('termsOfServiceFull',
-                        TextareaType::class,
+                        DescriptionFormType::class,
                         [
                             'data' => $data->parts->footer->termsOfServiceFull,
 
@@ -976,7 +977,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Back',
                     'attr' => [
-                        'class' => 'btn btn-primary rounded-5',
+                        'class' => 'btn btn-light w-100',
                     ],
                 ]
             )
@@ -986,7 +987,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Cancel',
                     'attr' => [
-                        'class' => 'btn btn-primary rounded-5',
+                        'class' => 'btn btn-light w-100',
                     ],
                 ]
             )
@@ -996,7 +997,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Save',
                     'attr' => [
-                        'class' => 'btn btn-primary rounded-5',
+                        'class' => 'btn btn-light w-100',
                     ],
                 ]
             )
@@ -1006,7 +1007,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Preview',
                     'attr' => [
-                        'class' => 'btn btn-primary rounded-5',
+                        'class' => 'btn btn-light w-100',
                     ],
                 ]
             )
@@ -1017,6 +1018,7 @@ class VariantBuilderFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => VariantMetaDto::class,
+            'allow_extra_fields' => true,
         ]);
     }
 }

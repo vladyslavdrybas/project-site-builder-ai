@@ -1,5 +1,9 @@
 {% extends 'base.html.twig'%}
 
+{% block headstylesheets %}
+    <link rel="stylesheet" href="{{ absolute_url(asset('style-cp.css', 'css')) }}">
+{% endblock %}
+
 {% block header %}
     <div id="header" class="fixed-top z-3">
         {% include "control-panel/components/header/fixed-top.html.twig" %}
