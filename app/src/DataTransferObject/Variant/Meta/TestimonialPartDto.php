@@ -9,6 +9,7 @@ class TestimonialPartDto
         public ?string $head = null,
         public ?string $subheadline = null,
         public ?int $maxReviews = 5,
+        /** @var array<TestimonialDto> $items*/
         public array $items = [],
         public bool $isActive = false,
         public int $position = 0,

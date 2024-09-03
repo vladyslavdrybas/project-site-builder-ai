@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
+use App\DataTransferObject\PromptAnswer\Parts\PartsDto as PromptAnswerPartsDto;
 use App\DataTransferObject\PromptAnswer\Parts\SimpleDescriptionDto;
 use App\DataTransferObject\PromptAnswer\Parts\SubscriptionPlanDto;
+use App\DataTransferObject\Variant\CallToActionButtonDto;
 use App\DataTransferObject\Variant\Meta\BrandDto;
-use App\DataTransferObject\Variant\Meta\CallToActionButtonDto;
 use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
 use App\DataTransferObject\Variant\Meta\FeatureDto;
 use App\DataTransferObject\Variant\Meta\FeaturesPartDataDto;
@@ -28,7 +29,6 @@ use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\Variant;
 use Symfony\Component\Serializer\SerializerInterface;
-use App\DataTransferObject\PromptAnswer\Parts\PartsDto as PromptAnswerPartsDto;
 
 class VariantBuilder
 {
@@ -111,6 +111,7 @@ class VariantBuilder
                     $promptPartsDto->features->subheadline,
                     $promptPartsDto->features->items
                         ->map(fn(SimpleDescriptionDto $item) => new FeatureDto(
+                            true,
                             $item->headline,
                             $item->description
                         ))
@@ -128,6 +129,7 @@ class VariantBuilder
                     $promptPartsDto->howItWorks->subheadline,
                     $promptPartsDto->howItWorks->items
                         ->map(fn(SimpleDescriptionDto $item) => new HowItWorksDto(
+                            true,
                             $item->headline,
                             $item->description
                         ))
@@ -145,6 +147,7 @@ class VariantBuilder
                 $promptPartsDto->testimonials->items->count(),
                 $promptPartsDto->testimonials->items
                     ->map(fn(SimpleDescriptionDto $item) => new TestimonialDto(
+                        true,
                         $item->headline,
                         $item->description
                     ))

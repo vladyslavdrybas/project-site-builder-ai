@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace App\Controller\ControlPanel;
 
 use App\Constants\RouteRequirements;
-use App\DataTransferObject\Variant\VariantPromptMetaDto;
+use App\DataTransferObject\Variant\AI\Prompt\VariantPromptMetaDto;
 use App\Entity\Project;
 use App\Entity\Tag;
-use App\Form\CommandCenter\Project\ProjectAddFormType;
-use App\Form\CommandCenter\Project\ProjectEditFormType;
+use App\Form\CommandPanel\Project\ProjectAddFormType;
+use App\Form\CommandPanel\Project\ProjectEditFormType;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormInterface;

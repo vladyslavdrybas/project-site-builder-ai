@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Builder;
 
-use App\DataTransferObject\Variant\Meta\MediaDto;
+use App\DataTransferObject\Variant\MediaDto;
 use App\Entity\Media;
 use App\Entity\Tag;
 use App\Entity\User;

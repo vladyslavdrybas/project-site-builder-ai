@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\DataTransferObject\Variant\Meta;
 
+use App\DataTransferObject\Variant\CallToActionButtonDto;
+
 class NewsletterPartDto
 {
     public function __construct(

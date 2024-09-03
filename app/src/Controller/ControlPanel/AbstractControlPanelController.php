@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 abstract class AbstractControlPanelController extends SymfonyAbstractController
 {
     public function __construct(
-        protected readonly EntityManagerInterface $em,
+        protected EntityManagerInterface $em,
     ) {}
 
     protected function getUser(): ?User

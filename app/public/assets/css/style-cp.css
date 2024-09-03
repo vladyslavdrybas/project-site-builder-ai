@@ -31,8 +31,8 @@ div::-webkit-scrollbar-thumb {
     color: var(--palette-color-white) !important;
 }
 
-.tab-content label,
-.tab-content legend
-{
-    color: var(--palette-color-white) !important;
-}
+/*.tab-content label,*/
+/*.tab-content legend*/
+/*{*/
+/*    color: var(--palette-color-white) !important;*/
+/*}*/

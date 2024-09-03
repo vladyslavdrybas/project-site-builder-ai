@@ -6,7 +6,8 @@ namespace App\DataTransferObject\PromptAnswer\Parts;
 class SimpleDescriptionDto
 {
     public function __construct(
-       public ?string $headline = null,
-       public ?string $description = null,
+        public bool $isActive = false,
+        public ?string $headline = null,
+        public ?string $description = null
     ) {}
 }

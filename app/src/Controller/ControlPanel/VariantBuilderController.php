@@ -5,8 +5,9 @@ namespace App\Controller\ControlPanel;
 
 use App\Builder\MediaBuilder;
 use App\Constants\RouteRequirements;
+use App\DataTransferObject\Variant\CallToActionButtonDto;
+use App\DataTransferObject\Variant\MediaDto;
 use App\DataTransferObject\Variant\Meta\BrandDto;
-use App\DataTransferObject\Variant\Meta\CallToActionButtonDto;
 use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
 use App\DataTransferObject\Variant\Meta\FeaturesPartDataDto;
 use App\DataTransferObject\Variant\Meta\FeaturesPartDto;
@@ -17,7 +18,6 @@ use App\DataTransferObject\Variant\Meta\HeroPartDataDto;
 use App\DataTransferObject\Variant\Meta\HeroPartDto;
 use App\DataTransferObject\Variant\Meta\HowItWorksPartDataDto;
 use App\DataTransferObject\Variant\Meta\HowItWorksPartDto;
-use App\DataTransferObject\Variant\Meta\MediaDto;
 use App\DataTransferObject\Variant\Meta\NewsletterPartDto;
 use App\DataTransferObject\Variant\Meta\PartsDto;
 use App\DataTransferObject\Variant\Meta\SubscriptionsPartDataDto;
@@ -26,7 +26,8 @@ use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\Media;
 use App\Entity\Variant;
-use App\Form\CommandCenter\VariantBuilder\VariantBuilderFormType;
+use App\Form\CommandPanel\VariantBuilder\VariantBuilderFormType;
+use App\Service\VariantBuilder\VariantBuilderFacade;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\FormInterface;
@@ -47,8 +48,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 class VariantBuilderController extends AbstractControlPanelController
 {
     public function __construct(
-        EntityManagerInterface $em,
+        protected EntityManagerInterface $em,
         protected readonly MediaBuilder $mediaBuilder,
+        protected readonly VariantBuilderFacade $variantBuilderFacade
     ) {
         parent::__construct($em);
     }
@@ -64,93 +66,89 @@ class VariantBuilderController extends AbstractControlPanelController
         SerializerInterface $serializer,
         string $projectDir
     ): Response {
+        $formBuilderData = $this->variantBuilderFacade->getVariantBuilderFormDto($variant);
+        dump($formBuilderData);
 
-        $meta = $this->getVariantMeta($request, $variant);
-
-        $variantMetaDto = $serializer->denormalize(
-            $meta,
-            VariantMetaDto::class
-        );
-
-        $builderForm = $this->createForm(VariantBuilderFormType::class, $variantMetaDto);
+        $builderForm = $this->createForm(VariantBuilderFormType::class, $formBuilderData);
 
         $builderForm->handleRequest($request);
 
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
-            $medias = $this->buildMediasFromForm($request->getSession(), $builderForm);
-
-            $formData = [
-                'variantId' => $builderForm->get('variantId')->getData(),
-                'projectId' => $builderForm->get('projectId')->getData(),
-                'parts' => [
-                    'header' => $builderForm->get('header')->getData(),
-                    'navigationLinksText' => $builderForm->get('navigationLinksText')->getData(),
-                    'hero' => $builderForm->get('hero')->getData(),
-                    'features' => $builderForm->get('features')->getData(),
-                    'howitworks' => $builderForm->get('howitworks')->getData(),
-                    'testimonial' => $builderForm->get('testimonial')->getData(),
-                    'subscriptions' => $builderForm->get('subscriptions')->getData(),
-                    'newsletter' => $builderForm->get('newsletter')->getData(),
-                    'footer' => $builderForm->get('footer')->getData(),
-                ],
-                'design' => $builderForm->get('designSettings')->getData(),
-                'medias' => $medias,
-            ];
-
-            $variantMeta = $this->buildVariantMetaFromForm($formData);
-            $variantMetaArray = $serializer->normalize($variantMeta);
-
-            if ($builderForm->get('backBtn')->isClicked()) {
-                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
-            }
-
-            if ($builderForm->get('cancelBtn')->isClicked()) {
-                $request->getSession()->remove('variantBuilderData');
-                $request->getSession()->remove('variantBuilderDataMedias');
-
-                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
-            }
-
-            if ($builderForm->get('saveBtn')->isClicked()) {
-
-                /** @var array<Media> $mediasToStore */
-                $mediasToStore = [];
-                $variantMetaArray = $this->buildMedia(
-                    $variantMetaArray,
-                    $mediasToStore
-                );
-
-                $mediaRepository = $this->em->getRepository(Media::class);
-                foreach ($mediasToStore as $media) {
-                    if (null === $media->getOwner()) {
-                        $media->setOwner($this->getUser());
-                        $mediaRepository->add($media);
-                    }
-                    $variant->addMedia($media);
-                }
-                $mediaRepository->save();
-
-                $variant->setMeta($variantMetaArray);
-
-                $variantRepository = $this->em->getRepository(Variant::class);
-                $variantRepository->add($variant);
-                $variantRepository->save();
-
-                $request->getSession()->remove('variantBuilderData');
-                $request->getSession()->remove('variantBuilderDataMedias');
-            }
-
-            if ($builderForm->get('previewBtn')->isClicked()) {
-                $request->getSession()->set(
-                    'variantBuilderData',
-                    $variantMetaArray
-                );
-
-                $request->getSession()->set(
-                    'variantBuilderDataMedias',
-                    $formData['medias']
-                );
-            }
+            dump($builderForm->getData());
+//            $medias = $this->buildMediasFromForm($request->getSession(), $builderForm);
+//
+//            $formData = [
+//                'variantId' => $builderForm->get('variantId')->getData(),
+//                'projectId' => $builderForm->get('projectId')->getData(),
+//                'parts' => [
+//                    'header' => $builderForm->get('header')->getData(),
+//                    'navigationLinksText' => $builderForm->get('navigationLinksText')->getData(),
+//                    'hero' => $builderForm->get('hero')->getData(),
+//                    'features' => $builderForm->get('features')->getData(),
+//                    'howitworks' => $builderForm->get('howitworks')->getData(),
+//                    'testimonial' => $builderForm->get('testimonial')->getData(),
+//                    'subscriptions' => $builderForm->get('subscriptions')->getData(),
+//                    'newsletter' => $builderForm->get('newsletter')->getData(),
+//                    'footer' => $builderForm->get('footer')->getData(),
+//                ],
+//                'design' => $builderForm->get('designSettings')->getData(),
+//                'medias' => $medias,
+//            ];
+//
+//            $variantMeta = $this->buildVariantMetaFromForm($formData);
+//            $variantMetaArray = $serializer->normalize($variantMeta);
+//
+//            if ($builderForm->get('backBtn')->isClicked()) {
+//                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+//            }
+//
+//            if ($builderForm->get('cancelBtn')->isClicked()) {
+//                $request->getSession()->remove('variantBuilderData');
+//                $request->getSession()->remove('variantBuilderDataMedias');
+//
+//                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+//            }
+//
+//            if ($builderForm->get('saveBtn')->isClicked()) {
+//
+//                /** @var array<Media> $mediasToStore */
+//                $mediasToStore = [];
+//                $variantMetaArray = $this->buildMedia(
+//                    $variantMetaArray,
+//                    $mediasToStore
+//                );
+//
+//                $mediaRepository = $this->em->getRepository(Media::class);
+//                foreach ($mediasToStore as $media) {
+//                    if (null === $media->getOwner()) {
+//                        $media->setOwner($this->getUser());
+//                        $mediaRepository->add($media);
+//                    }
+//                    $variant->addMedia($media);
+//                }
+//                $mediaRepository->save();
+//
+//                $variant->setMeta($variantMetaArray);
+//
+//                $variantRepository = $this->em->getRepository(Variant::class);
+//                $variantRepository->add($variant);
+//                $variantRepository->save();
+//
+//                $request->getSession()->remove('variantBuilderData');
+//                $request->getSession()->remove('variantBuilderDataMedias');
+//            }
+//
+//            if ($builderForm->get('previewBtn')->isClicked()) {
+//                $request->getSession()->set(
+//                    'variantBuilderData',
+//                    $variantMetaArray
+//                );
+//
+//                $request->getSession()->set(
+//                    'variantBuilderDataMedias',
+//                    $formData['medias']
+//                );
+//            }
         }
 
 
@@ -190,7 +188,7 @@ class VariantBuilderController extends AbstractControlPanelController
             [
                 'variant' => $variant,
                 'builderForm' => $builderForm,
-                'data' => $meta,
+//                'data' => $meta,
                 'sidebar' => $sidebar,
             ]
         );
@@ -202,10 +200,9 @@ class VariantBuilderController extends AbstractControlPanelController
         methods: ['GET']
     )]
     public function preview(
-        Request $request,
         Variant $variant
     ): Response {
-        $meta = $this->getVariantMeta($request, $variant);
+        $meta = $this->variantBuilderFacade->getVariantMeta($variant);
 
         return $this->render(
             '_parts/base/base.html.twig',
@@ -248,19 +245,6 @@ class VariantBuilderController extends AbstractControlPanelController
         }
 
         return $ar;
-    }
-
-    protected function getVariantMeta(
-        Request $request,
-        Variant $variant
-    ): array {
-        $data = $request->getSession()->get('variantBuilderData');
-
-        if (null === $data) {
-            $data = $this->buildMetaFromVariant($variant);
-        }
-
-        return $data;
     }
 
     protected function buildVariantMetaFromForm(
@@ -396,7 +380,7 @@ class VariantBuilderController extends AbstractControlPanelController
             new CallToActionButtonDto(
                 $data['parts']['newsletter']['ctaBtnText'],
             ),
-            $data['parts']['subscriptions']['isActive'],
+            $data['parts']['newsletter']['isActive'],
         );
 
         $footer = new FooterPartDto(
@@ -437,39 +421,6 @@ class VariantBuilderController extends AbstractControlPanelController
         return $vmDto;
     }
 
-    protected function buildMetaFromVariant(
-        Variant $variant
-    ): array {
-        $meta = $variant->getMeta();
-
-        if (!isset($meta['variantId'])) {
-            $meta['variantId'] = $variant->getRawId();
-        }
-
-        if (!isset($meta['projectId'])) {
-            $meta['projectId'] = $variant->getProject()->getRawId();
-        }
-
-        if (!isset($meta['design'])) {
-            $meta['design'] = new DesignSettingsDto();
-        }
-
-        if (!isset($meta['parts'])) {
-            $meta['parts'] = new PartsDto(
-                new HeaderPartDto(),
-                new HeroPartDto(),
-                new FeaturesPartDto(),
-                new HowItWorksPartDto(),
-                new TestimonialPartDto(),
-                new SubscriptionsPartDto(),
-                new NewsletterPartDto(),
-                new FooterPartDto()
-            );
-        }
-
-        return $meta;
-    }
-
     protected function createMediaDtoFromUploadedFile(
         ?UploadedFile $file = null,
         array $tags = [],
@@ -495,7 +446,11 @@ class VariantBuilderController extends AbstractControlPanelController
                     ??
                         $sessionMedias['header']['brand']
                     ??
-                        null,
+                        $builderForm->get('header')->get('mediaId')?->getData()
+                            ?
+                                new MediaDto($builderForm->get('header')->get('mediaId')->getData())
+                            :
+                                null,
             ],
             'hero' => [
                 'cover' =>

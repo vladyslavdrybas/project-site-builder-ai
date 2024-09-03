@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace App\Controller\ControlPanel;
 
 use App\Constants\RouteRequirements;
-use App\DataTransferObject\Variant\AddWithAiFormDto;
+use App\DataTransferObject\Variant\AI\AddWithAiFormDto;
 use App\Entity\Variant;
 use App\Entity\VariantPrompt;
-use App\Form\CommandCenter\Variant\VariantAddWithAiFormType;
-use App\OpenAi\Business\OpenAiPromptManager;
+use App\Form\CommandPanel\Variant\VariantAddWithAiFormType;
 use App\Repository\VariantPromptRepository;
 use App\Repository\VariantRepository;
+use App\Service\OpenAi\Business\OpenAiPromptManager;
 use App\Utility\RandomGenerator;
 use Exception;
 use InvalidArgumentException;

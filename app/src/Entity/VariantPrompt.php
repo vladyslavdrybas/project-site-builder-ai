@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\DataTransferObject\Variant\VariantPromptMetaDto;
+use App\DataTransferObject\Variant\AI\Prompt\VariantPromptMetaDto;
 use App\Entity\Type\JsonDataTransferObjectType;
 use App\Repository\VariantPromptRepository;
 use DateTimeInterface;

@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\DataTransferObject\Ai\PromptDto;
-use App\OpenAi\Business\OpenAiPromptManager;
+use App\Service\OpenAi\Business\OpenAiPromptManager;
 use App\Repository\VariantPromptRepository;
 use DateTime;
 use Exception;

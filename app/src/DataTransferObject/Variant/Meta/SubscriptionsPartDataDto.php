@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\DataTransferObject\Variant\Meta;
 
+use App\DataTransferObject\Variant\CallToActionButtonDto;
+
 class SubscriptionsPartDataDto
 {
     public function __construct(
@@ -20,7 +22,9 @@ class SubscriptionsPartDataDto
             }
 
             $this->items[$key] = new SubscriptionDto(
+                true,
                 $item['head'] ?? null,
+                $item['subheadline'] ?? null,
                     $itemDescription ?? null,
                 new CallToActionButtonDto(
                     $item['ctaBtnText'] ?? $item['callToActionButton']['text'] ?? null,

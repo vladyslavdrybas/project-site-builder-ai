@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Builder\VariantBuilder;
-use App\OpenAi\Business\OpenAiPromptManager;
+use App\Service\OpenAi\Business\OpenAiPromptManager;
 use App\Repository\VariantRepository;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
