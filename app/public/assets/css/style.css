@@ -108,6 +108,8 @@ body {
     --bs-body-font-family: var(--bs-font-aller);
     --bs-btn-font-family: var(--bs-font-aller);
 
+    --palette-color-alternative: #e98;
+
     --palette-light-400: #3c9cfd;
 
     --palette-shades-100: #3c9cfd;
