@@ -11,34 +11,36 @@
         {% endif %}
 
         {% for step in data.items %}
-            {% set stepHasMedia = step.media.id is defined and step.media.id is not null %}
-            <div class="row mb-5">
+            {% if step is not null %}
+                {% set stepHasMedia = step.media.id is defined and step.media.id is not null %}
+                <div class="row mb-5">
 
-                <div class="{% if stepHasMedia %}col-md-7{% endif %} {% if loop.index % 2 == 0 %}order-md-2{% endif %}">
-                    <h2 class="featurette-heading fw-normal lh-1">{{ step.head }}</h2>
-                    <p class="lead">{{ step.description }}</p>
-                </div>
+                    <div class="{% if stepHasMedia %}col-md-7{% endif %} {% if loop.index % 2 == 0 %}order-md-2{% endif %}">
+                        <h2 class="featurette-heading fw-normal lh-1">{{ step.head }}</h2>
+                        <p class="lead">{{ step.description }}</p>
+                    </div>
 
-                {% if stepHasMedia %}
-                <div class="col-md-5 {% if loop.index % 2 == 0 %}order-md-1{% endif %}">
+                    {% if stepHasMedia %}
+                    <div class="col-md-5 {% if loop.index % 2 == 0 %}order-md-1{% endif %}">
 
-                    {% if step.media.content is defined and step.media.content is not null %}
-                        <img
-                            src="data:{{ step.media.mimeType }};base64,{{ step.media.content }}"
-                            class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-                            alt="icon"
-                        >
-                    {% else %}
-                        <img
-                            src="{{ absolute_url(path('app_media_show', {'media': step.media.id})) }}"
-                            class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-                            alt="icon"
-                        >
+                        {% if step.media.content is defined and step.media.content is not null %}
+                            <img
+                                src="data:{{ step.media.mimeType }};base64,{{ step.media.content }}"
+                                class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                                alt="icon"
+                            >
+                        {% else %}
+                            <img
+                                src="{{ absolute_url(path('app_media_show', {'media': step.media.id})) }}"
+                                class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
+                                alt="icon"
+                            >
+                        {% endif %}
+                    </div>
                     {% endif %}
-                </div>
-                {% endif %}
 
-            </div>
+                </div>
+            {% endif %}
         {% endfor %}
 
     </div>

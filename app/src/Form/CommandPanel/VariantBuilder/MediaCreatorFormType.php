@@ -7,6 +7,7 @@ use App\DataTransferObject\Variant\Builder\MediaCreatorFormDto;
 use App\Form\ImageFromStocksType;
 use App\Form\ImageType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,6 +23,7 @@ class MediaCreatorFormType extends AbstractType
             ->add('file',
                 ImageType::class,
                 [
+                    'mapped' => true,
                     'label' => 'Upload image',
                 ]
             )
@@ -35,6 +37,14 @@ class MediaCreatorFormType extends AbstractType
                 HiddenType::class,
                 [
                     'data' => $data?->systemId
+                ]
+            )
+            ->add('remove',
+                ButtonType::class,
+                [
+                    'attr' => [
+                        'class' => 'btn-sm btn-light'
+                    ]
                 ]
             )
         ;

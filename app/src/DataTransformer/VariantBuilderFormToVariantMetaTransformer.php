@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\DataTransformer;
 
+use App\Builder\MediaBuilder;
 use App\DataTransferObject\Variant\Builder\DescriptionWithThumbFormDto;
+use App\DataTransferObject\Variant\Builder\MediaCreatorFormDto;
 use App\DataTransferObject\Variant\Builder\SubscriptionPlanFormDto;
 use App\DataTransferObject\Variant\Builder\VariantBuilderFormDto;
-use App\DataTransferObject\Variant\CallToActionButtonDto;
+use App\DataTransferObject\Variant\MediaDto;
 use App\DataTransferObject\Variant\Meta\BrandDto;
 use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
 use App\DataTransferObject\Variant\Meta\FeatureDto;
@@ -28,23 +30,34 @@ use App\DataTransferObject\Variant\Meta\SubscriptionsPartDto;
 use App\DataTransferObject\Variant\Meta\TestimonialDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
+use App\Entity\User;
 use Exception;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInterface
 {
+    public function __construct(
+        protected readonly MediaBuilder $mediaBuilder,
+        protected readonly RequestStack $requestStack
+    ) {}
+
     public function transform(mixed $value): VariantMetaDto
     {
         if (!$value instanceof VariantBuilderFormDto) {
             throw new Exception('Expected instance of VariantBuilderFormDto');
         }
-        dump($value);
 
         $header = new HeaderPartDto(
             new HeaderPartDataDto(
                 new BrandDto(
                     $value->header->brand->name,
-                    null,
+                    $this->buildMedia(
+                        $value->variant->getProject()->getOwner(),
+                        $value->header->brand->logo,
+                        ['header', 'brand', 'logo']
+                    ),
                 ),
                 $value->header->callToActionButton,
                 $value->header->navigation,
@@ -57,7 +70,11 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $value->hero->headline,
                 $value->hero->subheadline,
                 $value->hero->callToActionButton,
-                null,
+                $this->buildMedia(
+                    $value->variant->getProject()->getOwner(),
+                    $value->hero->media,
+                    ['hero', 'product']
+                ),
             ),
             $value->hero->isActive
         );
@@ -69,7 +86,12 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 array_map(fn(?DescriptionWithThumbFormDto $item) => null !== $item ? new FeatureDto(
                     $item->isActive,
                     $item->headline,
-                    $item->subheadline
+                    $item->subheadline,
+                    $this->buildMedia(
+                        $value->variant->getProject()->getOwner(),
+                        $item->media,
+                        ['feature', 'icon']
+                    )
                 ) : null, $value->features->items)
             ),
             $value->features->isActive
@@ -82,20 +104,35 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 array_map(fn(?DescriptionWithThumbFormDto $item) => null !== $item ? new HowItWorksDto(
                     $item->isActive,
                     $item->headline,
-                    $item->subheadline
+                    $item->subheadline,
+                    $this->buildMedia(
+                        $value->variant->getProject()->getOwner(),
+                        $item->media,
+                        ['howitworks', 'thumb']
+                    )
                 ) : null, $value->howitworks->items)
             ),
             $value->features->isActive
         );
 
+        $testimonialItems = array_map(
+            fn(?DescriptionWithThumbFormDto $item) => null !== $item ? new TestimonialDto(
+                $item->isActive,
+                $item->headline,
+                $item->subheadline,
+                $this->buildMedia(
+                    $value->variant->getProject()->getOwner(),
+                    $item->media,
+                    ['testimonial', 'avatar']
+                )
+            ) : null,
+            $value->testimonial->items
+        );
+
         $testimonial = new TestimonialPartDto(
             $value->howitworks->headline,
             $value->howitworks->subheadline,
-            array_map(fn(?DescriptionWithThumbFormDto $item) => null !== $item ? new TestimonialDto(
-                $item->isActive,
-                $item->headline,
-                $item->subheadline
-            ) : null, $value->testimonial->items),
+            $testimonialItems,
             $value->testimonial->isActive
         );
 
@@ -134,8 +171,6 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         );
 
         return new VariantMetaDto(
-            $value->variantId,
-            $value->projectId,
             new PartsDto(
                 $header,
                 $hero,
@@ -150,12 +185,39 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         );
     }
 
-    public function reverseTransform(mixed $value): VariantBuilderFormDto
+    public function reverseTransform(mixed $value): VariantMetaDto
     {
+        //IGNORE no transformation needed yet
         if (!$value instanceof VariantMetaDto) {
             throw new Exception('Expected instance of VariantMetaDto');
         }
 
-        return new VariantBuilderFormDto();
+        return $value;
+    }
+
+    protected function buildMedia(
+        User $owner,
+        ?MediaCreatorFormDto $mediaCreatorForm,
+        array $tags = []
+    ): ?MediaDto
+    {
+        if (null === $mediaCreatorForm) {
+            return null;
+        }
+
+        $result = null;
+        if ($mediaCreatorForm->file instanceof UploadedFile) {
+            $result = $this->mediaBuilder->mediaDtoFromUploadedFile(
+                $owner,
+                $mediaCreatorForm->file,
+                $tags
+            );
+        }
+
+        if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {
+            $result = $mediaCreatorForm->media;
+        }
+
+        return $result;
     }
 }

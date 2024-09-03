@@ -69,7 +69,6 @@ class VariantBuilderController extends AbstractControlPanelController
         VariantBuilderFormToVariantMetaTransformer $builderFormToVariantMetaTransformer
     ): Response {
         $formBuilderData = $this->variantBuilderFacade->getVariantBuilderFormDto($variant);
-        dump($formBuilderData);
 
         $builderForm = $this->createForm(VariantBuilderFormType::class, $formBuilderData);
 
@@ -78,83 +77,53 @@ class VariantBuilderController extends AbstractControlPanelController
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
             $variantMeta = $builderFormToVariantMetaTransformer->transform($builderForm->getData());
 
-            dump($variantMeta);
-            dump($builderForm->get('header')->get('brand')->get('logo')->get('file')->getData());
+            if ($builderForm->get('backBtn')->isClicked()) {
+                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+            }
 
-//            $medias = $this->buildMediasFromForm($request->getSession(), $builderForm);
-//
-//            $formData = [
-//                'variantId' => $builderForm->get('variantId')->getData(),
-//                'projectId' => $builderForm->get('projectId')->getData(),
-//                'parts' => [
-//                    'header' => $builderForm->get('header')->getData(),
-//                    'navigationLinksText' => $builderForm->get('navigationLinksText')->getData(),
-//                    'hero' => $builderForm->get('hero')->getData(),
-//                    'features' => $builderForm->get('features')->getData(),
-//                    'howitworks' => $builderForm->get('howitworks')->getData(),
-//                    'testimonial' => $builderForm->get('testimonial')->getData(),
-//                    'subscriptions' => $builderForm->get('subscriptions')->getData(),
-//                    'newsletter' => $builderForm->get('newsletter')->getData(),
-//                    'footer' => $builderForm->get('footer')->getData(),
-//                ],
-//                'design' => $builderForm->get('designSettings')->getData(),
-//                'medias' => $medias,
-//            ];
-//
-//            $variantMeta = $this->buildVariantMetaFromForm($formData);
-//            $variantMetaArray = $serializer->normalize($variantMeta);
-//
-//            if ($builderForm->get('backBtn')->isClicked()) {
-//                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
-//            }
-//
-//            if ($builderForm->get('cancelBtn')->isClicked()) {
-//                $request->getSession()->remove('variantBuilderData');
-//                $request->getSession()->remove('variantBuilderDataMedias');
-//
-//                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
-//            }
-//
-//            if ($builderForm->get('saveBtn')->isClicked()) {
-//
-//                /** @var array<Media> $mediasToStore */
-//                $mediasToStore = [];
-//                $variantMetaArray = $this->buildMedia(
-//                    $variantMetaArray,
-//                    $mediasToStore
-//                );
-//
-//                $mediaRepository = $this->em->getRepository(Media::class);
-//                foreach ($mediasToStore as $media) {
-//                    if (null === $media->getOwner()) {
-//                        $media->setOwner($this->getUser());
-//                        $mediaRepository->add($media);
-//                    }
-//                    $variant->addMedia($media);
-//                }
-//                $mediaRepository->save();
-//
-//                $variant->setMeta($variantMetaArray);
-//
-//                $variantRepository = $this->em->getRepository(Variant::class);
-//                $variantRepository->add($variant);
-//                $variantRepository->save();
-//
-//                $request->getSession()->remove('variantBuilderData');
-//                $request->getSession()->remove('variantBuilderDataMedias');
-//            }
-//
-//            if ($builderForm->get('previewBtn')->isClicked()) {
-//                $request->getSession()->set(
-//                    'variantBuilderData',
-//                    $variantMetaArray
-//                );
-//
-//                $request->getSession()->set(
-//                    'variantBuilderDataMedias',
-//                    $formData['medias']
-//                );
-//            }
+            if ($builderForm->get('cancelBtn')->isClicked()) {
+                $request->getSession()->remove('vb_' . $variant->getRawId());
+
+                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+            }
+
+            if ($builderForm->get('saveBtn')->isClicked()) {
+
+                $variantMetaArray = $serializer->normalize($variantMeta);
+
+                /** @var array<Media> $mediasToStore */
+                $mediasToStore = [];
+                $variantMetaArray = $this->buildMedia(
+                    $variantMetaArray,
+                    $mediasToStore
+                );
+
+                $mediaRepository = $this->em->getRepository(Media::class);
+                foreach ($mediasToStore as $media) {
+                    if (null === $media->getOwner()) {
+                        $media->setOwner($this->getUser());
+                        $mediaRepository->add($media);
+                    }
+                    $variant->addMedia($media);
+                }
+                $mediaRepository->save();
+
+                $variant->setMeta($variantMetaArray);
+
+                $variantRepository = $this->em->getRepository(Variant::class);
+                $variantRepository->add($variant);
+                $variantRepository->save();
+
+                $request->getSession()->remove('vb_' . $variant->getRawId());
+            }
+
+            if ($builderForm->get('previewBtn')->isClicked()) {
+                $variantMetaArray = $serializer->normalize($variantMeta);
+                $request->getSession()->set(
+                    'vb_' . $variant->getRawId(),
+                    $variantMetaArray
+                );
+            }
         }
 
 
@@ -194,7 +163,6 @@ class VariantBuilderController extends AbstractControlPanelController
             [
                 'variant' => $variant,
                 'builderForm' => $builderForm,
-//                'data' => $meta,
                 'sidebar' => $sidebar,
             ]
         );
@@ -251,315 +219,5 @@ class VariantBuilderController extends AbstractControlPanelController
         }
 
         return $ar;
-    }
-
-    protected function buildVariantMetaFromForm(
-        array $data
-    ): VariantMetaDto {
-        /** @var MediaDto $headerMedia */
-        $headerMedia = $data['medias']['header']['brand'] ?? new MediaDto( $data['parts']['header']['mediaId'] ?? null);
-
-        /** @var MediaDto $heroMedia */
-        $heroMedia = $data['medias']['hero']['cover'] ?? new MediaDto( $data['parts']['hero']['mediaId'] ?? null);
-
-        /** @var MediaDto $feature1Media */
-        $feature1Media = $data['medias']['features']['feature1']['icon'] ?? new MediaDto( $data['parts']['features']['feature1']['mediaId'] ?? null);
-        /** @var MediaDto $feature2Media */
-        $feature2Media = $data['medias']['features']['feature2']['icon'] ?? new MediaDto( $data['parts']['features']['feature2']['mediaId'] ?? null);
-        /** @var MediaDto $feature3Media */
-        $feature3Media = $data['medias']['features']['feature3']['icon'] ?? new MediaDto( $data['parts']['features']['feature3']['mediaId'] ?? null);
-
-        /** @var MediaDto $step1Media */
-        $step1Media = $data['medias']['howitworks']['step1']['cover'] ?? new MediaDto( $data['parts']['howitworks']['step1']['mediaId'] ?? null);
-        /** @var MediaDto $step2Media */
-        $step2Media = $data['medias']['howitworks']['step2']['cover'] ?? new MediaDto( $data['parts']['howitworks']['step2']['mediaId'] ?? null);
-        /** @var MediaDto $step3Media */
-        $step3Media = $data['medias']['howitworks']['step3']['cover'] ?? new MediaDto( $data['parts']['howitworks']['step3']['mediaId'] ?? null);
-
-        $header = new HeaderPartDto(
-          new HeaderPartDataDto(
-            new BrandDto(
-                $data['parts']['header']['logoText'],
-                $headerMedia,
-            ),
-            new CallToActionButtonDto(
-                $data['parts']['header']['ctaBtnText'],
-                '#pricing'
-            ),
-            $data['parts']['navigationLinksText']
-          ),
-          $data['parts']['header']['isActive'],
-        );
-
-        $hero = new HeroPartDto(
-            new HeroPartDataDto(
-                $data['parts']['hero']['head'],
-                $data['parts']['hero']['description'],
-                new CallToActionButtonDto(
-                    $data['parts']['hero']['ctaBtnText'],
-                    '#pricing'
-                ),
-                $heroMedia,
-            ),
-            $data['parts']['hero']['isActive']
-        );
-
-        $features = new FeaturesPartDto(
-            new FeaturesPartDataDto(
-                $data['parts']['features']['head'],
-                $data['parts']['features']['subheadline'] ?? null,
-                [
-                    'feature1' =>
-                        $data['parts']['features']['feature1']
-                        +
-                        [
-                            'media' => $feature1Media,
-                        ]
-                    ,
-                    'feature2' => $data['parts']['features']['feature2']
-                        +
-                        [
-                            'media' => $feature2Media,
-                        ],
-                    'feature3' => $data['parts']['features']['feature3']
-                        +
-                        [
-                            'media' => $feature3Media,
-                        ],
-                ]
-            ),
-            $data['parts']['features']['isActive'],
-        );
-
-        $howitworks = new HowItWorksPartDto(
-            new HowItWorksPartDataDto(
-                $data['parts']['howitworks']['head'],
-                $data['parts']['howitworks']['subheadline'] ?? null,
-                [
-                    'step1' => $data['parts']['howitworks']['step1']
-                        +
-                        [
-                            'media' => $step1Media,
-                        ],
-                    'step2' => $data['parts']['howitworks']['step2']
-                        +
-                        [
-                            'media' => $step2Media,
-                        ],
-                    'step3' => $data['parts']['howitworks']['step3']
-                        +
-                        [
-                            'media' => $step3Media,
-                        ],
-                ]
-            ),
-            $data['parts']['howitworks']['isActive'],
-
-        );
-
-        $testimonial = new TestimonialPartDto(
-            $data['parts']['testimonial']['head'],
-            $data['parts']['testimonial']['subheadline'] ?? null,
-            [],
-            $data['parts']['testimonial']['isActive']
-        );
-
-        $pricing = new SubscriptionsPartDto(
-            new SubscriptionsPartDataDto(
-                $data['parts']['subscriptions']['head'],
-                $data['parts']['subscriptions']['subheadline'] ?? null,
-                [
-                    'plan1' => $data['parts']['subscriptions']['plan1'],
-                    'plan2' => $data['parts']['subscriptions']['plan2'],
-                    'plan3' => $data['parts']['subscriptions']['plan3'],
-                ]
-            ),
-            $data['parts']['subscriptions']['isActive'],
-        );
-
-        $newsletter = new NewsletterPartDto(
-            $data['parts']['newsletter']['head'],
-            $data['parts']['newsletter']['subheadline'] ?? null,
-            $data['parts']['newsletter']['description'],
-            $data['parts']['newsletter']['inputFieldPlaceholder'],
-            new CallToActionButtonDto(
-                $data['parts']['newsletter']['ctaBtnText'],
-            ),
-            $data['parts']['newsletter']['isActive'],
-        );
-
-        $footer = new FooterPartDto(
-            $data['parts']['footer']['copyright'],
-            $data['parts']['footer']['privacyPolicyFull'],
-            $data['parts']['footer']['termsOfServiceFull'],
-            $data['parts']['footer']['socialLinks'],
-            $data['parts']['footer']['isActive'],
-        );
-
-        $parts = new PartsDto(
-            $header,
-            $hero,
-            $features,
-            $howitworks,
-            $testimonial,
-            $pricing,
-            $newsletter,
-            $footer,
-        );
-        $design = new DesignSettingsDto(
-            [
-                'primary' => $data['design']['primary'],
-                'secondary' => $data['design']['secondary'],
-                'success' => $data['design']['success'],
-                'error' => $data['design']['error'],
-                'info' => $data['design']['info'],
-            ]
-        );
-
-        $vmDto = new VariantMetaDto(
-            $data['variantId'],
-            $data['projectId'],
-            $parts,
-            $design
-        );
-
-        return $vmDto;
-    }
-
-    protected function createMediaDtoFromUploadedFile(
-        ?UploadedFile $file = null,
-        array $tags = [],
-    ): ?MediaDto {
-        return $this->mediaBuilder->mediaDtoFromUploadedFile($this->getUser(), $file, $tags);
-    }
-
-    protected function buildMediasFromForm(
-        Session $session,
-        FormInterface $builderForm
-    ): array {
-        $sessionMedias = $session->get('variantBuilderDataMedias');
-
-        $medias = [
-            'header' => [
-                'brand' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('header')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['header', 'brand']
-                        )
-                    ??
-                        $sessionMedias['header']['brand']
-                    ??
-                        $builderForm->get('header')->get('mediaId')?->getData()
-                            ?
-                                new MediaDto($builderForm->get('header')->get('mediaId')->getData())
-                            :
-                                null,
-            ],
-            'hero' => [
-                'cover' =>
-                    $this->createMediaDtoFromUploadedFile(
-                        $builderForm->get('hero')
-                            ->get('mediaFile')
-                            ->getData(),
-                        ['hero', 'cover']
-                    )
-                    ??
-                        $sessionMedias['hero']['cover']
-                    ??
-                        null,
-            ],
-            'features' => [
-                'feature1' => [
-                    'icon' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('features')
-                                ->get('feature1')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['features', 'feature1', 'icon']
-                        )
-                        ??
-                            $sessionMedias['features']['feature1']['icon']
-                        ??
-                            null,
-                ],
-                'feature2' => [
-                    'icon' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('features')
-                                ->get('feature2')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['features', 'feature2', 'icon']
-                        )
-                        ??
-                            $sessionMedias['features']['feature2']['icon']
-                        ??
-                            null,
-                ],
-                'feature3' => [
-                    'icon' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('features')
-                                ->get('feature3')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['features', 'feature3', 'icon']
-                        )
-                        ??
-                            $sessionMedias['features']['feature3']['icon']
-                        ??
-                            null,
-                ],
-            ],
-            'howitworks' => [
-                'step1' => [
-                    'cover' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('howitworks')
-                                ->get('step1')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['howitworks', 'step1', 'cover']
-                        )
-                        ??
-                            $sessionMedias['howitworks']['step1']['cover']
-                        ??
-                            null,
-                ],
-                'step2' => [
-                    'cover' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('howitworks')
-                                ->get('step2')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['howitworks', 'step2', 'cover']
-                        )
-                        ??
-                            $sessionMedias['howitworks']['step2']['cover']
-                        ??
-                            null,
-                ],
-                'step3' => [
-                    'cover' =>
-                        $this->createMediaDtoFromUploadedFile(
-                            $builderForm->get('howitworks')
-                                ->get('step3')
-                                ->get('mediaFile')
-                                ->getData(),
-                            ['howitworks', 'step3', 'cover']
-                        )
-                        ??
-                            $sessionMedias['howitworks']['step3']['cover']
-                        ??
-                            null,
-                ],
-            ],
-        ];
-
-        return $medias;
     }
 }

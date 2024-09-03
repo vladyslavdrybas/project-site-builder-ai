@@ -5,7 +5,6 @@ namespace App\Form\CommandPanel\VariantBuilder;
 
 use App\DataTransferObject\Variant\Builder\VariantBuilderFormDto;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,18 +17,6 @@ class VariantBuilderFormType extends AbstractType
         $data = $builder->getData();
 
         $builder
-            ->add('variantId',
-                HiddenType::class,
-                [
-                    'data' => $data->variantId,
-                ]
-            )
-            ->add('projectId',
-                HiddenType::class,
-                [
-                    'data' => $data->projectId,
-                ]
-            )
             ->add('header',
                 SectionHeaderFormType::class,
                 [

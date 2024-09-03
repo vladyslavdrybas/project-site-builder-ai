@@ -21,30 +21,42 @@ class SectionWithDescriptionItemsFormType extends AbstractType
         /** @var SectionWithDescriptionItemsFormDto $data */
         $data = $builder->getData();
 
+        $partLabel = ucfirst(str_replace(['-', '_'], ' ', $data->itemKeyName));
+
         $items = $builder->create(
             'items',
             FormType::class,
             [
-                'label' => 'Features',
+                'label' => $partLabel,
                 'required' => false,
             ]
         );
+
+        $dataItems = $data?->items ?? [];
 
         $len = self::ITEMS_AMOUNT;
         if (null !== $data && count($data->items) > 0) {
             $len = count($data->items);
         }
 
+        $itemKey = $data->itemKeyName;
+        if (array_is_list($dataItems) && count($dataItems) > 0) {
+            $itemKey = null;
+        }
+
         for ($i = 0; $i < $len; $i++) {
-            $key = $data->itemKeyName . ($i + 1);
-            $label = ucfirst(str_replace(['-', '_'], ' ', $data->itemKeyName)) . ' ' . ($i + 1);
+            if (null !== $itemKey) {
+                $key = $data->itemKeyName . ($i + 1);
+            } else {
+                $key = $i;
+            }
 
             $items
                 ->add(
-                    $key,
+                    (string) $key,
                     DescriptionFormType::class,
                     [
-                        'label' => $label,
+                        'label' => $partLabel . ' ' . ($i + 1),
                         'required' => false,
                         'data' => $data?->items[$key] ?? $data?->items[$i] ?? null,
                     ]

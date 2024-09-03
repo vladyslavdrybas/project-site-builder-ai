@@ -56,17 +56,16 @@ class VariantBuilderFacade
             VariantMetaDto::class
         );
 
-        $dto = new VariantBuilderFormDto(
-            $variant->getRawId(),
-            $variant->getProject()->getRawId(),
-        );
+        $dto = new VariantBuilderFormDto($variant);
 
         if (true) {
             $brand = new BrandFormDto(
                 $variantMetaDto->parts->header->data->brand->text ?? null,
                 new MediaCreatorFormDto(
                     $variantMetaDto->parts->header->data->brand->media->id ?? null,
-                    []
+                    [],
+                    null,
+                    $variantMetaDto->parts->header->data->brand->media
                 )
             );
 
@@ -86,7 +85,9 @@ class VariantBuilderFacade
                 $variantMetaDto->parts->hero->data->callToActionButton ?? null,
                 new MediaCreatorFormDto(
                     $variantMetaDto->parts->hero->data->media->id ?? null,
-                    []
+                    [],
+                    null,
+                    $variantMetaDto->parts->hero->data->media
                 )
             );
         }
@@ -106,7 +107,9 @@ class VariantBuilderFacade
                         $item->description,
                         new MediaCreatorFormDto(
                             $item->media->id ?? null,
-                            []
+                            [],
+                            null,
+                            $item->media
                         )
                     ),
                         $variantMetaDto->parts->features->data->items ?? []
@@ -129,7 +132,9 @@ class VariantBuilderFacade
                         $item->description,
                         new MediaCreatorFormDto(
                             $item->media->id ?? null,
-                            []
+                            [],
+                            null,
+                            $item->media
                         )
                     ),
                         $variantMetaDto->parts->howitworks->data->items ?? []
@@ -138,25 +143,29 @@ class VariantBuilderFacade
         }
 
         if (true) {
+            $testimonialItems = array_map(
+                fn (TestimonialDto $item) => new DescriptionWithThumbFormDto(
+                    $item->isActive,
+                    true,
+                    'Testimonial Image',
+                    $item->headline,
+                    $item->description,
+                    new MediaCreatorFormDto(
+                        $item->media->id ?? null,
+                        [],
+                        null,
+                        $item->media
+                    )
+                ),
+                $variantMetaDto->parts->testimonial->items ?? []
+            );
+
             $dto->testimonial = new SectionWithDescriptionItemsFormDto(
                 $variantMetaDto->parts->testimonial->isActive ?? false,
                 $variantMetaDto->parts->testimonial->head ?? null,
                 $variantMetaDto->parts->testimonial->subheadline ?? null,
                 'testimonial',
-                array_map(
-                    fn (TestimonialDto $item) => new DescriptionWithThumbFormDto(
-                        $item->isActive,
-                        true,
-                        'Testimonial Image',
-                        $item->headline,
-                        $item->description,
-                        new MediaCreatorFormDto(
-                            $item->media->id ?? null,
-                            []
-                        )
-                    ),
-                        $variantMetaDto->parts->testimonial->items ?? []
-                ),
+                $testimonialItems
             );
         }
 
@@ -207,7 +216,7 @@ class VariantBuilderFacade
     public function getVariantMeta(
         Variant $variant
     ): array {
-        $data = $this->request->getSession()->get('variantBuilderData');
+        $data = $this->request->getSession()->get('vb_' . $variant->getRawId());
 
         if (null === $data) {
             $data = $this->buildMetaFromVariant($variant);

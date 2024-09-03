@@ -215,8 +215,6 @@ class VariantBuilder
         $design = new DesignSettingsDto();
 
         $meta = new VariantMetaDto(
-            $variant->getRawId(),
-            $variant->getProject()->getRawId(),
             $parts,
             $design
         );

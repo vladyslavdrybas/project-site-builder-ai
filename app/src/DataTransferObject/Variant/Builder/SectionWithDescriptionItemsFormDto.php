@@ -9,7 +9,7 @@ class SectionWithDescriptionItemsFormDto
         public bool $isActive = false,
         public ?string $headline = null,
         public ?string $subheadline = null,
-        public ?string $itemKeyName = 'item',
+        public ?string $itemKeyName = null,
         /** @var array<DescriptionWithThumbFormDto> $items*/
         public array $items = []
     ) {}
