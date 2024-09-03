@@ -24,6 +24,7 @@ use App\DataTransferObject\Variant\Meta\SubscriptionsPartDataDto;
 use App\DataTransferObject\Variant\Meta\SubscriptionsPartDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
+use App\DataTransformer\VariantBuilderFormToVariantMetaTransformer;
 use App\Entity\Media;
 use App\Entity\Variant;
 use App\Form\CommandPanel\VariantBuilder\VariantBuilderFormType;
@@ -64,7 +65,8 @@ class VariantBuilderController extends AbstractControlPanelController
         Request $request,
         Variant $variant,
         SerializerInterface $serializer,
-        string $projectDir
+        string $projectDir,
+        VariantBuilderFormToVariantMetaTransformer $builderFormToVariantMetaTransformer
     ): Response {
         $formBuilderData = $this->variantBuilderFacade->getVariantBuilderFormDto($variant);
         dump($formBuilderData);
@@ -74,7 +76,11 @@ class VariantBuilderController extends AbstractControlPanelController
         $builderForm->handleRequest($request);
 
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
-            dump($builderForm->getData());
+            $variantMeta = $builderFormToVariantMetaTransformer->transform($builderForm->getData());
+
+            dump($variantMeta);
+            dump($builderForm->get('header')->get('brand')->get('logo')->get('file')->getData());
+
 //            $medias = $this->buildMediasFromForm($request->getSession(), $builderForm);
 //
 //            $formData = [
@@ -354,7 +360,6 @@ class VariantBuilderController extends AbstractControlPanelController
         $testimonial = new TestimonialPartDto(
             $data['parts']['testimonial']['head'],
             $data['parts']['testimonial']['subheadline'] ?? null,
-            (int) $data['parts']['testimonial']['maxReviews'],
             [],
             $data['parts']['testimonial']['isActive']
         );

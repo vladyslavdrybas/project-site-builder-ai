@@ -4,20 +4,11 @@ declare(strict_types=1);
 namespace App\Form\CommandPanel\VariantBuilder;
 
 use App\DataTransferObject\Variant\Builder\VariantBuilderFormDto;
-use App\DataTransferObject\Variant\Meta\VariantMetaDto;
-use App\Form\DescriptionType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
 
 class VariantBuilderFormType extends AbstractType
 {

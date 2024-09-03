@@ -8,7 +8,6 @@ class TestimonialPartDto
     public function __construct(
         public ?string $head = null,
         public ?string $subheadline = null,
-        public ?int $maxReviews = 5,
         /** @var array<TestimonialDto> $items*/
         public array $items = [],
         public bool $isActive = false,
