@@ -10,9 +10,11 @@ class MediaCreatorFormDto
 {
     public function __construct(
         public ?string $systemId = null,
-        public array $stockKeywords = [],
+        public array $stockTags = [],
         public ?UploadedFile $file = null,
         public ?MediaDto $media = null,
-        public bool $remove = false
+        public bool $toRemove = false,
+        public bool $toGenerate = false,
+        public bool $toGetFromStock = false
     ) {}
 }

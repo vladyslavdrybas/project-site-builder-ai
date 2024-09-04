@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\DataTransformer;
 
-use App\Entity\Tag;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\DataTransformerInterface;
 
@@ -20,9 +19,7 @@ class TagToStringTransformer implements DataTransformerInterface
         }
 
         if (is_array($value)) {
-            $value = array_map(fn (Tag $tag) => $tag->getRawId(), $value);
-
-            return implode(' ', $value);
+            return $this->purify(implode(' ', $value));
         }
 
         return '';
@@ -36,9 +33,8 @@ class TagToStringTransformer implements DataTransformerInterface
 
         $value = $this->purify($value);
         $values = explode(' ', $value);
-        $value = array_map(fn (string $tag) => new Tag($tag), $values);
 
-        return $value;
+        return $values;
     }
 
     protected function purify(string $value): string

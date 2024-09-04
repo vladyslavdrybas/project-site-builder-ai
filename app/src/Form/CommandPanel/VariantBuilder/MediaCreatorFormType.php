@@ -24,11 +24,16 @@ class MediaCreatorFormType extends AbstractType
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
+                /** @var MediaCreatorFormDto $formData */
                 $formData = $event->getData();
                 $form = $event->getForm();
 
                 if ($form['removeBtn']->isClicked()) {
-                    $formData->remove = true;
+                    $formData->toRemove = true;
+                } elseif ($form['generateBtn']->isClicked()) {
+                    $formData->toGenerate = true;
+                } elseif ($form['getFromStockBtn']->isClicked()) {
+                    $formData->toGetFromStock = true;
                 }
             }
         );
@@ -41,16 +46,34 @@ class MediaCreatorFormType extends AbstractType
                     'label' => 'Upload image',
                 ]
             )
-            ->add('stock',
+            ->add('stockTags',
                 ImageFromStocksType::class,
                 [
-                    'data' => $data?->stockKeywords,
+                    'data' => $data?->stockTags,
                 ]
             )
             ->add('systemId',
                 HiddenType::class,
                 [
                     'data' => $data?->systemId
+                ]
+            )
+            ->add('getFromStockBtn',
+                SubmitType::class,
+                [
+                    'label' => 'Get random stock image',
+                    'attr' => [
+                        'class' => 'btn-sm btn-light'
+                    ]
+                ]
+            )
+            ->add('generateBtn',
+                SubmitType::class,
+                [
+                    'label' => 'Generate Image',
+                    'attr' => [
+                        'class' => 'btn-sm btn-light'
+                    ]
                 ]
             )
             ->add('removeBtn',

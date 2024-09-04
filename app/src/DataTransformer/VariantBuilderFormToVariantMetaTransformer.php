@@ -31,6 +31,7 @@ use App\DataTransferObject\Variant\Meta\TestimonialDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\User;
+use App\Service\ImageStocks\ImageStocksFacade;
 use Exception;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -40,7 +41,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
 {
     public function __construct(
         protected readonly MediaBuilder $mediaBuilder,
-        protected readonly RequestStack $requestStack
+        protected readonly RequestStack $requestStack,
+        protected readonly ImageStocksFacade $imageStocksFacade
     ) {}
 
     public function transform(mixed $value): VariantMetaDto
@@ -205,12 +207,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
     ): ?MediaDto
     {
         if (null === $mediaCreatorForm
-            || true === $mediaCreatorForm->remove
+            || true === $mediaCreatorForm->toRemove
         ) {
-            return null;
-        }
-
-        if ($mediaCreatorForm->remove) {
             return null;
         }
 
@@ -221,6 +219,16 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $mediaCreatorForm->file,
                 $tags
             );
+        } else if ($mediaCreatorForm->toGetFromStock) {
+            $tags = array_merge($mediaCreatorForm->stockTags, $tags);
+
+            $stockImage = $this->imageStocksFacade->findOneRandom($tags);
+
+            if (null !== $stockImage) {
+                $result = $this->mediaBuilder->buildFromStockImage($stockImage);
+                $result->ownerId = $owner->getRawId();
+                $result->id = $this->mediaBuilder->generateMediaId($result);
+            }
         }
 
         if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {

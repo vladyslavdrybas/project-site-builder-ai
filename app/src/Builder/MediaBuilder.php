@@ -7,6 +7,9 @@ use App\DataTransferObject\Variant\MediaDto;
 use App\Entity\Media;
 use App\Entity\Tag;
 use App\Entity\User;
+use App\Repository\MediaRepository;
+use App\Service\ImageStocks\DataTransferObject\StockImageDto;
+use App\Utility\MediaIdGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,7 +19,8 @@ class MediaBuilder implements IEntityBuilder
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly string $contentDir,
-        protected readonly Filesystem $filesystem
+        protected readonly Filesystem $filesystem,
+        protected readonly MediaIdGenerator $mediaIdGenerator,
     ) {}
 
     public function fromArray(
@@ -102,10 +106,9 @@ class MediaBuilder implements IEntityBuilder
         $mimeType = $file->getMimeType();
         $version = 0;
 
-        $id = $this->generateMediaId($owner->getRawId(), $content, $version);
 
         $dto = new MediaDto(
-            $id,
+            null,
             $mimeType,
             $extension,
             $size,
@@ -115,12 +118,28 @@ class MediaBuilder implements IEntityBuilder
             base64_encode($content)
         );
 
+        $dto->id = $this->generateMediaId($dto);
+
         return $dto;
     }
 
-    protected function generateMediaId(string $ownerId, string $content, int $version): string
+    public function buildFromStockImage(StockImageDto $stockImage): MediaDto
     {
-        return hash('sha256', $ownerId .$content . $version);
+        return new MediaDto(
+            null,
+            $stockImage->mimeType,
+            $stockImage->extension,
+            $stockImage->size,
+            $stockImage->version,
+            $stockImage->tags,
+            null,
+            $stockImage->content,
+        );
+    }
+
+    public function generateMediaId(MediaDto $media): string
+    {
+        return $this->mediaIdGenerator->generate($media->ownerId, $media->content, $media->version);
     }
 
     protected function generateFilePath(

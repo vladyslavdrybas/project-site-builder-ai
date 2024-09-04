@@ -9,6 +9,14 @@ framework:
     #esi: true
     #fragments: true
       
+    http_client:
+      
+      scoped_clients:
+        picsumClient:
+          base_uri: 'https://picsum.photos/'
+      default_options:
+        max_redirects: 5
+          
     assets:
       packages:
         img:

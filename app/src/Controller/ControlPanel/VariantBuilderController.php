@@ -47,6 +47,7 @@ class VariantBuilderController extends AbstractControlPanelController
         VariantBuilderFormToVariantMetaTransformer $builderFormToVariantMetaTransformer
     ): Response {
         $formBuilderData = $this->variantBuilderFacade->getVariantBuilderFormDto($variant);
+        dump($formBuilderData);
 
         $builderForm = $this->createForm(VariantBuilderFormType::class, $formBuilderData);
 
@@ -95,6 +96,7 @@ class VariantBuilderController extends AbstractControlPanelController
                 default:
                     $variantMetaArray = $serializer->normalize($variantMeta);
 
+                    dump($variantMetaArray);
                     $request->getSession()->set(
                         'vb_' . $variant->getRawId(),
                         $variantMetaArray
