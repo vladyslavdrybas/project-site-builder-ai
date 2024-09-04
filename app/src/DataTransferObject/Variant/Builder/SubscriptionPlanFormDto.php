@@ -15,5 +15,6 @@ class SubscriptionPlanFormDto
         public ?CallToActionButtonDto $callToActionButton = null,
         public ?string $price = null,
         public ?string $currencySign = null,
+        public ?string $period = null
     ) {}
 }

@@ -38,7 +38,12 @@
                             <p>{{ proposal }}</p>
                         {% endfor %}
                         </div>
-                        <div class="price {% if loop.index == 2 %}text-white{% else %}text-primary{% endif %}">{{ plan.currencySign }}{{ plan.price }}</div>
+                        <div class="price price-column {% if loop.index == 2 %}text-white{% else %}text-primary{% endif %}">
+                            <span class="price-value">{{ plan.currencySign }}{{ plan.price }}</span>
+                            {% if plan.period is defined and plan.period is not null %}
+                                <span class="price-period">{{ plan.period }}</span>
+                            {% endif %}
+                        </div>
                     </div>
                     <a
                         href="{{ plan.callToActionButton.link }}"

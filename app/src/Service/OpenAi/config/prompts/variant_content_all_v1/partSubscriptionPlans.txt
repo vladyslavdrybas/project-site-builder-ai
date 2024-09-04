@@ -6,6 +6,7 @@
     * Low price plan has special offer with limit time to attract audience.
     * Use short features headlines that show to target audience value of subscription.
     * For field 'price' use numbers only. currency sign save into field 'currencySign'.
+    * Each plan must have a subscription period as week, month, year.
     * Provide answer in json. DO NOT cover answer into markup. Attach additional fields into json answer in case of need. Use this json structure: '{{jsonStructure}}'.
 </instructions>
 </section>

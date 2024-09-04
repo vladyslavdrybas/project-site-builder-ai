@@ -320,3 +320,28 @@ body {
 .pre-wrap {
     white-space: pre-wrap;
 }
+
+.price.price-row .price-period::before {
+    content: "/";
+    display: inline;
+    padding-right: 0.21rem;
+    margin-left: 0.21rem;
+}
+.price .price-period {
+    font-size: 1rem;
+}
+.price.price-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.price.price-column .price-period {
+    display: block;
+    border-top: 1px solid var(--paletter-color-primary);
+    padding-top: 0.13rem;
+    margin-top: 0.13rem;
+}
+.price.price-column .price-valur {
+    display: block;
+}

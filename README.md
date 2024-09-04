@@ -27,6 +27,8 @@
 ### Design example - clean and minimal
 1. https://wirestock.io/docs/api
 2. https://photoai.com/
+3. https://www.116117.de/de/ukraine.php
+4. https://dr-flex.de/dentigo-koeln-muelheim-19349
 
 ## Tools
 1. background remove https://www.remove.bg/upload

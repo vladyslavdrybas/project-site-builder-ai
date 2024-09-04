@@ -147,7 +147,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                     explode("\n", $item->features),
                     $item->callToActionButton,
                     $item->price,
-                    $item->currencySign
+                    $item->currencySign,
+                    $item->period
                 ) : null, $value->subscriptions->items),
             ),
             $value->subscriptions->isActive

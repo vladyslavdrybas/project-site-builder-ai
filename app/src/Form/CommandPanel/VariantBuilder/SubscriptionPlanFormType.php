@@ -56,6 +56,13 @@ class SubscriptionPlanFormType extends AbstractType
                     'data' => $data?->currencySign,
                 ]
             )
+            ->add('period',
+                TextType::class,
+                [
+                    'help' => 'week/month/year',
+                    'data' => $data?->period,
+                ]
+            )
             ->add('callToActionButton',
                 CallToActionButtonFormType::class,
                 [
