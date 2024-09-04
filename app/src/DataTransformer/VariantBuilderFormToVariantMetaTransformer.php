@@ -49,6 +49,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
             throw new Exception('Expected instance of VariantBuilderFormDto');
         }
 
+        dump($value);
+
         $header = new HeaderPartDto(
             new HeaderPartDataDto(
                 new BrandDto(
@@ -202,7 +204,14 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         array $tags = []
     ): ?MediaDto
     {
-        if (null === $mediaCreatorForm) {
+        dump( $mediaCreatorForm->remove);
+        if (null === $mediaCreatorForm
+            || true === $mediaCreatorForm->remove
+        ) {
+            return null;
+        }
+
+        if ($mediaCreatorForm->remove) {
             return null;
         }
 

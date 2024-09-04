@@ -5,25 +5,6 @@ namespace App\Controller\ControlPanel;
 
 use App\Builder\MediaBuilder;
 use App\Constants\RouteRequirements;
-use App\DataTransferObject\Variant\CallToActionButtonDto;
-use App\DataTransferObject\Variant\MediaDto;
-use App\DataTransferObject\Variant\Meta\BrandDto;
-use App\DataTransferObject\Variant\Meta\DesignSettingsDto;
-use App\DataTransferObject\Variant\Meta\FeaturesPartDataDto;
-use App\DataTransferObject\Variant\Meta\FeaturesPartDto;
-use App\DataTransferObject\Variant\Meta\FooterPartDto;
-use App\DataTransferObject\Variant\Meta\HeaderPartDataDto;
-use App\DataTransferObject\Variant\Meta\HeaderPartDto;
-use App\DataTransferObject\Variant\Meta\HeroPartDataDto;
-use App\DataTransferObject\Variant\Meta\HeroPartDto;
-use App\DataTransferObject\Variant\Meta\HowItWorksPartDataDto;
-use App\DataTransferObject\Variant\Meta\HowItWorksPartDto;
-use App\DataTransferObject\Variant\Meta\NewsletterPartDto;
-use App\DataTransferObject\Variant\Meta\PartsDto;
-use App\DataTransferObject\Variant\Meta\SubscriptionsPartDataDto;
-use App\DataTransferObject\Variant\Meta\SubscriptionsPartDto;
-use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
-use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\DataTransformer\VariantBuilderFormToVariantMetaTransformer;
 use App\Entity\Media;
 use App\Entity\Variant;
@@ -31,11 +12,8 @@ use App\Form\CommandPanel\VariantBuilder\VariantBuilderFormType;
 use App\Service\VariantBuilder\VariantBuilderFacade;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -77,55 +55,51 @@ class VariantBuilderController extends AbstractControlPanelController
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
             $variantMeta = $builderFormToVariantMetaTransformer->transform($builderForm->getData());
 
-            if ($builderForm->get('backBtn')->isClicked()) {
-                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
-            }
+            switch (true) {
+                case $builderForm->get('backBtn')->isClicked():
+                    return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+                    break;
+                case $builderForm->get('cancelBtn')->isClicked();
+                    $request->getSession()->remove('vb_' . $variant->getRawId());
 
-            if ($builderForm->get('cancelBtn')->isClicked()) {
-                $request->getSession()->remove('vb_' . $variant->getRawId());
+                    return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
+                    break;
+                case $builderForm->get('saveBtn')->isClicked():
+                    $variantMetaArray = $serializer->normalize($variantMeta);
 
-                return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
-            }
+                    /** @var array<Media> $mediasToStore */
+                    $mediasToStore = [];
+                    $variantMetaArray = $this->buildMedia(
+                        $variantMetaArray,
+                        $mediasToStore
+                    );
 
-            if ($builderForm->get('saveBtn')->isClicked()) {
-
-                $variantMetaArray = $serializer->normalize($variantMeta);
-
-                /** @var array<Media> $mediasToStore */
-                $mediasToStore = [];
-                $variantMetaArray = $this->buildMedia(
-                    $variantMetaArray,
-                    $mediasToStore
-                );
-
-                $mediaRepository = $this->em->getRepository(Media::class);
-                foreach ($mediasToStore as $media) {
-                    if (null === $media->getOwner()) {
-                        $media->setOwner($this->getUser());
-                        $mediaRepository->add($media);
+                    $mediaRepository = $this->em->getRepository(Media::class);
+                    foreach ($mediasToStore as $media) {
+                        if (null === $media->getOwner()) {
+                            $media->setOwner($this->getUser());
+                            $mediaRepository->add($media);
+                        }
+                        $variant->addMedia($media);
                     }
-                    $variant->addMedia($media);
-                }
-                $mediaRepository->save();
+                    $mediaRepository->save();
 
-                $variant->setMeta($variantMetaArray);
+                    $variant->setMeta($variantMetaArray);
 
-                $variantRepository = $this->em->getRepository(Variant::class);
-                $variantRepository->add($variant);
-                $variantRepository->save();
+                    $variantRepository = $this->em->getRepository(Variant::class);
+                    $variantRepository->add($variant);
+                    $variantRepository->save();
 
-                $request->getSession()->remove('vb_' . $variant->getRawId());
-            }
-
-            if ($builderForm->get('previewBtn')->isClicked()) {
-                $variantMetaArray = $serializer->normalize($variantMeta);
-                $request->getSession()->set(
-                    'vb_' . $variant->getRawId(),
-                    $variantMetaArray
-                );
+                    $request->getSession()->remove('vb_' . $variant->getRawId());
+                    break;
+                default:
+                    $variantMetaArray = $serializer->normalize($variantMeta);
+                    $request->getSession()->set(
+                        'vb_' . $variant->getRawId(),
+                        $variantMetaArray
+                    );
             }
         }
-
 
         $sidebar = [];
         $finder = new Finder();

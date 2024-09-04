@@ -7,9 +7,11 @@ use App\DataTransferObject\Variant\Builder\MediaCreatorFormDto;
 use App\Form\ImageFromStocksType;
 use App\Form\ImageType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MediaCreatorFormType extends AbstractType
@@ -18,6 +20,18 @@ class MediaCreatorFormType extends AbstractType
     {
         /** @var MediaCreatorFormDto $data */
         $data = $builder->getData();
+
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $formData = $event->getData();
+                $form = $event->getForm();
+
+                if ($form['removeBtn']->isClicked()) {
+                    $formData->remove = true;
+                }
+            }
+        );
 
         $builder
             ->add('file',
@@ -39,9 +53,10 @@ class MediaCreatorFormType extends AbstractType
                     'data' => $data?->systemId
                 ]
             )
-            ->add('remove',
-                ButtonType::class,
+            ->add('removeBtn',
+                SubmitType::class,
                 [
+                    'label' => 'Remove',
                     'attr' => [
                         'class' => 'btn-sm btn-light'
                     ]

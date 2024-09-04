@@ -12,6 +12,7 @@ class MediaCreatorFormDto
         public ?string $systemId = null,
         public array $stockKeywords = [],
         public ?UploadedFile $file = null,
-        public ?MediaDto $media = null
+        public ?MediaDto $media = null,
+        public bool $remove = false
     ) {}
 }
