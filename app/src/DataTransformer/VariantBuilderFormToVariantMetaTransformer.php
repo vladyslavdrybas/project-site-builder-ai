@@ -204,7 +204,6 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         array $tags = []
     ): ?MediaDto
     {
-        dump( $mediaCreatorForm->remove);
         if (null === $mediaCreatorForm
             || true === $mediaCreatorForm->remove
         ) {

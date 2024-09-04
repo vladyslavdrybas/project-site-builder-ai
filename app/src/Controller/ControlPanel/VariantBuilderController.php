@@ -94,6 +94,7 @@ class VariantBuilderController extends AbstractControlPanelController
                     break;
                 default:
                     $variantMetaArray = $serializer->normalize($variantMeta);
+
                     $request->getSession()->set(
                         'vb_' . $variant->getRawId(),
                         $variantMetaArray
