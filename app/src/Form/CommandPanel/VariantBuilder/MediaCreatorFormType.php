@@ -69,7 +69,7 @@ class MediaCreatorFormType extends AbstractType
                     'label' => 'Get random stock image',
                     'attr' => [
                         'class' => 'btn-sm btn-light formSubmit btn-media-submit'
-                    ]
+                    ],
                 ]
             )
             ->add('generateBtn',

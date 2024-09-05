@@ -5,6 +5,7 @@ namespace App\Controller\ControlPanel;
 
 use App\Builder\MediaBuilder;
 use App\Constants\RouteRequirements;
+use App\DataTransferObject\Variant\Builder\VariantBuilderFormDto;
 use App\DataTransformer\VariantBuilderFormToVariantMetaTransformer;
 use App\Entity\Media;
 use App\Entity\Variant;
@@ -54,7 +55,9 @@ class VariantBuilderController extends AbstractControlPanelController
         $builderForm->handleRequest($request);
 
         if ($builderForm->isSubmitted() && $builderForm->isValid()) {
-            $variantMeta = $builderFormToVariantMetaTransformer->transform($builderForm->getData());
+            /** @var VariantBuilderFormDto $formData */
+            $formData = $builderForm->getData();
+            $variantMeta = $builderFormToVariantMetaTransformer->transform($formData);
 
             switch (true) {
                 case $builderForm->get('backBtn')->isClicked():
@@ -65,7 +68,7 @@ class VariantBuilderController extends AbstractControlPanelController
 
                     return $this->redirectToRoute('cp_variant_show', ['variant' => $variant->getId()]);
                     break;
-                case $builderForm->get('saveBtn')->isClicked():
+                case $builderForm->get('saveBtn')->isClicked() || $formData->toSave:
                     $variantMetaArray = $serializer->normalize($variantMeta);
 
                     /** @var array<Media> $mediasToStore */

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Form\CommandPanel\VariantBuilder;
 
 use App\DataTransferObject\Variant\Builder\VariantBuilderFormDto;
+use App\Form\HiddenBooleanType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -87,7 +88,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Back',
                     'attr' => [
-                        'class' => 'btn btn-light w-100 formSubmit',
+                        'class' => 'btn btn-light w-100',
                     ],
                 ]
             )
@@ -97,10 +98,11 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Cancel',
                     'attr' => [
-                        'class' => 'btn btn-light w-100 formSubmit',
+                        'class' => 'btn btn-light w-100',
                     ],
                 ]
             )
+            ->add('toSave', HiddenBooleanType::class, ['data' => false])
             ->add(
                 'saveBtn',
                 SubmitType::class,
@@ -111,6 +113,7 @@ class VariantBuilderFormType extends AbstractType
                     ],
                 ]
             )
+            ->add('toPreview', HiddenBooleanType::class, ['data' => false])
             ->add(
                 'previewBtn',
                 SubmitType::class,

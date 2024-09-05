@@ -19,5 +19,7 @@ class VariantBuilderFormDto
         public ?SectionSubscriptionsFormDto $subscriptions = null,
         public ?SectionNewsletterFormDto $newsletter = null,
         public ?SectionFooterFormDto $footer = null,
+        public bool $toSave = false,
+        public bool $toPreview = false
     ) {}
 }

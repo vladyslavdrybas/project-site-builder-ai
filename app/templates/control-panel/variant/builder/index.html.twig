@@ -116,8 +116,14 @@
                         >
                             <div class="d-flex flex-column justify-content-center mt-3">
                                 {{ form_row(builderForm.cancelBtn) }}
+
                                 {{ form_row(builderForm.backBtn) }}
-                                {{ form_row(builderForm.saveBtn) }}
+
+                                <div>
+
+                                    {{ form_row(builderForm.saveBtn) }}
+                                </div>
+
                                 {{ form_row(builderForm.previewBtn) }}
                             </div>
                         </div>
@@ -193,10 +199,10 @@
 
     gutter.addEventListener('mousedown', resizer);
 
-    $(".formSubmit.btn-media-submit").click(function(event) {
+    $(".formSubmit").click(function(event) {
         event.preventDefault();
         const me = $(this);
-        me.toggleClass('disabled');
+        me.toggleClass('disabled btn-loading');
         me.attr("disabled", false);
 
         const form = $('#{{ builderForm.vars.id }}');
@@ -205,12 +211,19 @@
         const targetId = myId.replace('removeBtn', 'toRemove')
             .replace('generateBtn', 'toGenerate')
             .replace('getFromStockBtn', 'toGetFromStock')
+            .replace('saveBtn', 'toSave')
+            .replace('previewBtn', 'toPreview')
         ;
 
         const hiddenInput = $('#' + targetId);
 
         hiddenInput.prop('value', true);
         const formData = form.serialize();
+
+        console.log([
+           myId,
+           targetId,
+        ]);
 
         $.ajax({
             type: form.prop('method'),
@@ -222,7 +235,7 @@
             })
             .always(function(data) {
                 hiddenInput.prop('value', false);
-                me.toggleClass('disabled');
+                me.toggleClass('disabled btn-loading');
                 me.removeAttr("disabled");
             })
         ;
