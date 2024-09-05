@@ -155,6 +155,8 @@ class VariantBuilderController extends AbstractControlPanelController
     ): Response {
         $meta = $this->variantBuilderFacade->getVariantMeta($variant);
 
+        dump($meta);
+
         return $this->render(
             '_parts/base/base.html.twig',
             [

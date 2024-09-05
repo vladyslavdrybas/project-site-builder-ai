@@ -22,12 +22,6 @@ class MediaCreatorFormType extends AbstractType
         /** @var MediaCreatorFormDto $data */
         $data = $builder->getData();
 
-        dump([
-            __METHOD__,
-            $data,
-        ]);
-
-
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {

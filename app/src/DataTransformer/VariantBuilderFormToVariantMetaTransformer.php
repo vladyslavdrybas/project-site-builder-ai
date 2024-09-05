@@ -116,7 +116,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                     )
                 ) : null, $value->howitworks->items)
             ),
-            $value->features->isActive
+            $value->howitworks->isActive
         );
 
         $testimonialItems = array_map(
