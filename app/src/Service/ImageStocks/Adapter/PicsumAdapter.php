@@ -11,6 +11,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PicsumAdapter implements IAdapter
 {
+    public const IMAGE_DEFAULT_WITH = 512;
+    public const IMAGE_DEFAULT_HEIGHT = 512;
+    public const IMAGE_MIN_WITH = 128;
+    public const IMAGE_MIN_HEIGHT = 128;
+    public const IMAGE_MAX_WITH = 2048;
+    public const IMAGE_MAX_HEIGHT = 2048;
+
     public function __construct(
         protected readonly HttpClientInterface $picsumClient,
         protected readonly Filesystem $filesystem,
@@ -20,20 +27,60 @@ class PicsumAdapter implements IAdapter
 
     public function findOneRandom(
         array $tags = [],
-        array $size = [512,512]
+        array $size = [self::IMAGE_DEFAULT_WITH, self::IMAGE_DEFAULT_HEIGHT]
     ): ?StockImageDto
     {
-        dump(__METHOD__);
+        dump([
+            __METHOD__,
+            'tags' => $tags,
+        ]);
         $query = [
             'random' => time(),
         ];
 
-        if (in_array('blur', $tags)) {
-            $query['blur'] = 5;
-        }
+        foreach ($tags as $tag) {
+            switch($tag) {
+                case str_starts_with($tag, 'blur'):
+                    $blur = preg_replace('/[^0-9]/', '', $tag);
+                    $blur = (int)$blur;
+                    if ($blur < 0 || $blur > 10) {
+                        $blur = 5;
+                    }
 
-        if (in_array('grayscale', $tags)) {
-            $query['grayscale'] = 1;
+                    $query['blur'] = $blur;
+
+                    break;
+                case str_starts_with($tag, 'width'):
+                    $width = preg_replace('/[^0-9]/', '', $tag);
+                    $width = (int) $width;
+                    if ($width < self::IMAGE_MIN_WITH) {
+                        $width = self::IMAGE_MIN_WITH;
+                    } elseif ($width > self::IMAGE_MAX_WITH) {
+                        $width = self::IMAGE_MAX_WITH;
+                    }
+
+                    $size[0] = $width;
+
+                    break;
+                case str_starts_with($tag, 'height'):
+                    $height = preg_replace('/[^0-9]/', '', $tag);
+                    $height = (int) $height;
+                    if ($height < self::IMAGE_MIN_HEIGHT) {
+                        $height = self::IMAGE_MIN_HEIGHT;
+                    } elseif ($height > self::IMAGE_MAX_HEIGHT) {
+                        $height = self::IMAGE_MAX_HEIGHT;
+                    }
+
+                    $size[1] = $height;
+
+                    break;
+                case 'grayscale':
+                    $query['grayscale'] = 1;
+
+                    break;
+                default:
+                    // do nothing
+            }
         }
 
         $result = null;

@@ -54,9 +54,10 @@
 {% endblock %}
 </div>
 
+<script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
+<script src="{{ absolute_url(asset('jquery-3.7.1.min.js', 'js')) }}"></script>
 <script src="{{ absolute_url(asset('use-bootstrap-tag.min.js', 'js')) }}"></script>
 <script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
-<script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
 
 <script>
     function printTheJSONInPrettyFormat(json) {
@@ -66,7 +67,6 @@
     const alerts = document.querySelectorAll(".alert")
 
     alerts && alerts.forEach((e) => e.addEventListener('click', function (e) {
-        console.log(this);
         e.preventDefault();
         e.target.remove();
     }));
@@ -76,12 +76,10 @@
         const inputTags = document.querySelectorAll(".input-tags");
 
         codeJson && codeJson.forEach((el) => {
-            console.log(el);
             el.innerHTML = printTheJSONInPrettyFormat(el.innerHTML);
         });
 
         inputTags && inputTags.forEach((el) => {
-            console.log(el);
             UseBootstrapTag(el);
         });
     })

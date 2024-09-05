@@ -77,7 +77,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $this->buildMedia(
                     $value->variant->getProject()->getOwner(),
                     $value->hero->media,
-                    ['hero', 'product']
+                    ['hero', 'product', 'thumbnail']
                 ),
             ),
             $value->hero->isActive
@@ -112,7 +112,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                     $this->buildMedia(
                         $value->variant->getProject()->getOwner(),
                         $item->media,
-                        ['howitworks', 'thumb']
+                        ['howitworks', 'step', 'thumbnail']
                     )
                 ) : null, $value->howitworks->items)
             ),
@@ -220,13 +220,13 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $tags
             );
         } else if ($mediaCreatorForm->toGetFromStock) {
-            $tags = array_merge($mediaCreatorForm->stockTags, $tags);
+            $stockImage = $this->imageStocksFacade->findOneRandom($mediaCreatorForm->stockTags);
 
-            $stockImage = $this->imageStocksFacade->findOneRandom($tags);
 
             if (null !== $stockImage) {
                 $result = $this->mediaBuilder->buildFromStockImage($stockImage);
                 $result->ownerId = $owner->getRawId();
+                $result->tags = array_unique(array_merge($mediaCreatorForm->stockTags, $tags));
                 $result->id = $this->mediaBuilder->generateMediaId($result);
             }
         }

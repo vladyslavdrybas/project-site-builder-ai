@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Form\CommandPanel\VariantBuilder;
 
 use App\DataTransferObject\Variant\Builder\MediaCreatorFormDto;
+use App\Form\HiddenBooleanType;
 use App\Form\ImageFromStocksType;
 use App\Form\ImageType;
 use Symfony\Component\Form\AbstractType;
@@ -21,6 +22,12 @@ class MediaCreatorFormType extends AbstractType
         /** @var MediaCreatorFormDto $data */
         $data = $builder->getData();
 
+        dump([
+            __METHOD__,
+            $data,
+        ]);
+
+
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
@@ -30,15 +37,24 @@ class MediaCreatorFormType extends AbstractType
 
                 if ($form['removeBtn']->isClicked()) {
                     $formData->toRemove = true;
-                } elseif ($form['generateBtn']->isClicked()) {
+                } else if ($form['generateBtn']->isClicked()) {
                     $formData->toGenerate = true;
-                } elseif ($form['getFromStockBtn']->isClicked()) {
+                } else if ($form['getFromStockBtn']->isClicked()) {
                     $formData->toGetFromStock = true;
                 }
             }
         );
 
         $builder
+            ->add('toRemove', HiddenBooleanType::class, ['data' => false])
+            ->add('toGenerate', HiddenBooleanType::class, ['data' => false])
+            ->add('toGetFromStock', HiddenBooleanType::class, ['data' => false])
+            ->add('systemId',
+                HiddenType::class,
+                [
+                    'data' => $data?->systemId
+                ]
+            )
             ->add('file',
                 ImageType::class,
                 [
@@ -49,13 +65,8 @@ class MediaCreatorFormType extends AbstractType
             ->add('stockTags',
                 ImageFromStocksType::class,
                 [
+                    'mapped' => true,
                     'data' => $data?->stockTags,
-                ]
-            )
-            ->add('systemId',
-                HiddenType::class,
-                [
-                    'data' => $data?->systemId
                 ]
             )
             ->add('getFromStockBtn',
@@ -63,7 +74,7 @@ class MediaCreatorFormType extends AbstractType
                 [
                     'label' => 'Get random stock image',
                     'attr' => [
-                        'class' => 'btn-sm btn-light'
+                        'class' => 'btn-sm btn-light formSubmit btn-media-submit'
                     ]
                 ]
             )
@@ -72,7 +83,7 @@ class MediaCreatorFormType extends AbstractType
                 [
                     'label' => 'Generate Image',
                     'attr' => [
-                        'class' => 'btn-sm btn-light'
+                        'class' => 'btn-sm btn-light formSubmit btn-media-submit'
                     ]
                 ]
             )
@@ -81,7 +92,7 @@ class MediaCreatorFormType extends AbstractType
                 [
                     'label' => 'Remove',
                     'attr' => [
-                        'class' => 'btn-sm btn-light'
+                        'class' => 'btn-sm btn-light formSubmit btn-media-submit'
                     ]
                 ]
             )

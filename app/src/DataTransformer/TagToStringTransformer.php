@@ -32,9 +32,9 @@ class TagToStringTransformer implements DataTransformerInterface
         }
 
         $value = $this->purify($value);
-        $values = explode(' ', $value);
-
-        return $values;
+        $value = array_unique(explode(' ', $value));
+;
+        return $value;
     }
 
     protected function purify(string $value): string

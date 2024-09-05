@@ -142,6 +142,7 @@
                 "
             >
                 <iframe
+                    id="preview-frame"
                     class="
                         scroll-primary
                         w-100
@@ -191,5 +192,51 @@
     }
 
     gutter.addEventListener('mousedown', resizer);
+
+    $(".formSubmit.btn-media-submit").click(function(event) {
+        event.preventDefault();
+        const me = $(this);
+        me.toggleClass('disabled');
+        me.attr("disabled", false);
+
+        const form = $('#{{ builderForm.vars.id }}');
+
+        const myId = me.prop('id');
+        const targetId = myId.replace('removeBtn', 'toRemove')
+            .replace('generateBtn', 'toGenerate')
+            .replace('getFromStockBtn', 'toGetFromStock')
+        ;
+        const stockTagsId = myId.replace('removeBtn', 'stockTags')
+            .replace('generateBtn', 'stockTags')
+            .replace('getFromStockBtn', 'stockTags')
+        ;
+
+        const stockTags = $('#' + stockTagsId);
+
+        console.log(stockTags.prop('value'));
+        console.log(document.getElementById(stockTagsId));
+
+        const hiddenInput = $('#' + targetId);
+
+        hiddenInput.prop('value', true);
+        const formData = form.serialize();
+
+        $.ajax({
+            type: form.prop('method'),
+            url: form.prop('action'),
+            data: formData,
+        })
+            .done(function(data) {
+                document.getElementById('preview-frame').contentWindow.location.reload();
+            })
+            .always(function(data) {
+                hiddenInput.prop('value', false);
+                me.toggleClass('disabled');
+                me.removeAttr("disabled");
+            })
+        ;
+
+        return false; // avoid to execute the actual submit of the form.
+    })
 </script>
 {% endblock %}

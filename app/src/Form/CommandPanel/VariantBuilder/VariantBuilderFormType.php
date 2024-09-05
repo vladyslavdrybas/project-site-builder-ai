@@ -87,7 +87,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Back',
                     'attr' => [
-                        'class' => 'btn btn-light w-100',
+                        'class' => 'btn btn-light w-100 formSubmit',
                     ],
                 ]
             )
@@ -97,7 +97,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Cancel',
                     'attr' => [
-                        'class' => 'btn btn-light w-100',
+                        'class' => 'btn btn-light w-100 formSubmit',
                     ],
                 ]
             )
@@ -107,7 +107,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Save',
                     'attr' => [
-                        'class' => 'btn btn-light w-100',
+                        'class' => 'btn btn-light w-100 formSubmit',
                     ],
                 ]
             )
@@ -117,7 +117,7 @@ class VariantBuilderFormType extends AbstractType
                 [
                     'label' => 'Preview',
                     'attr' => [
-                        'class' => 'btn btn-light w-100',
+                        'class' => 'btn btn-light w-100 formSubmit',
                     ],
                 ]
             )

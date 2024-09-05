@@ -29,6 +29,7 @@ class TagsType extends AbstractType
             'attr' => [
                 'class' => 'input-tags text-secondary',
                 'data-ub-tag-separator' => ' ',
+                'data-ub-tag-duplicate' => '',
             ],
         ]);
     }

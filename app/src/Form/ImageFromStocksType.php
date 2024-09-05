@@ -14,8 +14,7 @@ class ImageFromStocksType extends AbstractType
 
         $resolver->setDefaults([
             'label' => 'Search Image on stocks',
-            'help' => 'Search by keywords. Add keywords separated by space.',
-            'mapped' => false,
+            'help' => 'Search by keywords. Add keywords separated by space. for example: width512, height512, blur5, grayscale, etc.',
             'required' => false,
         ]);
     }
