@@ -31,7 +31,9 @@ use App\DataTransferObject\Variant\Meta\TestimonialDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\User;
+use App\Service\AiMl\AiMlFacade;
 use App\Service\ImageStocks\ImageStocksFacade;
+use App\Service\OpenAi\Business\OpenAiPromptManager;
 use Exception;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -42,7 +44,9 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
     public function __construct(
         protected readonly MediaBuilder $mediaBuilder,
         protected readonly RequestStack $requestStack,
-        protected readonly ImageStocksFacade $imageStocksFacade
+        protected readonly ImageStocksFacade $imageStocksFacade,
+        protected readonly OpenAiPromptManager $openAiPromptManager,
+        protected readonly AiMlFacade $aiMlFacade
     ) {}
 
     public function transform(mixed $value): VariantMetaDto
@@ -222,13 +226,25 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         } else if ($mediaCreatorForm->toGetFromStock) {
             $stockImage = $this->imageStocksFacade->findOneRandom($mediaCreatorForm->stockTags);
 
-
             if (null !== $stockImage) {
                 $result = $this->mediaBuilder->buildFromStockImage($stockImage);
                 $result->ownerId = $owner->getRawId();
                 $result->tags = array_unique(array_merge($mediaCreatorForm->stockTags, $tags));
                 $result->id = $this->mediaBuilder->generateMediaId($result);
             }
+        } else if ($mediaCreatorForm->toGenerate) {
+            $prompt = 'Create an image of a futuristic city skyline at sunset, with towering skyscrapers made of glass and metal reflecting the golden light. Flying cars zip between the buildings, and glowing neon signs in various languages illuminate the streets below. In the distance, a massive digital billboard displays an advertisement for space travel. The city is surrounded by lush, green hills, with a river running through the center. The style should be vibrant, detailed, and a mix of cyberpunk and utopian aesthetics.';
+
+            $result = $this->aiMlFacade->findOneRandom($prompt, $tags);
+            if (null !== $result) {
+                $result->ownerId = $owner->getRawId();
+                $result->id = $this->mediaBuilder->generateMediaId($result);
+            }
+//            dump([
+//                __METHOD__,
+//                $mediaCreatorForm,
+//                $result,
+//            ]);
         }
 
         if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {

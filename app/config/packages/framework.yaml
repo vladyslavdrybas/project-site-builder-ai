@@ -14,6 +14,10 @@ framework:
       scoped_clients:
         picsumClient:
           base_uri: 'https://picsum.photos/'
+        openAiV1Client:
+          base_uri: 'https://api.openai.com/v1/'
+        aimlApiClient:
+          base_uri: 'https://api.aimlapi.com/'
       default_options:
         max_redirects: 5
           

@@ -40,6 +40,7 @@
 7. power words for content build https://optinmonster.com/700-power-words-that-will-boost-your-conversions/
 8. highlihgt code https://highlightjs.org/
 9. front input tags https://use-bootstrap-tag.js.org/methods.html
+10. AI image API generator https://aimlapi.com/models?integration-category=Image+Generation
 
 ## Photostocks API
 

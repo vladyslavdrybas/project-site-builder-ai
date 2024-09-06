@@ -10,6 +10,7 @@ parameters:
   content_dir: '%kernel.project_dir%/public/assets/content'
   env: '%kernel.environment%'
   openai_api_secret_key: '%env(OPENAI_API_SECRET_KEY)%'
+  aiml_api_key: '%env(AIML_API_SECRET_KEY)%'
 
 services:
     # default configuration for services in *this* file

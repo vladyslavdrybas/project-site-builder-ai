@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class OpenAiClient
 {
     public function __construct(
-        protected readonly HttpClientInterface $httpClient,
+        protected readonly HttpClientInterface $openAiV1Client,
         protected readonly ParameterBagInterface $parameterBag
     ) {}
 
@@ -17,9 +17,9 @@ class OpenAiClient
     {
         $apiKey = $this->parameterBag->get('openai_api_secret_key');
 
-        $response = $this->httpClient->request(
+        $response = $this->openAiV1Client->request(
             'POST',
-            'https://api.openai.com/v1/chat/completions',
+            'chat/completions',
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiKey,
@@ -43,6 +43,53 @@ class OpenAiClient
                 ],
             ]
         );
+
+        // Handle the response
+        if ($response->getStatusCode() === 200) {
+            $content = $response->toArray();
+
+            return $content;
+        }
+
+        $content = $response->getContent(false);
+
+        throw new \Exception(
+            'API request failed: ' . $response->getStatusCode()
+            .
+            '.'
+            .
+            $content
+        );
+    }
+
+    // TODO Pro subscription required
+    public function imageByPrompt(string $prompt): array
+    {
+        $apiKey = $this->parameterBag->get('openai_api_secret_key');
+
+        dump([
+            __METHOD__,
+            $apiKey,
+        ]);
+
+        $response = $this->openAiV1Client->request(
+            'POST',
+            'images/generations',
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'dall-e-3',
+                    'prompt' => $prompt,
+                    'size' => '1024x1024',
+                    'n' => 1,
+                ],
+            ]
+        );
+
+        dump($response->getInfo());
 
         // Handle the response
         if ($response->getStatusCode() === 200) {
