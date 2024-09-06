@@ -26,62 +26,143 @@
                     p-0
                 "
             >
-                <div
-                    class="d-flex align-items-start h-100"
-                >
+                <div class="d-flex flex-column align-items-start h-100">
                     <div
-                        id="tools-icon"
-                        class="tools-icon nav flex-column nav-pills bg-dark h-100"
-                        role="tablist"
-                        aria-orientation="vertical"
+                        class="d-flex flex-row w-100 px-1 py-2 bg-dark justify-content-between"
                     >
-                        {% for sidebarTab in sidebar %}
+                        <div>
                             <button
+                                id="sidebar--nav-top-btn-icon-cancel"
+                                type="button"
                                 class="
-                                    mt-2
+                                    btn
+                                    btn-dark
+                                    mx-1
+                                    sidebar--nav-top-btn
+                                    border-0
+                                    shadow-none
+                                "
+                                data-click-target="#{{ builderForm.cancelBtn.vars.id }}"
+                                title="Cancel"
+                            >
+                                <svg class="bi bi-1"><use xlink:href="#icon-cancel"/></svg>
+                            </button>
+                            <button
+                                id="sidebar--nav-top-btn-icon-back"
+                                type="button"
+                                class="
+                                    btn
+                                    btn-dark
+                                    mx-1
+                                    sidebar--nav-top-btn
+                                    border-0
+                                    shadow-none
+                                "
+                                data-click-target="#{{ builderForm.backBtn.vars.id }}"
+                                title="Back"
+                            >
+                                <svg class="bi bi-1"><use xlink:href="#icon-back"/></svg>
+                                Back
+                            </button>
+                        </div>
+
+                        <div>
+                            <button
+                                id="sidebar--nav-top-btn-icon-preview"
+                                type="button"
+                                class="
+                                    btn
+                                    btn-dark
+                                    mx-1
+                                    sidebar--nav-top-btn
+                                    border-0
+                                    shadow-none
+                                "
+                                data-click-target="#{{ builderForm.previewBtn.vars.id }}"
+                                title="Preview"
+                            >
+                                Preview
+                            </button>
+                            <button
+                                id="sidebar--nav-top-btn-icon-save"
+                                type="button"
+                                class="
+                                    btn
+                                    btn-dark
+                                    mx-1
+                                    sidebar--nav-top-btn
+                                    border-0
+                                    shadow-none
+                                "
+                                data-click-target="#{{ builderForm.saveBtn.vars.id }}"
+                                title="Save"
+                            >
+                                <svg class="bi bi-1"><use xlink:href="#icon-save"/></svg>
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="d-flex align-items-start w-100 h-100"
+                    >
+                        <div
+                            id="tools-icon"
+                            class="tools-icon nav flex-column nav-pills bg-dark h-100"
+                            role="tablist"
+                            aria-orientation="vertical"
+                        >
+                            {% for sidebarTab in sidebar %}
+                                <button
+                                    class="
+                                    mb-1
                                     w-100
                                     btn
+                                    btn-dark
                                     border-0
-                                    text-white
+                                    rounded-0
+{#                                    border-0#}
+{#                                    text-white#}
                                     text-center
                                     {% if loop.index == 1 %}active{% endif %}
                                 "
-                                id="{{ sidebarTab.id }}-tab"
+                                    id="{{ sidebarTab.id }}-tab"
+                                    data-bs-toggle="pill"
+                                    data-bs-target="#{{ sidebarTab.id }}"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="{{ sidebarTab.id }}"
+                                    aria-selected="true"
+                                >
+                                    <svg class="bi bi-1"><use xlink:href="#icon-{{ sidebarTab.id }}"/></svg>
+                                    <br>
+                                    <span class="icon-text">{{ sidebarTab.name }}</span>
+                                </button>
+                            {% endfor %}
+
+                            <button
+                                class="btn border-0 text-white d-none"
+                                id="sidebar--save-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#{{ sidebarTab.id }}"
+                                data-bs-target="#sidebar--save"
                                 type="button"
                                 role="tab"
-                                aria-controls="{{ sidebarTab.id }}"
+                                aria-controls="sidebar--save"
                                 aria-selected="true"
                             >
-                                <svg class="bi bi-1"><use xlink:href="#icon-{{ sidebarTab.id }}"/></svg>
+                                <svg class="bi bi-1"><use xlink:href="#icon-sidebar--save"/></svg>
                                 <br>
-                                <span class="icon-text">{{ sidebarTab.name }}</span>
+                                <span class="icon-text">Save</span>
                             </button>
-                        {% endfor %}
+                        </div>
 
-                        <button
-                            class="btn border-0 text-white"
-                            id="sidebar--save-tab"
-                            data-bs-toggle="pill"
-                            data-bs-target="#sidebar--save"
-                            type="button"
-                            role="tab"
-                            aria-controls="sidebar--save"
-                            aria-selected="true"
-                        >
-                            <svg class="bi bi-1"><use xlink:href="#icon-sidebar--save"/></svg>
-                            <br>
-                            <span class="icon-text">Save</span>
-                        </button>
-                    </div>
-
-                    {{ form_start(builderForm, {'method': 'POST',
-                        'attr': {
-                            'id': builderForm.vars.id,
-                            'class': 'tab-content bg-light h-100 w-100 p-1 pe-0'
-                        }
-                    }) }}
+                        {{ form_start(builderForm, {'method': 'POST',
+                            'attr': {
+                                'id': builderForm.vars.id,
+                                'class': 'tab-content bg-light h-100 w-100 p-1 pe-0'
+                            }
+                        }) }}
                         {% for sidebarTab in sidebar %}
                             <div
                                 id="{{ sidebarTab.id }}"
@@ -104,13 +185,14 @@
                         <div
                             id="sidebar--save"
                             class="
-                                tab-pane
-                                fade
-                                show
-                                overflow-y-auto
-                                vh-100
-                                pe-2
-                            "
+                                    tab-pane
+                                    fade
+                                    show
+                                    overflow-y-auto
+                                    vh-100
+                                    pe-2
+                                    d-none
+                                "
                             role="tabpanel"
                             aria-labelledby="sidebar--save-tab"
                         >
@@ -127,7 +209,8 @@
                                 {{ form_row(builderForm.previewBtn) }}
                             </div>
                         </div>
-                    {{ form_end(builderForm) }}
+                        {{ form_end(builderForm) }}
+                    </div>
                 </div>
 
                 <div
@@ -199,11 +282,11 @@
 
     gutter.addEventListener('mousedown', resizer);
 
-    $(".formSubmit").click(function(event) {
+    $('.formSubmit').click(function(event) {
         event.preventDefault();
         const me = $(this);
         me.toggleClass('disabled btn-loading');
-        me.attr("disabled", false);
+        me.attr('disabled', false);
 
         const form = $('#{{ builderForm.vars.id }}');
 
@@ -220,11 +303,6 @@
         hiddenInput.prop('value', true);
         const formData = form.serialize();
 
-        console.log([
-           myId,
-           targetId,
-        ]);
-
         $.ajax({
             type: form.prop('method'),
             url: form.prop('action'),
@@ -236,11 +314,19 @@
             .always(function(data) {
                 hiddenInput.prop('value', false);
                 me.toggleClass('disabled btn-loading');
-                me.removeAttr("disabled");
+                me.removeAttr('disabled');
             })
         ;
 
         return false; // avoid to execute the actual submit of the form.
+    })
+
+    $('.sidebar--nav-top-btn').click(function(event) {
+        event.preventDefault();
+
+        $($(this).attr('data-click-target')).trigger('click');
+
+        return false;
     })
 </script>
 {% endblock %}
