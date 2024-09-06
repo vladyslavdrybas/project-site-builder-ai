@@ -34,6 +34,9 @@ class Variant extends AbstractEntity
     #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $meta = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    protected ?array $metaPublished = null;
+
     #[ORM\Column(type: JsonDataTransferObjectType::NAME, nullable: true)]
     protected ?VariantPromptMetaDto $promptMeta = null;
 
@@ -77,6 +80,16 @@ class Variant extends AbstractEntity
     {
         parent::__construct();
         $this->medias = new ArrayCollection();
+    }
+
+    public function getMetaPublished(): ?array
+    {
+        return $this->metaPublished;
+    }
+
+    public function setMetaPublished(?array $metaPublished): void
+    {
+        $this->metaPublished = $metaPublished;
     }
 
     public function getPrompt(): ?VariantPrompt
