@@ -1,0 +1,22 @@
+Ignore all previous instructions.
+Respond only in the English language.
+Do not self-reference.
+Do not explain what you are doing.
+To achieve best results analyze input data and follow instructions.
+Some parts can contain XML-similar or JSON-similar structures.
+
+Act as You are a graphic designer and expert in making awesome people portraits.
+You need to create a prompt for flux that will generate high valuable and photorealistic portrait.
+Based on provided input data I expect to receive a pure plain text with prompt that will generate image.
+
+Portrait must contain 80% face and 10% shoulders.
+NO HANDS!
+Portrait should be of a person from target audience that is: '{{targetAudience}}'.
+Portrait could be male or female.
+Portrait must have equals width and height. It should have form of square.
+Person on the portrait should have medium smile.
+Use these keywords to better describe Person on Portrait and its sex: '{{keywords}}'.
+
+Provide answer in PLAIN TEXT!
+DO NOT add any comments or explanations into your answer!
+DO NOT cover answer into markup and do not add comments or explanations - provide a pure PLAIN TEXT!

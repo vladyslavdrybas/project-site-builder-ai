@@ -3,17 +3,17 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\MediaAiPromptRepository;
+use App\Repository\OpenAiPromptRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: MediaAiPromptRepository::class, readOnly: false)]
-#[ORM\Table(name: "media_ai_prompt")]
-class MediaAiPrompt extends AbstractEntity
+#[ORM\Entity(repositoryClass: OpenAiPromptRepository::class, readOnly: false)]
+#[ORM\Table(name: "open_ai_prompt")]
+class OpenAIPrompt extends AbstractEntity
 {
-    #[Assert\NotBlank(message: 'Media prompt must have owner.')]
+    #[Assert\NotBlank(message: 'Prompt must have owner.')]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id')]
     protected ?User $owner = null;
@@ -22,31 +22,13 @@ class MediaAiPrompt extends AbstractEntity
     protected ?string $promptHash = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    protected ?string $apiName = null;
-
-    #[ORM\Column(type: Types::STRING, nullable: true)]
     protected ?string $modelName = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $promptMeta = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    protected ?array $tags = null;
-
-    #[ORM\Column(type: Types::JSON, nullable: true)]
     protected ?array $promptAnswer = null;
-
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    protected ?int $width = null;
-
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    protected ?int $height = null;
-
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    protected ?string $mimeType = null;
-
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    protected ?string $url = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
     protected bool $isDone = false;
@@ -57,16 +39,6 @@ class MediaAiPrompt extends AbstractEntity
     #[ORM\Column(type: Types::INTEGER, options: ['default' => 0, 'comment' => 'milliseconds', 'unsigned' => true])]
     protected int $executionMilliseconds = 0;
 
-    public function getTags(): ?array
-    {
-        return $this->tags;
-    }
-
-    public function setTags(?array $tags): void
-    {
-        $this->tags = $tags;
-    }
-
     public function getPromptHash(): ?string
     {
         return $this->promptHash;
@@ -75,76 +47,6 @@ class MediaAiPrompt extends AbstractEntity
     public function setPromptHash(?string $promptHash): void
     {
         $this->promptHash = $promptHash;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
-    }
-
-    public function getWidth(): ?int
-    {
-        return $this->width;
-    }
-
-    public function setWidth(?int $width): void
-    {
-        $this->width = $width;
-    }
-
-    public function getHeight(): ?int
-    {
-        return $this->height;
-    }
-
-    public function setHeight(?int $height): void
-    {
-        $this->height = $height;
-    }
-
-    public function getMimeType(): ?string
-    {
-        return $this->mimeType;
-    }
-
-    public function setMimeType(?string $mimeType): void
-    {
-        $this->mimeType = $mimeType;
-    }
-
-    public function getPromptMeta(): ?array
-    {
-        return $this->promptMeta;
-    }
-
-    public function setPromptMeta(?array $promptMeta): void
-    {
-        $this->promptMeta = $promptMeta;
-    }
-
-    public function getApiName(): ?string
-    {
-        return $this->apiName;
-    }
-
-    public function setApiName(?string $apiName): void
-    {
-        $this->apiName = $apiName;
-    }
-
-    public function getModelName(): ?string
-    {
-        return $this->modelName;
-    }
-
-    public function setModelName(?string $modelName): void
-    {
-        $this->modelName = $modelName;
     }
 
     public function getOwner(): ?User
@@ -157,6 +59,21 @@ class MediaAiPrompt extends AbstractEntity
         $this->owner = $owner;
     }
 
+    public function getModelName(): ?string
+    {
+        return $this->modelName;
+    }
+
+    public function setModelName(?string $modelName): void
+    {
+        $this->modelName = $modelName;
+    }
+
+    public function getPromptMeta(): ?array
+    {
+        return $this->promptMeta;
+    }
+
     public function getPromptAnswer(): ?array
     {
         return $this->promptAnswer;
@@ -165,6 +82,11 @@ class MediaAiPrompt extends AbstractEntity
     public function setPromptAnswer(?array $promptAnswer): void
     {
         $this->promptAnswer = $promptAnswer;
+    }
+
+    public function setPromptMeta(?array $promptMeta): void
+    {
+        $this->promptMeta = $promptMeta;
     }
 
     public function isDone(): bool

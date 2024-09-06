@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Service\OpenAi\Client;
 
+use App\Entity\OpenAIPrompt;
+use App\Repository\OpenAiPromptRepository;
+use DateTime;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -10,12 +14,32 @@ class OpenAiClient
 {
     public function __construct(
         protected readonly HttpClientInterface $openAiV1Client,
-        protected readonly ParameterBagInterface $parameterBag
+        protected readonly ParameterBagInterface $parameterBag,
+        protected readonly Security $security,
+        protected readonly OpenAiPromptRepository $openAiPromptRepository
     ) {}
 
     public function prompt(string $prompt): array
     {
         $apiKey = $this->parameterBag->get('openai_api_secret_key');
+
+
+        $requestAt = new DateTime('now');
+        $start = microtime(true);
+        $modelName = 'gpt-4o-mini';
+        $data = [
+            'model' => $modelName, // cheapest
+            'messages' => [
+                [
+                    "role" => "system",
+                    "content" => "You are a helpful assistant."
+                ],
+                [
+                    "role" => "user",
+                    "content" => $prompt
+                ],
+            ],
+        ];
 
         $response = $this->openAiV1Client->request(
             'POST',
@@ -25,28 +49,31 @@ class OpenAiClient
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
                 ],
-                'json' => [
-                    'model' => 'gpt-4o-mini', // cheapest
-//                    'model' => 'gpt-3.5-turbo-0125',
-//                    'model' => 'gpt-3.5-turbo',
-//                    'model' => 'gpt-4o-mini-2024-07-18',
-                    'messages' => [
-                        [
-                            "role" => "system",
-                            "content" => "You are a helpful assistant."
-                        ],
-                        [
-                            "role" => "user",
-                            "content" => $prompt
-                        ],
-                    ],
-                ],
+                'json' => $data,
             ]
         );
 
         // Handle the response
         if ($response->getStatusCode() === 200) {
             $content = $response->toArray();
+
+            $end = microtime(true);
+            $promptRequestExecutionTime = (int) ($end - $start) * 1000;
+
+            $openAiPrompt = new OpenAIPrompt();
+            $openAiPrompt->setOwner($this->security->getUser());
+            $openAiPrompt->setModelName($modelName);
+            $openAiPrompt->setPromptMeta($data);
+            $openAiPrompt->setRequestAt($requestAt);
+            $openAiPrompt->setExecutionMilliseconds($promptRequestExecutionTime);
+            $openAiPrompt->setPromptAnswer($content);
+            $openAiPrompt->setIsDone(true);
+            $openAiPrompt->setPromptHash(
+                hash('sha256', trim($content['choices'][0]['message']['content'] ?? ''))
+            );
+
+            $this->openAiPromptRepository->add($openAiPrompt);
+            $this->openAiPromptRepository->save();
 
             return $content;
         }
@@ -67,11 +94,6 @@ class OpenAiClient
     {
         $apiKey = $this->parameterBag->get('openai_api_secret_key');
 
-        dump([
-            __METHOD__,
-            $apiKey,
-        ]);
-
         $response = $this->openAiV1Client->request(
             'POST',
             'images/generations',
@@ -88,8 +110,6 @@ class OpenAiClient
                 ],
             ]
         );
-
-        dump($response->getInfo());
 
         // Handle the response
         if ($response->getStatusCode() === 200) {

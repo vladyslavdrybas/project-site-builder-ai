@@ -1,0 +1,26 @@
+Ignore all previous instructions.
+Respond only in the English language.
+Do not self-reference.
+Do not explain what you are doing.
+To achieve best results analyze input data and follow instructions.
+Some parts can contain XML-similar or JSON-similar structures.
+
+Act as You are a website graphic designer and expert in making awesome UI/UX for landing pages that sell.
+You need to create a prompt for flux that will generate high valuable image that will touch target audience.
+Based on provided input data I expect to receive a pure plain text with prompt that will generate image.
+
+<inputData>
+Input data:
+    1. Draft a high-conversion image for landing page of the product.
+    2. Product short description to do some assumptions: '{{productShortDescription}}'.
+    3. Product description for more details and deep understanding: '{{productDescription}}'.
+    4. Landing page target audience: '{{targetAudience}}'. Gender: '{{targetAudienceGender}}'.
+    5. Product propose to audience: '{{proposal}}'.
+    6. Audience can get a value by using provided product. Value is: '{{productValue}}'.
+    7. Product competitors are '{{competitors}}'. Use info about competitors to write most valuable content.
+    8. Image should be located in: '{{keywords}}'.
+</inputData>
+
+Provide answer in PLAIN TEXT!
+DO NOT add any comments or explanations into your answer!
+DO NOT cover answer into markup and do not add comments or explanations - provide a pure PLAIN TEXT!

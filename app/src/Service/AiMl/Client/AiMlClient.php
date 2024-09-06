@@ -44,16 +44,26 @@ class AiMlClient
             ;
         }
 
+        $imageSize = 'landscape_4_3';
+        foreach ($tags as $tag) {
+            if ('landscape_4_3' === $tag) {
+                $imageSize = $tag;
+                break;
+            }
+
+            if ('square' === $tag) {
+                $imageSize = $tag;
+                break;
+            }
+        }
+
         $apiKey = $this->parameterBag->get('aiml_api_key');
         $modelName = 'flux/schnell';
         $data = [
             'model' => $modelName,
             'prompt' => $prompt,
-//                    "image_size" => "landscape_4_3",
-//                    "num_inference_steps" => 28,
-//                    "guidance_scale" => 3.5,
-            "num_images" => 1,
-//                    "safety_tolerance" => "2",
+            'image_size' => $imageSize,
+            'num_images' => 1,
         ];
 
         $result = null;
@@ -85,13 +95,16 @@ class AiMlClient
             $mediaPrompt = new MediaAiPrompt();
             $mediaPrompt->setOwner($user);
             $mediaPrompt->setApiName('aiml');
-            $mediaPrompt->setPrompt($prompt);
             $mediaPrompt->setModelName($modelName);
+            $mediaPrompt->setTags($tags);
             $mediaPrompt->setPromptMeta($data);
             $mediaPrompt->setPromptAnswer($content);
             $mediaPrompt->setIsDone(true);
             $mediaPrompt->setRequestAt($requestAt);
             $mediaPrompt->setExecutionMilliseconds($promptRequestExecutionTime);
+            $mediaPrompt->setPromptHash(
+                hash('sha256', $prompt)
+            );
 
             $images = $content['images'] ?? [];
             $image = $images[0] ?? null;
@@ -124,6 +137,7 @@ class AiMlClient
                         $result->extension = $extension;
                         $result->content = base64_encode($fileContent);
                         $result->tags = $tags;
+                        $result->mediaAiPromptId = $mediaPrompt->getRawId();
 
                         if (in_array($this->projectEnvironment, ['local', 'dev'])) {
                             $this->filesystem->dumpFile(

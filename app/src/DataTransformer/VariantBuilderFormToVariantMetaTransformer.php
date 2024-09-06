@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\DataTransformer;
 
 use App\Builder\MediaBuilder;
+use App\DataTransferObject\Variant\AI\Prompt\VariantPromptMetaDto;
 use App\DataTransferObject\Variant\Builder\DescriptionWithThumbFormDto;
 use App\DataTransferObject\Variant\Builder\MediaCreatorFormDto;
 use App\DataTransferObject\Variant\Builder\SubscriptionPlanFormDto;
@@ -31,9 +32,9 @@ use App\DataTransferObject\Variant\Meta\TestimonialDto;
 use App\DataTransferObject\Variant\Meta\TestimonialPartDto;
 use App\DataTransferObject\Variant\Meta\VariantMetaDto;
 use App\Entity\User;
-use App\Service\AiMl\AiMlFacade;
+use App\Entity\Variant;
+use App\Service\ImageAiCreator\ImageAiCreatorFacade;
 use App\Service\ImageStocks\ImageStocksFacade;
-use App\Service\OpenAi\Business\OpenAiPromptManager;
 use Exception;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -45,8 +46,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         protected readonly MediaBuilder $mediaBuilder,
         protected readonly RequestStack $requestStack,
         protected readonly ImageStocksFacade $imageStocksFacade,
-        protected readonly OpenAiPromptManager $openAiPromptManager,
-        protected readonly AiMlFacade $aiMlFacade
+        protected readonly ImageAiCreatorFacade $imageAiCreatorFacade
     ) {}
 
     public function transform(mixed $value): VariantMetaDto
@@ -64,7 +64,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                     $this->buildMedia(
                         $value->variant->getProject()->getOwner(),
                         $value->header->brand->logo,
-                        ['header', 'brand', 'logo']
+                        ['header', 'brand', 'logo', 'square'],
+                        $value->variant
                     ),
                 ),
                 $value->header->callToActionButton,
@@ -81,7 +82,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $this->buildMedia(
                     $value->variant->getProject()->getOwner(),
                     $value->hero->media,
-                    ['hero', 'product', 'thumbnail']
+                    ['hero', 'product', 'thumbnail', 'landscape_4_3'],
+                    $value->variant
                 ),
             ),
             $value->hero->isActive
@@ -98,7 +100,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                     $this->buildMedia(
                         $value->variant->getProject()->getOwner(),
                         $item->media,
-                        ['feature', 'icon']
+                        ['feature', 'icon', 'square'],
+                        $value->variant
                     )
                 ) : null, $value->features->items)
             ),
@@ -116,7 +119,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                     $this->buildMedia(
                         $value->variant->getProject()->getOwner(),
                         $item->media,
-                        ['howitworks', 'step', 'thumbnail']
+                        ['howitworks', 'step', 'thumbnail', 'square'],
+                        $value->variant
                     )
                 ) : null, $value->howitworks->items)
             ),
@@ -131,7 +135,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $this->buildMedia(
                     $value->variant->getProject()->getOwner(),
                     $item->media,
-                    ['testimonial', 'avatar']
+                    ['testimonial', 'avatar', 'square'],
+                    $value->variant
                 )
             ) : null,
             $value->testimonial->items
@@ -207,7 +212,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
     protected function buildMedia(
         User $owner,
         ?MediaCreatorFormDto $mediaCreatorForm,
-        array $tags = []
+        array $tags = [],
+        ?Variant $variant = null,
     ): ?MediaDto
     {
         if (null === $mediaCreatorForm
@@ -233,18 +239,21 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $result->id = $this->mediaBuilder->generateMediaId($result);
             }
         } else if ($mediaCreatorForm->toGenerate) {
-            $prompt = 'Create an image of a futuristic city skyline at sunset, with towering skyscrapers made of glass and metal reflecting the golden light. Flying cars zip between the buildings, and glowing neon signs in various languages illuminate the streets below. In the distance, a massive digital billboard displays an advertisement for space travel. The city is surrounded by lush, green hills, with a river running through the center. The style should be vibrant, detailed, and a mix of cyberpunk and utopian aesthetics.';
+            $variantPromptMeta = $variant->getPromptMeta();
 
-            $result = $this->aiMlFacade->findOneRandom($prompt, $tags);
+            $result = $this->imageAiCreatorFacade->findOneRandom(
+                $variantPromptMeta,
+                $tags
+            );
             if (null !== $result) {
                 $result->ownerId = $owner->getRawId();
                 $result->id = $this->mediaBuilder->generateMediaId($result);
             }
-//            dump([
-//                __METHOD__,
-//                $mediaCreatorForm,
-//                $result,
-//            ]);
+            dump([
+                __METHOD__,
+                $mediaCreatorForm,
+                $result,
+            ]);
         }
 
         if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {

@@ -158,6 +158,70 @@ class   OpenAiPromptManager
         return $dto;
     }
 
+    public function createPromptToGenerateImage(
+        VariantPromptMetaDto $promptMetaDto,
+        string $promptTemplate,
+        array $keywords = []
+    ): PromptDto {
+        $promptTemplateDirPath = sprintf('%s/config/prompts/images/%s', dirname(__DIR__), $promptTemplate);
+
+        if (!$this->filesystem->exists($promptTemplateDirPath)) {
+            throw new FileNotFoundException($promptTemplate);
+        }
+
+        $indexFilePath = sprintf('%s/%s.txt', $promptTemplateDirPath, 'index');
+        if (!$this->filesystem->exists($indexFilePath)) {
+            throw new FileNotFoundException($promptTemplate . '/index');
+        }
+        $indexPromptText = file_get_contents($indexFilePath);
+
+        $indexPromptText = str_replace(
+            [
+                '{{productShortDescription}}',
+                '{{productDescription}}',
+                '{{targetAudience}}',
+                '{{targetAudienceGender}}',
+                '{{tone}}',
+                '{{style}}',
+                '{{proposal}}',
+                '{{productValue}}',
+                '{{competitors}}',
+                '{{keywords}}',
+            ],
+            [
+                $promptMetaDto->productShortDescription,
+                $promptMetaDto->productDescription,
+                $promptMetaDto->targetAudience,
+                'men and women',
+                implode(' and ', array_keys($promptMetaDto->tone ?? ['creative' => true])),
+                implode(' and ', array_keys($promptMetaDto->style ?? ['humor' => true])),
+                $promptMetaDto->proposal,
+                $promptMetaDto->value,
+                implode(' and ', explode("\r\n", $promptMetaDto->competitors ?? ['none'])),
+                implode(',', $keywords)
+            ],
+            $indexPromptText
+        );
+
+        $indexPromptText = preg_replace('/\n{2,}/m', "\n", $indexPromptText);
+
+
+        $dto = new PromptDto(
+            $indexPromptText,
+            $promptTemplate,
+            []
+        );
+
+        if (in_array($this->projectEnvironment, ['local', 'dev'])) {
+            $this->filesystem->dumpFile(
+                sprintf( '%s/var/prompts/%s-%s-%s.txt', $this->projectDir, date('d-m-Y'), hash('md5', $dto->text) . '-text', date('H-i-s')),
+                $dto->text
+            );
+        }
+
+        return $dto;
+    }
+
     public function convertPromptJsonAnswerToArray(array $data): array
     {
         $content = $data['choices'][0]['message']['content'] ?? null;
@@ -178,5 +242,25 @@ class   OpenAiPromptManager
         }
 
         return $content;
+    }
+
+    public function convertPromptPlainTextAnswerToText(array $data): ?string
+    {
+        $content = $data['choices'][0]['message']['content'] ?? null;
+        if (empty($content)) {
+            dump('prompt answer content not found.');
+            // TODO add logging
+
+            return null;
+        }
+
+        if (!is_string($content)) {
+            dump('Content is not a string');
+            // TODO add logging
+
+            return null;
+        }
+
+        return trim($content);
     }
 }

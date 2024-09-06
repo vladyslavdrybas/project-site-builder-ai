@@ -3,7 +3,7 @@ Respond only in the English language.
 Do not self-reference.
 Do not explain what you are doing.
 To achieve best results analyze product input data and follow instructions.
-Some parts of my  can contain XML-similar structure.
+Some parts can contain XML-similar structure.
 Words have power, so try to convince audience that our proposal is best on the market, and they need product.
 Do not add any comments or explanations into JSON syntax.
 

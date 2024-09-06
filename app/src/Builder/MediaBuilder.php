@@ -5,9 +5,9 @@ namespace App\Builder;
 
 use App\DataTransferObject\Variant\MediaDto;
 use App\Entity\Media;
+use App\Entity\MediaAiPrompt;
 use App\Entity\Tag;
 use App\Entity\User;
-use App\Repository\MediaRepository;
 use App\Service\ImageStocks\DataTransferObject\StockImageDto;
 use App\Utility\MediaIdGenerator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,6 +44,12 @@ class MediaBuilder implements IEntityBuilder
         $media->setExtension($data['extension']);
         $media->setMimeType($data['mimeType']);;
         $media->setId($data['id']);
+
+        if (!empty($data['mediaAiPromptId'])) {
+            $mediaAiPromptRepository = $this->em->getRepository(MediaAiPrompt::class);
+            $mediaAiPrompt = $mediaAiPromptRepository->find($data['mediaAiPromptId']);
+            $media->setMediaAiPrompt($mediaAiPrompt);
+        }
 
         $existedMedia = $mediaRepository->find($media->getId());
 

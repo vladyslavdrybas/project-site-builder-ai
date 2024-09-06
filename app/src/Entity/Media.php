@@ -32,6 +32,10 @@ class Media implements EntityInterface
     #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id')]
     protected ?User $owner = null;
 
+    #[ORM\ManyToOne(targetEntity: MediaAiPrompt::class)]
+    #[ORM\JoinColumn(name: 'media_ai_prompt', referencedColumnName: 'id')]
+    protected ?MediaAiPrompt $mediaAiPrompt = null;
+
     #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $mimetype;
 
@@ -73,6 +77,16 @@ class Media implements EntityInterface
         $this->tags = new ArrayCollection();
         $this->setCreatedAt(new DateTime());
         $this->setUpdatedAt(new DateTime());
+    }
+
+    public function getMediaAiPrompt(): ?MediaAiPrompt
+    {
+        return $this->mediaAiPrompt;
+    }
+
+    public function setMediaAiPrompt(?MediaAiPrompt $mediaAiPrompt): void
+    {
+        $this->mediaAiPrompt = $mediaAiPrompt;
     }
 
     public function getPath(): string
