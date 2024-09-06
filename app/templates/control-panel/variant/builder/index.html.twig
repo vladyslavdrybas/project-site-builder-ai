@@ -178,7 +178,7 @@
                                 role="tabpanel"
                                 aria-labelledby="{{ sidebarTab.id }}-tab"
                             >
-                                {% include sidebarTab.path %}
+                                {% include sidebarTab.path with {'form': builderForm} only %}
                             </div>
                         {% endfor %}
 
