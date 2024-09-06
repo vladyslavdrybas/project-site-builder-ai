@@ -228,8 +228,37 @@
                     col-lg-9
                     p-0
                     overflow-hidden
+                    d-flex
+                    flex-column
+                    align-items-start
                 "
             >
+                <div
+                    class="
+                        w-100
+                        bg-dark
+                        w-100
+                        px-1
+                        py-2
+                    "
+                >
+                    <button
+                        id="toolbar-top-btn-icon-sections-highlight-active"
+                        type="button"
+                        class="
+                                    btn
+                                    btn-dark
+                                    mx-1
+                                    sidebar--nav-top-btn
+                                    border-0
+                                    shadow-none
+                                "
+                        data-click-target=""
+                        title="Cancel"
+                    >
+                        Highlight active section
+                    </button>
+                </div>
                 <iframe
                     id="preview-frame"
                     class="
@@ -305,16 +334,27 @@
 
         $.ajax({
             type: form.prop('method'),
-            url: form.prop('action'),
+            url: form.prop('action') + '/ajax',
             data: formData,
         })
-            .done(function(data) {
+            .done(function() {
                 document.getElementById('preview-frame').contentWindow.location.reload();
             })
-            .always(function(data) {
+            .always(function() {
                 hiddenInput.prop('value', false);
                 me.toggleClass('disabled btn-loading');
                 me.removeAttr('disabled');
+            })
+            .fail(function(response) {
+                const data = $.parseJSON(response.responseText);
+                const dateTime = new Date(data.time);
+                const formattedDate = `${dateTime.getDate()}-${dateTime.getMonth() + 1}-${dateTime.getFullYear()} ${dateTime.getHours()}:${dateTime.getMinutes()}`;
+
+                toastShow({
+                    'dateTime': formattedDate,
+                    'message': data.message,
+                    'title': 'Fail',
+                });
             })
         ;
 

@@ -345,3 +345,8 @@ body {
 .price.price-column .price-valur {
     display: block;
 }
+
+.toast {
+    --bs-toast-header-bg: rgba(var(--bs-body-bg-rgb), 1);
+    --bs-toast-bg: rgba(var(--bs-body-bg-rgb), 1);
+}

@@ -10,12 +10,9 @@
         {% include 'landing-page/meta.html.twig' %}
     {% endif %}
 
-    <style>
-        @font-face {
-            font-family: 'Aller Regular'; /*a name to be used later*/
-            src: url('{{ absolute_url(asset('fonts/Aller_Rg.ttf', 'css')) }}'); /*URL to font*/
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ absolute_url(asset('use-bootstrap-tag.min.css', 'css')) }}">
     <link rel="stylesheet" href="{{ absolute_url(asset('highlight.default.min.css', 'css')) }}">
@@ -54,12 +51,49 @@
 {% endblock %}
 </div>
 
+<div aria-live="polite" aria-atomic="true" class="z-3">
+    <div id="toast-list" class="toast-container top-0 end-0 p-3 mt-5">
+
+    </div>
+</div>
+
+<div id="toast-template" class="d-none">
+    <div class="toast rounded-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">{{ '{{title}}' }}</strong>
+            <small class="text-body-secondary">{{ '{{dateTime}}' }}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body bg-opacity-100 opacity-100">
+            {{ '{{body}}' }}
+        </div>
+    </div>
+</div>
+
+{##}
+{##}
+{##}
+
 <script src="{{ absolute_url(asset('js/bootstrap.bundle.min.js', 'bootstrap')) }}"></script>
 <script src="{{ absolute_url(asset('jquery-3.7.1.min.js', 'js')) }}"></script>
 <script src="{{ absolute_url(asset('use-bootstrap-tag.min.js', 'js')) }}"></script>
 <script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
 
 <script>
+    function toastShow(data) {
+        const html = $("#toast-template").html()
+            .replace("{{ '{{title}}' }}", data.title)
+            .replace("{{ '{{dateTime}}' }}", data.dateTime)
+            .replace("{{ '{{body}}' }}", data.message)
+        ;
+
+        const toastObj = $(html);
+
+        $("#toast-list").append(toastObj);
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastObj);
+        toastBootstrap.show();
+    }
+
     function printTheJSONInPrettyFormat(json) {
         return JSON.stringify(JSON.parse(json), undefined, 4);
     }

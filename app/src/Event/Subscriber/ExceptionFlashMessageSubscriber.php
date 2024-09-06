@@ -31,7 +31,7 @@ class ExceptionFlashMessageSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::EXCEPTION => ['onKernelException', 100],
+            KernelEvents::EXCEPTION => ['onKernelException', 50],
         ];
     }
 

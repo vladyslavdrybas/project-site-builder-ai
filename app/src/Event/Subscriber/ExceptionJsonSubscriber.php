@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Event\Subscriber;
 
+use DateTime;
+use DateTimeInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
@@ -27,16 +29,18 @@ class ExceptionJsonSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            // the priority must be greater than the Security HTTP
-            // ExceptionListener, to make sure it's called before
-            // the default exception listener
             KernelEvents::EXCEPTION => ['onKernelException', 100],
         ];
     }
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (!str_starts_with($event->getRequest()->server->get('REQUEST_URI'), '/api')) {
+        $route = $event->getRequest()->attributes->get('_route');
+        dump($route);
+        if (
+            'cp_variant_builder_process_ajax' !== $route
+            && !str_starts_with($event->getRequest()->server->get('REQUEST_URI'), '/api')
+        ) {
             return;
         }
 
@@ -62,6 +66,7 @@ class ExceptionJsonSubscriber implements EventSubscriberInterface
             'environment' => $this->projectEnvironment,
             'service' => $this->parameterBag->get('service_name'),
             'version' => $this->parameterBag->get('api_version'),
+            'time' => (new DateTime())->format(DateTimeInterface::W3C),
             'message' => $message,
         ];
 
@@ -69,8 +74,10 @@ class ExceptionJsonSubscriber implements EventSubscriberInterface
             $data['trace'] = $exception->getTrace();
         }
 
-        $event->setResponse(new JsonResponse($data,$code));
+        dump($data);
+
+        $event->setResponse(new JsonResponse($data, $code));
         // or stop propagation (prevents the next exception listeners from being called)
-        //$event->stopPropagation();
+        $event->stopPropagation();
     }
 }

@@ -92,7 +92,8 @@
 {% block scriptsbottom %}
 <script type="application/javascript">
     function scrollTo(hash) {
-        location.hash = "#" + hash;
+        // TODO FIX scrolling: on click cannot return to the top. hidinge header
+        // location.hash = "#" + hash;
     }
 
     const btnSubmitCheckout = document.getElementById("btn-submit-checkout");
@@ -101,6 +102,7 @@
     const alerts = document.querySelectorAll(".alert");
     const pageLanding = document.getElementById("page-landing");
     const pageCheckout = document.getElementById("page-checkout");
+
 
     btnSubmitCheckout && btnSubmitCheckout.addEventListener('click', function (e) {
         console.log(this);
@@ -127,6 +129,8 @@
         e.preventDefault();
         e.target.remove();
     }));
+
+
 </script>
 {% endblock %}
 
