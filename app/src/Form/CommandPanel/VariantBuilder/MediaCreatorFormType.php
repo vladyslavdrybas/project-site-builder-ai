@@ -68,7 +68,7 @@ class MediaCreatorFormType extends AbstractType
                 [
                     'label' => 'Get random stock image',
                     'attr' => [
-                        'class' => 'btn-sm btn-light formSubmit btn-media-submit'
+                        'class' => 'btn-sm btn-dark formSubmit btn-media-submit'
                     ],
                 ]
             )
@@ -77,7 +77,7 @@ class MediaCreatorFormType extends AbstractType
                 [
                     'label' => 'Generate Image',
                     'attr' => [
-                        'class' => 'btn-sm btn-light formSubmit btn-media-submit'
+                        'class' => 'btn-sm btn-dark formSubmit btn-media-submit'
                     ]
                 ]
             )
@@ -86,7 +86,7 @@ class MediaCreatorFormType extends AbstractType
                 [
                     'label' => 'Remove',
                     'attr' => [
-                        'class' => 'btn-sm btn-light formSubmit btn-media-submit'
+                        'class' => 'btn-sm btn-dark formSubmit btn-media-submit'
                     ]
                 ]
             )

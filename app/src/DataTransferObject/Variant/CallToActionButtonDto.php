@@ -7,6 +7,7 @@ class CallToActionButtonDto
 {
     public function __construct(
        public ?string $text = null,
-       public ?string $link = null
+       public ?string $link = null,
+       public bool $isVisible = true
     ) {}
 }

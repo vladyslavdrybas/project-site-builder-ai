@@ -11,6 +11,7 @@ class SectionHeaderFormDto
         public bool $isActive = false,
         public ?CallToActionButtonDto $callToActionButton = null,
         public ?BrandFormDto $brand = null,
-        public array $navigation = []
+        public array $navigation = [],
+        public bool $isVisibleBrand = true
     ) {}
 }

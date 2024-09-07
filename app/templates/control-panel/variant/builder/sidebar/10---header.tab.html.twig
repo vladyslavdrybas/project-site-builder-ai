@@ -1,1 +1,18 @@
-{{ form_row(form.header, {'label' : false}) }}
+{% set form = form.header %}
+
+{#{{ form_row(form, {'label' : false}) }}#}
+
+
+{% include 'control-panel/variant/builder/form-component/show-section-switcher.html.twig' with {'form': form} only %}
+
+{% include 'control-panel/variant/builder/form-component/call-to-action-button.html.twig' with {'form': form.callToActionButton} only %}
+
+<div class="text-uppercase text-start w-100 d-flex flex-row justify-content-start">
+    {{ form_row(form.brand.isVisible, {'label': false}) }}
+
+    <span class="text-uppercase">-- Brand --</span>
+</div>
+<span >Name</span>
+{{ form_row(form.brand.name, {'label': false}) }}
+
+{% include 'control-panel/variant/builder/form-component/media-uploader.html.twig' with {'form': form.brand.logo} only %}

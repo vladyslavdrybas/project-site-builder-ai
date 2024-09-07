@@ -28,19 +28,21 @@
             >
                 <div class="d-flex flex-column align-items-start h-100">
                     <div
-                        class="d-flex flex-row w-100 px-1 py-2 bg-dark justify-content-between"
+                        class="d-flex flex-row w-100 px-1 py-0 bg-dark justify-content-between"
                     >
                         <div>
                             <button
                                 id="sidebar--nav-top-btn-icon-cancel"
                                 type="button"
                                 class="
+                                    sidebar--nav-top-btn
                                     btn
                                     btn-dark
-                                    mx-1
-                                    sidebar--nav-top-btn
+                                    m-0
                                     border-0
                                     shadow-none
+                                    rounded-0
+                                    p-3
                                 "
                                 data-click-target="#{{ builderForm.cancelBtn.vars.id }}"
                                 title="Cancel"
@@ -51,12 +53,14 @@
                                 id="sidebar--nav-top-btn-icon-back"
                                 type="button"
                                 class="
+                                    sidebar--nav-top-btn
                                     btn
                                     btn-dark
-                                    mx-1
-                                    sidebar--nav-top-btn
+                                    m-0
                                     border-0
                                     shadow-none
+                                    rounded-0
+                                    p-3
                                 "
                                 data-click-target="#{{ builderForm.backBtn.vars.id }}"
                                 title="Back"
@@ -71,12 +75,14 @@
                                 id="sidebar--nav-top-btn-icon-preview"
                                 type="button"
                                 class="
+                                    sidebar--nav-top-btn
                                     btn
                                     btn-dark
-                                    mx-1
-                                    sidebar--nav-top-btn
+                                    m-0
                                     border-0
                                     shadow-none
+                                    rounded-0
+                                    p-3
                                 "
                                 data-click-target="#{{ builderForm.previewBtn.vars.id }}"
                                 title="Preview"
@@ -87,12 +93,14 @@
                                 id="sidebar--nav-top-btn-icon-save"
                                 type="button"
                                 class="
+                                    sidebar--nav-top-btn
                                     btn
                                     btn-dark
-                                    mx-1
-                                    sidebar--nav-top-btn
+                                    m-0
                                     border-0
                                     shadow-none
+                                    rounded-0
+                                    p-3
                                 "
                                 data-click-target="#{{ builderForm.saveBtn.vars.id }}"
                                 title="Save"
@@ -116,7 +124,8 @@
                             {% for sidebarTab in sidebar %}
                                 <button
                                     class="
-                                    mb-1
+                                    sidebar--nav-left-btn
+                                    pb-2
                                     w-100
                                     btn
                                     btn-dark
@@ -142,7 +151,7 @@
                             {% endfor %}
 
                             <button
-                                class="btn border-0 text-white d-none"
+                                class="sidebar--nav-left-btn btn border-0 text-white pb-2 d-none"
                                 id="sidebar--save-tab"
                                 data-bs-toggle="pill"
                                 data-bs-target="#sidebar--save"
@@ -178,7 +187,7 @@
                                 role="tabpanel"
                                 aria-labelledby="{{ sidebarTab.id }}-tab"
                             >
-                                {% include sidebarTab.path with {'form': builderForm} only %}
+                                {% include sidebarTab.path with {'form': builderForm } only %}
                             </div>
                         {% endfor %}
 
@@ -239,20 +248,24 @@
                         bg-dark
                         w-100
                         px-1
-                        py-2
+                        py-0
                     "
                 >
                     <button
                         id="toolbar-top-btn-icon-sections-highlight-active"
                         type="button"
+
                         class="
-                                    btn
-                                    btn-dark
-                                    mx-1
-                                    sidebar--nav-top-btn
-                                    border-0
-                                    shadow-none
-                                "
+                            sidebar--nav-top-btn
+                            btn
+                            btn-dark
+                            m-0
+                            border-0
+                            shadow-none
+                            rounded-0
+                            p-3
+                        "
+
                         data-click-target=""
                         title="Cancel"
                     >
@@ -311,11 +324,16 @@
 
     gutter.addEventListener('mousedown', resizer);
 
-    $('.formSubmit').click(function(event) {
+    $('.formSubmit').on('click', function(event, data) {
         event.preventDefault();
         const me = $(this);
-        me.toggleClass('disabled btn-loading');
-        me.attr('disabled', false);
+        let loader = me;
+        if (data !== undefined && data.loader !== undefined) {
+            loader = data.loader;
+        }
+
+        loader.toggleClass('disabled btn-loading');
+        loader.attr('disabled', false);
 
         const form = $('#{{ builderForm.vars.id }}');
 
@@ -342,8 +360,8 @@
             })
             .always(function() {
                 hiddenInput.prop('value', false);
-                me.toggleClass('disabled btn-loading');
-                me.removeAttr('disabled');
+                loader.toggleClass('disabled btn-loading');
+                loader.removeAttr('disabled');
             })
             .fail(function(response) {
                 const data = $.parseJSON(response.responseText);
@@ -361,10 +379,19 @@
         return false; // avoid to execute the actual submit of the form.
     })
 
-    $('.sidebar--nav-top-btn').click(function(event) {
+    $('.sidebar--nav-top-btn, .modal--nav-media-btn').on('click', function(event, data) {
         event.preventDefault();
 
-        $($(this).attr('data-click-target')).trigger('click');
+        const me = $(this);
+        let loader = me;
+        if (data !== undefined && data.loader !== undefined) {
+            loader = data.loader;
+        }
+
+        const target = me.attr('data-click-target');
+        if (target !== undefined) {
+            $(target).trigger('click', {'loader' : loader});
+        }
 
         return false;
     })

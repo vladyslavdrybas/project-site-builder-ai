@@ -7,6 +7,7 @@ class BrandFormDto
 {
     public function __construct(
        public ?string $name = null,
-       public ?MediaCreatorFormDto $logo = null
+       public ?MediaCreatorFormDto $logo = null,
+       public bool $isVisible = true
     ) {}
 }

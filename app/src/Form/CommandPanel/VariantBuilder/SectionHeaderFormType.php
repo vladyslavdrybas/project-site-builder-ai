@@ -33,6 +33,13 @@ class SectionHeaderFormType extends AbstractType
                     'data' => $data?->callToActionButton
                 ]
             )
+            ->add('isVisibleBrand',
+                SwitchType::class,
+                [
+                    'label' => 'Show call to action',
+                    'data' => $data?->isVisibleBrand
+                ]
+            )
             ->add('brand',
                 BrandFormType::class,
                 [

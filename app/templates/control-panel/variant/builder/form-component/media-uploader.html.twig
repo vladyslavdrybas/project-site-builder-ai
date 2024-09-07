@@ -1,0 +1,257 @@
+<div>
+    <div class="d-none">
+        {{ form_row(form.toRemove) }}
+        {{ form_row(form.toGenerate) }}
+        {{ form_row(form.toGetFromStock) }}
+        {{ form_row(form.systemId) }}
+        {{ form_row(form.removeBtn) }}
+        {{ form_row(form.generateBtn) }}
+        {{ form_row(form.getFromStockBtn) }}
+    </div>
+
+    <!-- Button trigger modal -->
+    <button
+        id="{{ form.vars.id }}_media"
+        type="button"
+        class="
+            sidebar--btn-media
+            btn
+            btn-dark
+            m-0
+            border-0
+            shadow-none
+            rounded-0
+            p-3
+        "
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+    >
+        Edit Brand Logo
+    </button>
+
+    <!-- Modal -->
+    <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="false"
+        data-bs-keyboard="false"
+        tabindex="1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+    >
+
+        <!-- Vertically centered scrollable modal -->
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+
+            <div class="modal-content rounded-0">
+                <div class="modal-header bg-dark text-white rounded-0 border-0">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Media configurator</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-0 bg-light">
+                    <ul class="nav nav-pills mt-0 mb-1 justify-content-between px-1 bg-dark" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="
+                                    modal--nav-media-btn
+                                    btn-tab
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                    active
+                                "
+                                id="{{ form.vars.id }}_modal_catalog-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#{{ form.vars.id }}_modal_catalog"
+                                type="button"
+                                role="tab"
+                                aria-controls="{{ form.vars.id }}_modal_catalog"
+                                aria-selected="true"
+                            >
+                                Catalog
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="
+                                    modal--nav-media-btn
+                                    btn-tab
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                "
+                                id="{{ form.vars.id }}_modal_upload-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#{{ form.vars.id }}_modal_upload"
+                                type="button"
+                                role="tab"
+                                aria-controls="{{ form.vars.id }}_modal_upload"
+                                aria-selected="false"
+                            >
+                                Upload
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="
+                                    modal--nav-media-btn
+                                    btn-tab
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                "
+                                id="{{ form.vars.id }}_modal_random-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#{{ form.vars.id }}_modal_random"
+                                type="button"
+                                role="tab"
+                                aria-controls="{{ form.vars.id }}_modal_random"
+                                aria-selected="false"
+                            >
+                                Random
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="
+                                    modal--nav-media-btn
+                                    btn-tab
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                "
+                                id="{{ form.vars.id }}_modal_ai_generate-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#{{ form.vars.id }}_modal_ai_generate"
+                                type="button"
+                                role="tab"
+                                aria-controls="{{ form.vars.id }}_modal_ai_generate"
+                                aria-selected="false"
+                            >
+                                AI Generated
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content p-1 bg-light" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="{{ form.vars.id }}_modal_catalog" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_catalog-tab" tabindex="0">
+                            <ul class="d-flex flex-row flex-wrap justify-content-between list-unstyled">
+                                <li class="img img-background square-10 mt-2" style="background-image: url('https://prototyper.localhost/m/a307fdc2fce98c0bc47fdd0d0d7778218d2c2b78555514de20c416e25d1ec6d2');">
+                                </li>
+                                <li class="img img-background square-10 m-2" style="background-image: url('https://prototyper.localhost/m/1b7d8188cf9016cb175053711c14b75db4fc6fbbd4a0518d068787cdb1b285b0');">
+                                </li>
+                                <li class="img img-background square-10 mt-2" style="background-image: url('https://prototyper.localhost/m/8c46fef77f802e1b5a0370092276a56d2feeed3d15eb9090ea7c5dd73576139c');">
+                                </li>
+                                <li class="img img-background square-10 mt-2" style="background-image: url('https://prototyper.localhost/m/1f03153cfa5665e9a9af64bd943804e75ab11c58f6eca2b5e5a01c5f1599ee1c');">
+                                </li>
+                                <li class="img img-background square-10 mt-2" style="background-image: url('https://prototyper.localhost/m/84d9f9a01ff6c3144cbf9ba85bd003d48e7f9bf5fe67de5c91ce321de792fc86');">
+                                </li>
+                                <li class="square-10 mt-2"></li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane fade" id="{{ form.vars.id }}_modal_upload" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_upload-tab" tabindex="0">
+                            {{ form_row(form.file) }}
+                            <button
+                                id="{{ form.vars.id }}_media_upload_previewBtn"
+                                type="button"
+                                class="
+                                    formSubmit
+                                    modal--nav-media-btn
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                    ms-1
+                                "
+                            >
+                                Upload
+                            </button>
+                        </div>
+                        <div class="tab-pane fade" id="{{ form.vars.id }}_modal_random" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_random-tab" tabindex="0">
+                            {{ form_row(form.stockTags) }}
+                            <button
+                                id="{{ form.getFromStockBtn.vars.id }}_label"
+                                type="button"
+                                class="
+                                    modal--nav-media-btn
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                "
+                                data-click-target="#{{ form.getFromStockBtn.vars.id }}"
+                            >
+                                Get Random Image
+                            </button>
+                        </div>
+                        <div class="tab-pane fade" id="{{ form.vars.id }}_modal_ai_generate" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_ai_generate-tab" tabindex="0">
+                            <label
+                                for="{{ form.generateBtn.vars.id }}"
+                                type="button"
+                                class="
+                                    modal--nav-media-btn
+                                    btn
+                                    btn-dark
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                "
+                                data-click-target="#{{ form.generateBtn.vars.id }}"
+                            >
+                                Generate with AI
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer bg-dark text-white py-0 px-1 rounded-0 d-flex flex-row justify-content-between">
+                    <label
+                        for="{{ form.removeBtn.vars.id }}"
+                        type="button"
+                        class="
+                            modal--nav-media-btn
+                            btn
+                            btn-dark
+                            m-0
+                            border-0
+                            shadow-none
+                            rounded-0
+                            p-3
+                        "
+                        data-click-target="#{{ form.removeBtn.vars.id }}"
+                    >
+                        Remove
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Form\CommandPanel\VariantBuilder;
 
 use App\DataTransferObject\Variant\CallToActionButtonDto;
+use App\Form\SwitchType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +17,13 @@ class CallToActionButtonFormType extends AbstractType
         $data = $builder->getData();
 
         $builder
+            ->add('isVisible',
+                SwitchType::class,
+                [
+                    'label' => 'Show on page',
+                    'data' => $data?->isVisible
+                ]
+            )
             ->add('text',
             TextType::class,
                 [

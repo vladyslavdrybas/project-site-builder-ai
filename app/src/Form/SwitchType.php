@@ -13,7 +13,7 @@ class SwitchType extends CheckboxType
         parent::configureOptions($resolver);
 
         $resolver->setDefault('label_attr', [ 'class' => 'me-3']);
-        $resolver->setDefault('row_attr', [ 'class' => 'form-switch ps-4 switch-form-type']);
-        $resolver->setDefault('attr', [ 'class' => 'me-1']);
+        $resolver->setDefault('row_attr', [ 'class' => 'form-switch ps-3 switch-form-type']);
+        $resolver->setDefault('attr', [ 'class' => 'me-1 switch-dark']);
     }
 }
