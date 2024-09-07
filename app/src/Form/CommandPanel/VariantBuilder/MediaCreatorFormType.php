@@ -35,6 +35,8 @@ class MediaCreatorFormType extends AbstractType
                     $formData->toGenerate = true;
                 } else if ($form['getFromStockBtn']->isClicked()) {
                     $formData->toGetFromStock = true;
+                } else if ($form['getFromCatalogBtn']->isClicked()) {
+                    $formData->toSetFromCatalog = true;
                 }
             }
         );
@@ -43,6 +45,7 @@ class MediaCreatorFormType extends AbstractType
             ->add('toRemove', HiddenBooleanType::class, ['data' => false])
             ->add('toGenerate', HiddenBooleanType::class, ['data' => false])
             ->add('toGetFromStock', HiddenBooleanType::class, ['data' => false])
+            ->add('toSetFromCatalog', HiddenBooleanType::class, ['data' => false])
             ->add('systemId',
                 HiddenType::class,
                 [
@@ -82,6 +85,15 @@ class MediaCreatorFormType extends AbstractType
                 ]
             )
             ->add('removeBtn',
+                SubmitType::class,
+                [
+                    'label' => 'Remove',
+                    'attr' => [
+                        'class' => 'btn-sm btn-dark formSubmit btn-media-submit'
+                    ]
+                ]
+            )
+            ->add('getFromCatalogBtn',
                 SubmitType::class,
                 [
                     'label' => 'Remove',

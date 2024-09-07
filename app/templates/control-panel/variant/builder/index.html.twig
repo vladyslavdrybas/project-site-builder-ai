@@ -397,7 +397,20 @@
             targetContent.html('');
 
             $.each(medias, function(key, mediaId) {
-                targetContent.append($(template).css('background-image', 'url(' + library[mediaId].url + ')'));
+                const el = $(template).css('background-image', 'url(' + library[mediaId].url + ')')
+                    .on('click', function(event) {
+                        const me = $(this);
+                        const parent = me.parent();
+                        const targetClick = $(parent.attr('data-click-target'));
+                        const mediaIdField = $(parent.attr('data-media-id-field'));
+                        const targetClickMask = $(parent.attr('data-click-target-mask'));
+
+                        mediaIdField.attr('value', mediaId);
+                        targetClickMask.attr('value', true);
+                        console.log(mediaIdField.attr('value'));
+                        targetClick.trigger('click');
+                    });
+                targetContent.append(el);
             });
         }
     }
@@ -518,7 +531,6 @@
 
         const me = $(this);
         renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig);
-
 
         return false;
     })

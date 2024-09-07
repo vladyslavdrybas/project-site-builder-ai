@@ -15,6 +15,7 @@ class MediaCreatorFormDto
         public ?MediaDto $media = null,
         public bool $toRemove = false,
         public bool $toGenerate = false,
-        public bool $toGetFromStock = false
+        public bool $toGetFromStock = false,
+        public bool $toSetFromCatalog = false
     ) {}
 }

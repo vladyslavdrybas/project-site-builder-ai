@@ -173,6 +173,7 @@ class VariantBuilderController extends AbstractControlPanelController
             /** @var VariantBuilderFormDto $formData */
             $formData = $builderForm->getData();
             $variantMeta = $this->builderFormToVariantMetaTransformer->transform($formData);
+            dump($variantMeta);
 
             switch (true) {
                 case $builderForm->get('backBtn')->isClicked():

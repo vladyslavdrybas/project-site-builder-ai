@@ -3,10 +3,12 @@
         {{ form_row(form.toRemove) }}
         {{ form_row(form.toGenerate) }}
         {{ form_row(form.toGetFromStock) }}
+        {{ form_row(form.toSetFromCatalog) }}
         {{ form_row(form.systemId) }}
         {{ form_row(form.removeBtn) }}
         {{ form_row(form.generateBtn) }}
         {{ form_row(form.getFromStockBtn) }}
+        {{ form_row(form.getFromCatalogBtn) }}
     </div>
 
     <!-- Button trigger modal -->
@@ -159,6 +161,9 @@
                         <div class="tab-pane fade show active" id="{{ form.vars.id }}_modal_catalog" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_catalog-tab" tabindex="0">
                             <div class="tab-pane-content d-flex flex-column justify-content-between align-items-baseline">
                                 <div
+                                    data-click-target="#{{ form.getFromCatalogBtn.vars.id }}"
+                                    data-media-id-field="#{{ form.systemId.vars.id }}"
+                                    data-click-target-mask="#{{ form.toSetFromCatalog.vars.id }}"
                                     id="{{ form.vars.id }}_media_catalog_content"
                                     class="media-catalog d-flex flex-row flex-wrap justify-content-between mb-5 w-100"
                                 >

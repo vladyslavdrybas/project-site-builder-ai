@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\DataTransformer;
 
 use App\Builder\MediaBuilder;
-use App\DataTransferObject\Variant\AI\Prompt\VariantPromptMetaDto;
 use App\DataTransferObject\Variant\Builder\DescriptionWithThumbFormDto;
 use App\DataTransferObject\Variant\Builder\MediaCreatorFormDto;
 use App\DataTransferObject\Variant\Builder\SubscriptionPlanFormDto;
@@ -233,7 +232,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
             $stockImage = $this->imageStocksFacade->findOneRandom($mediaCreatorForm->stockTags);
 
             if (null !== $stockImage) {
-                $result = $this->mediaBuilder->buildFromStockImage($stockImage);
+                $result = $this->mediaBuilder->mediaDtoFromStockImage($stockImage);
                 $result->ownerId = $owner->getRawId();
                 $result->tags = array_unique(array_merge($mediaCreatorForm->stockTags, $tags));
                 $result->id = $this->mediaBuilder->generateMediaId($result);
@@ -249,11 +248,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $result->ownerId = $owner->getRawId();
                 $result->id = $this->mediaBuilder->generateMediaId($result);
             }
-            dump([
-                __METHOD__,
-                $mediaCreatorForm,
-                $result,
-            ]);
+        } else if ($mediaCreatorForm->toSetFromCatalog) {
+            $result = $this->mediaBuilder->mediaDtoFromMedia($mediaCreatorForm->systemId);
         }
 
         if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {

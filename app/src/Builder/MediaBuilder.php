@@ -129,7 +129,7 @@ class MediaBuilder implements IEntityBuilder
         return $dto;
     }
 
-    public function buildFromStockImage(StockImageDto $stockImage): MediaDto
+    public function mediaDtoFromStockImage(StockImageDto $stockImage): MediaDto
     {
         return new MediaDto(
             null,
@@ -141,6 +141,25 @@ class MediaBuilder implements IEntityBuilder
             null,
             $stockImage->content,
         );
+    }
+
+    public function mediaDtoFromMedia(?string $id = null): ?MediaDto
+    {
+        if (null === $id) return null;
+        $mediaRepository = $this->em->getRepository(Media::class);
+        $media = $mediaRepository->find($id);
+
+        if (null === $media) return null;
+
+        $dto = new MediaDto();
+        $dto->id = $media->getId();
+        $dto->mimeType = $media->getMimeType();
+        $dto->extension = $media->getExtension();
+        $dto->size = $media->getSize();
+        $dto->version = $media->getVersion();
+        $dto->tags = $media->getTags()->map(fn(Tag $tag) => $tag->getRawId())->toArray();
+
+        return $dto;
     }
 
     public function generateMediaId(MediaDto $media): string
