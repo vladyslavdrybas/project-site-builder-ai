@@ -289,13 +289,126 @@
 
         </div>
     </div>
+
+    <div id="modal-media-img-template" class="d-none">
+        <div
+            class="img img-background square-10 mt-2"
+        ></div>
+    </div>
 {% endblock %}
 
 {% block scriptsbottom %}
 <script type="application/javascript">
+    const mediaLibrary = {};
+    const mediaLibraryOrder = [];
+    // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
+    const mediaLibraryConfig = {
+        'lock': false,
+        'loadOffset': 0,
+        'loadLimit': 9,
+        'viewLimit': 6,
+        'viewPage': 0,
+        'baseUri': '{{ absolute_url(path('api_media_list_my')) }}'
+    };
+
     const leftPane = document.getElementById("cp-panel-left");
     const rightPane = document.getElementById("cp-panel-right");
     const gutter = document.getElementById("cp-gutter");
+
+    async function loadMedias(me) {
+        let loader = me;
+
+        const targetContent = me.attr('data-content-target');
+
+        if (targetContent !== undefined && !mediaLibraryConfig.lock) {
+            mediaLibraryConfig.lock = true;
+            const uri = mediaLibraryConfig.baseUri  + '/' + mediaLibraryConfig.loadLimit + '/' + mediaLibraryConfig.loadOffset;
+
+            loader.toggleClass('disabled btn-loading');
+            loader.attr('disabled', false);
+
+            await $.getJSON({
+                url: uri,
+            })
+                .done(function(response) {
+                    if (response.type !== undefined) {
+                        if (response.type === 'media') {
+                            setMedias(response.data);
+                        } else {
+                            console.log('trying to find undefined content type.');
+                        }
+                    }
+
+                    mediaLibraryConfig.loadOffset += mediaLibraryConfig.loadLimit;
+
+                })
+                .always(function(response) {
+                    loader.toggleClass('disabled btn-loading');
+                    loader.removeAttr('disabled');
+                    let len = response.data.length;
+                    if (len === undefined) {
+                        len = Object.keys(response.data).length;
+                    }
+                    if (len < mediaLibraryConfig.loadLimit) {
+                        mediaLibraryConfig.lock = true;
+                        if (me.hasClass('btn-load-more')) {
+                            me.toggle('d-none');
+                        }
+                    } else {
+                        mediaLibraryConfig.lock = false;
+                    }
+                })
+                .fail(function(response) {toastServerError(response)})
+        }
+    }
+
+    function renderMediaList(me, library, libraryOrder, libraryConfig, direction = 1) {
+        direction = parseInt(me.attr('data-direction') ?? direction);
+        direction = direction > 0 ? 1 : -1;
+        const mediasLength = libraryOrder.length;
+        const maxPages = Math.ceil(mediasLength / libraryConfig.viewLimit);
+
+        libraryConfig.viewPage += direction;
+
+        if (libraryConfig.viewPage >= maxPages) {
+            libraryConfig.viewPage = maxPages - 1;
+        } else if (libraryConfig.viewPage < 1) {
+            libraryConfig.viewPage = 0;
+        }
+
+        let offset = libraryConfig.viewLimit * libraryConfig.viewPage;
+
+        let end = offset + libraryConfig.viewLimit;
+        if (end > mediasLength) {
+            end = mediasLength;
+        }
+
+        let medias = libraryOrder.slice(offset, end);
+
+        const pagesBehind = libraryConfig.viewPage;
+        const pagesAhead = maxPages - libraryConfig.viewPage - 1;
+        $(me.attr('data-btn-prev') + ' .media-arrow-page-numbers').text(pagesBehind > 0 ? pagesBehind : '');
+        $(me.attr('data-btn-next') + ' .media-arrow-page-numbers').text(pagesAhead > 0 ? pagesAhead : '');
+
+        if (medias.length > 0) {
+            const targetContent = $(me.attr('data-content-target'));
+
+            const template = $("#modal-media-img-template").html();
+            targetContent.html('');
+
+            $.each(medias, function(key, mediaId) {
+                targetContent.append($(template).css('background-image', 'url(' + library[mediaId].url + ')'));
+            });
+        }
+    }
+
+    function setMedias(data)
+    {
+        $.each(data, function (key, obj) {
+            mediaLibrary[key] = obj;
+            mediaLibraryOrder[obj.order] = key;
+        });
+    }
 
     function resizer(e) {
         window.addEventListener('mousemove', mousemove);
@@ -363,35 +476,49 @@
                 loader.toggleClass('disabled btn-loading');
                 loader.removeAttr('disabled');
             })
-            .fail(function(response) {
-                const data = $.parseJSON(response.responseText);
-                const dateTime = new Date(data.time);
-                const formattedDate = `${dateTime.getDate()}-${dateTime.getMonth() + 1}-${dateTime.getFullYear()} ${dateTime.getHours()}:${dateTime.getMinutes()}`;
-
-                toastShow({
-                    'dateTime': formattedDate,
-                    'message': data.message,
-                    'title': 'Fail',
-                });
-            })
+            .fail(function(response) {toastServerError(response)})
         ;
 
         return false; // avoid to execute the actual submit of the form.
     })
 
-    $('.sidebar--nav-top-btn, .modal--nav-media-btn').on('click', function(event, data) {
+    // form submit
+    $('.sidebar--nav-top-btn, .modal--nav-media-btn, .modal--tab-media-btn').on('click', function(event, data) {
         event.preventDefault();
 
         const me = $(this);
         let loader = me;
-        if (data !== undefined && data.loader !== undefined) {
-            loader = data.loader;
+
+        const targetClick = me.attr('data-click-target');
+        if (targetClick !== undefined) {
+            if (data !== undefined && data.loader !== undefined) {
+                loader = data.loader;
+            }
+
+            $(targetClick).trigger('click', {'loader' : loader});
         }
 
-        const target = me.attr('data-click-target');
-        if (target !== undefined) {
-            $(target).trigger('click', {'loader' : loader});
-        }
+        return false;
+    })
+
+    // find content
+    $('.media-loader').on('click', function(event, data) {
+        event.preventDefault();
+
+        const me = $(this);
+        loadMedias(me).then((r) => renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig));
+
+
+        return false;
+    })
+
+    // find content
+    $('.modal--tab-media-btn-prev, .modal--tab-media-btn-next').on('click', function(event, data) {
+        event.preventDefault();
+
+        const me = $(this);
+        renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig);
+
 
         return false;
     })

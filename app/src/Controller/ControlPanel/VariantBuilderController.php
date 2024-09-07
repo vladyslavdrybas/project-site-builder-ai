@@ -125,7 +125,7 @@ class VariantBuilderController extends AbstractControlPanelController
         name: '_builder_process_ajax',
         methods: ['POST']
     )]
-    public function processBuilderFormByAjax(
+    public function processBuilderFormAsJson(
         Variant $variant,
         Request $request
     ): JsonResponse {

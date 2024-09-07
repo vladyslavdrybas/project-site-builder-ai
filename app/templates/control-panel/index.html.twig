@@ -1,7 +1,7 @@
 {% extends 'base.html.twig'%}
 
 {% block headstylesheets %}
-    <link rel="stylesheet" href="{{ absolute_url(asset('style-cp.css', 'css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url(asset('style-cp.css?t=' ~ 'now'|date('Y-m-d-H-i') , 'css')) }}">
 {% endblock %}
 
 {% block header %}

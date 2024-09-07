@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ absolute_url(asset('highlight.default.min.css', 'css')) }}">
     <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap-icons.min.css', 'bootstrap')) }}">
     <link rel="stylesheet" href="{{ absolute_url(asset('css/bootstrap.min.css', 'bootstrap')) }}">
-    <link rel="stylesheet" href="{{ absolute_url(asset('style.css', 'css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url(asset('style.css?t=' ~ 'now'|date('Y-m-d-H-i'), 'css')) }}">
 
     {% block headstylesheets %}
     {% endblock %}
@@ -92,6 +92,18 @@
         $("#toast-list").append(toastObj);
         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastObj);
         toastBootstrap.show();
+    }
+
+    function toastServerError(response) {
+        const data = $.parseJSON(response.responseText);
+        const dateTime = new Date(data.time);
+        const formattedDate = `${dateTime.getDate()}-${dateTime.getMonth() + 1}-${dateTime.getFullYear()} ${dateTime.getHours()}:${dateTime.getMinutes()}`;
+
+        toastShow({
+            'dateTime': formattedDate,
+            'message': data.message,
+            'title': 'Fail',
+        });
     }
 
     function printTheJSONInPrettyFormat(json) {

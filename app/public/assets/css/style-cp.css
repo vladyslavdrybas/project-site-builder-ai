@@ -110,8 +110,14 @@ div::-webkit-scrollbar-thumb {
     width: 8.9rem;
 }
 
+.modal-content .tab-content,
+.modal-content .tab-pane,
+.modal-content .tab-pane .tab-pane-content {
+    min-height: 26rem;
+}
 
-.modal-content .tab-content {
-    min-height: 21rem;
+.modal-content .media-arrow-page-numbers {
+    display: inline-block;
+    min-width: 1rem;
 }
 

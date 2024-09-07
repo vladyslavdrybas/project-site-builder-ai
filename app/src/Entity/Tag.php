@@ -40,4 +40,9 @@ class Tag implements EntityInterface
     {
         return $this->id;
     }
+
+    public function __toString(): string
+    {
+        return $this->getRawId();
+    }
 }

@@ -135,7 +135,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
                 $this->buildMedia(
                     $value->variant->getProject()->getOwner(),
                     $item->media,
-                    ['testimonial', 'avatar', 'square'],
+                    ['testimonial', 'avatar', 'square', 'face', 'realistic'],
                     $value->variant
                 )
             ) : null,

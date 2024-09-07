@@ -57,7 +57,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sel
      * @param int $limit
      * @return EntityInterface[]
      */
-    public function findAll(array $orderBy = [], int $offset = 0, int $limit = 0): array
+    public function findAll(array $orderBy = [], int $limit = 0, int $offset = 0): array
     {
         $query = $this->createQueryBuilder('t')
             ->setFirstResult($offset)
@@ -71,6 +71,6 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sel
             $query->setMaxResults($limit);
         }
 
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getResult() ?? [];
     }
 }
