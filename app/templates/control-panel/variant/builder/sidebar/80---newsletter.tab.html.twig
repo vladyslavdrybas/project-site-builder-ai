@@ -1,1 +1,12 @@
-{{ form_row(form.newsletter, {'label' : false}) }}
+{% set form = form.newsletter %}
+
+{% include 'control-panel/variant/builder/form-component/show-section-switcher.html.twig' with {'form': form} only %}
+
+
+{{ form_row(form.headline) }}
+
+{{ form_row(form.subheadline) }}
+
+{{ form_row(form.inputFieldPlaceholder) }}
+
+{% include 'control-panel/variant/builder/form-component/call-to-action-button.html.twig' with {'form': form.callToActionButton} only %}
