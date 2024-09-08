@@ -223,12 +223,25 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
 
         $result = null;
         if ($mediaCreatorForm->toGetFromStock) {
-            $stockImage = $this->imageStocksFacade->findOneRandom($mediaCreatorForm->stockTags);
+            dump([
+                __METHOD__,
+                __LINE__,
+                !empty($mediaCreatorForm->systemId),
+                !empty($mediaCreatorForm->content),
+            ]);
+            if (!empty($mediaCreatorForm->content)) {
+                dump([
+                    __METHOD__,
+                    __LINE__,
 
-            if (null !== $stockImage) {
-                $result = $this->mediaBuilder->mediaDtoFromStockImage($stockImage);
+                ]);
+                $result = $this->mediaBuilder->mediaDtoFromContent($mediaCreatorForm->content, $tags);
+            } else if (!empty($mediaCreatorForm->systemId)) {
+                $result = $this->mediaBuilder->mediaDtoFromMedia($mediaCreatorForm->systemId);
+            }
+
+            if (null !== $result) {
                 $result->ownerId = $owner->getRawId();
-                $result->tags = array_unique(array_merge($mediaCreatorForm->stockTags, $tags));
                 $result->id = $this->mediaBuilder->generateMediaId($result);
             }
         } else if ($mediaCreatorForm->toGenerate) {

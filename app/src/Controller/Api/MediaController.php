@@ -3,12 +3,16 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\Builder\MediaBuilder;
 use App\Constants\RouteRequirements;
 use App\Controller\AbstractController;
+use App\DataTransferObject\Variant\MediaDto;
 use App\Entity\Media;
 use App\Entity\Tag;
 use App\Exceptions\AccessDenied;
 use App\Repository\MediaRepository;
+use App\Service\ImageStocks\DataTransferObject\StockImageDto;
+use App\Service\ImageStocks\ImageStocksFacade;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -57,6 +61,9 @@ class MediaController extends AbstractController
                 'url' => $this->generateUrl('app_media_show', ['media' => $media->getRawId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'tags' => $media->getTags()->map(fn(Tag $tag) => $tag->__toString()),
                 'order' => $key + $offset,
+                'content' => null,
+                'mimeType' => $media->getMimeType(),
+                'extension' => $media->getExtension(),
             ];
         }
 
@@ -64,6 +71,59 @@ class MediaController extends AbstractController
 
         return $this->json([
             'type' => 'media',
+            'data' => $data,
+        ]);
+    }
+
+    // TODO save stock media on local storage. save data transfer
+    #[Route(
+        "/l/share-stock",
+        name: "_list_share_stock",
+        methods: ["GET"]
+    )]
+    public function shareStockAsJson(
+        MediaRepository $mediaRepository,
+        ImageStocksFacade $imageStocksFacade,
+        MediaBuilder $mediaBuilder
+    ): JsonResponse {
+        $tags = [];
+        $stockImages = [$imageStocksFacade->findOneRandom($tags)];
+        $owner = $this->getUser();
+
+        /** @var array<MediaDto> $mediasDto */
+        $mediasDto = array_map(function(StockImageDto $dto) use ($mediaBuilder, $owner) {
+            $result = $mediaBuilder->mediaDtoFromStockImage($dto);
+            $result->ownerId = $owner->getRawId();
+            $result->tags = $dto->tags;
+            $result->id = $mediaBuilder->generateMediaId($result);
+
+            return $result;
+        }, $stockImages);
+
+        dump($mediasDto);
+
+        $data = [];
+        foreach ($mediasDto as $key => $dto) {
+            $order = strval(microtime(true) / 100000);
+            dump($order);
+            $order = explode('.', $order);
+            dump($order);
+            $order = (int) (floatval($order[1]));
+            dump($order);
+            $data[$dto->id] = [
+                'url' => null,
+                'tags' => $dto->tags,
+                'order' => $order,
+                'content' => $dto->content,
+                'mimeType' => $dto->mimeType,
+                'extension' => $dto->extension,
+            ];
+        }
+
+        dump($data);
+
+        return $this->json([
+            'type' => 'media_share_stock',
             'data' => $data,
         ]);
     }

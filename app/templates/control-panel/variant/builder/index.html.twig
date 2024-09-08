@@ -300,7 +300,7 @@
     <div class="d-none">
         <button
             id="initiate_media_loading_on_page_load"
-            class="media-loader"
+            class="media-loader load-catalog"
         ></button>
 
         <div id="modal-media-img-template" class="d-none">
@@ -318,24 +318,40 @@
     let mediaLibraryOrder = [];
     // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
     const mediaLibraryConfig = {
+        'type': 'media',
         'lock': false,
         'loadOffset': 0,
         'loadLimit': 9,
         'viewLimit': 6,
         'viewPage': 0,
+        'restrictUploadOnLimit': true,
         'baseUri': '{{ absolute_url(path('api_media_list_my')) }}'
+    };
+
+    const mediaShareStockLibrary = {};
+    let mediaShareStockLibraryOrder = [];
+    // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
+    const mediaShareStockLibraryConfig = {
+        'type': 'media_share_stock',
+        'lock': false,
+        'viewLimit': 6,
+        'viewPage': 0,
+        'restrictUploadOnLimit': false,
+        'baseUri': '{{ absolute_url(path('api_media_list_share_stock')) }}'
     };
 
     const leftPane = document.getElementById("cp-panel-left");
     const rightPane = document.getElementById("cp-panel-right");
     const gutter = document.getElementById("cp-gutter");
 
-    async function loadMedias(me) {
+    async function loadMedias(me, libraryConfig) {
         let loader = me;
 
-        if (!mediaLibraryConfig.lock) {
-            mediaLibraryConfig.lock = true;
-            const uri = mediaLibraryConfig.baseUri  + '/' + mediaLibraryConfig.loadLimit + '/' + mediaLibraryConfig.loadOffset;
+        if (!libraryConfig.lock) {
+            libraryConfig.lock = true;
+            let uri = libraryConfig.baseUri;
+            if (libraryConfig.loadLimit !== undefined) uri += '/' + libraryConfig.loadLimit;
+            if (libraryConfig.loadOffset !== undefined) uri += '/' + libraryConfig.loadOffset;
 
             loader.toggleClass('disabled btn-loading');
             loader.attr('disabled', false);
@@ -345,30 +361,42 @@
             })
                 .done(function(response) {
                     if (response.type !== undefined) {
-                        if (response.type === 'media') {
+                        if (response.type === mediaLibraryConfig.type) {
                             setMedias(response.data);
+                        } else if (response.type === mediaShareStockLibraryConfig.type) {
+                            setShareStockMedias(response.data);
                         } else {
                             console.log('trying to find undefined content type.');
                         }
                     }
 
-                    mediaLibraryConfig.loadOffset += mediaLibraryConfig.loadLimit;
-
+                    if (libraryConfig.loadOffset !== undefined) {
+                        libraryConfig.loadOffset += libraryConfig.loadLimit;
+                    }
                 })
                 .always(function(response) {
                     loader.toggleClass('disabled btn-loading');
                     loader.removeAttr('disabled');
-                    let len = response.data.length;
-                    if (len === undefined) {
-                        len = Object.keys(response.data).length;
+                    let len = 1000000;
+                    if (response.data !== undefined) {
+                        len = response.data.length;
+                        if (len === undefined) {
+                            len = Object.keys(response.data).length;
+                        }
                     }
-                    if (len < mediaLibraryConfig.loadLimit) {
-                        mediaLibraryConfig.lock = true;
+
+                    let limit = 9;
+                    if (libraryConfig.loadLimit !== undefined) {
+                        limit = libraryConfig.loadLimit;
+                    }
+
+                    if (libraryConfig.restrictUploadOnLimit && len < limit) {
+                        libraryConfig.lock = true;
                         if (me.hasClass('btn-load-more')) {
                             me.toggle('d-none');
                         }
                     } else {
-                        mediaLibraryConfig.lock = false;
+                        libraryConfig.lock = false;
                     }
                 })
                 .fail(function(response) {toastServerError(response)})
@@ -410,16 +438,41 @@
             targetContent.html('');
 
             $.each(medias, function(key, mediaId) {
-                const el = $(template).css('background-image', 'url(' + library[mediaId].url + ')')
+                let imgSource = library[mediaId].url;
+                if (null === imgSource && null !== library[mediaId].content !== library[mediaId].mimeType) {
+                    imgSource = 'data:' + library[mediaId].mimeType + ';base64,' + library[mediaId].content;
+                }
+                if (null === imgSource) return null;
+
+                const el = $(template)
+                    .attr('data-media-id', mediaId)
+                    .css('background-image', 'url(' + imgSource + ')')
                     .on('click', function(event) {
                         const me = $(this);
                         const parent = me.parent();
-                        const targetClick = $(parent.attr('data-click-target'));
+
                         const mediaIdField = $(parent.attr('data-media-id-field'));
-                        mediaIdField.attr('value', mediaId);
-                        targetClick.trigger('click');
+                        if (mediaIdField !== undefined && null !== library[mediaId].url)
+                            mediaIdField.attr('value', mediaId);
+
+                        const mediaContentField = $(parent.attr('data-media-content-field'));
+                        if (mediaContentField !== undefined && null === library[mediaId].url && null !== library[mediaId].content)
+                            mediaContentField.attr(
+                                'value',
+                                library[mediaId].extension
+                                + '|||'
+                                + library[mediaId].mimeType
+                                + '|||'
+                                + library[mediaId].content
+                            );
+
+                        const targetClick = $(parent.attr('data-click-target'));
+                        if (targetClick !== undefined)
+                            targetClick.trigger('click');
+
                     });
                 targetContent.append(el);
+                {#"data:{{ data.brand.media.mimeType }};base64,#}
             });
         }
     }
@@ -432,6 +485,16 @@
         });
 
         mediaLibraryOrder = array_unique(mediaLibraryOrder);
+    }
+
+    function setShareStockMedias(data)
+    {
+        $.each(data, function (key, obj) {
+            mediaShareStockLibrary[key] = obj;
+            mediaShareStockLibraryOrder[obj.order] = key;
+        });
+
+        mediaShareStockLibraryOrder = array_unique(mediaShareStockLibraryOrder);
     }
 
     function resizer(e) {
@@ -496,7 +559,7 @@
             contentType: false,
             cache: false,
         })
-            .done(function() {
+            .done(function(response) {
                 document.getElementById('preview-frame').contentWindow.location.reload();
             })
             .always(function() {
@@ -530,22 +593,42 @@
     })
 
     // find content
-    $('.media-loader').on('click', function(event, data) {
+    $('.media-loader.load-catalog').on('click', function(event, data) {
         event.preventDefault();
 
         const me = $(this);
-        loadMedias(me).then((r) => renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig));
+        loadMedias(me, mediaLibraryConfig).then((r) => renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig));
 
 
         return false;
     })
 
     // find content
-    $('.modal--tab-media-btn-prev, .modal--tab-media-btn-next, .sidebar--btn-media-open-modal').on('click', function(event, data) {
+    $('.media-loader.load-stock-share').on('click', function(event, data) {
+        event.preventDefault();
+
+        const me = $(this);
+        loadMedias(me, mediaShareStockLibraryConfig).then((r) => renderMediaList(me, mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig));
+
+        return false;
+    })
+
+    // find content
+    $('.modal--tab-media-btn-prev.load-catalog, .modal--tab-media-btn-next.load-catalog, .sidebar--btn-media-open-modal').on('click', function(event, data) {
         event.preventDefault();
 
         const me = $(this);
         renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig);
+
+        return false;
+    })
+
+    // find content
+    $('.modal--tab-media-btn-prev.load-stock-share, .modal--tab-media-btn-next.load-stock-share').on('click', function(event, data) {
+        event.preventDefault();
+
+        const me = $(this);
+        renderMediaList(me, mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig);
 
         return false;
     })

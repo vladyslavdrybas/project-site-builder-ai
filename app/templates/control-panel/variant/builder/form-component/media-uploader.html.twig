@@ -9,6 +9,7 @@
         {{ form_row(form.generateBtn, {'label': false}) }}
         {{ form_row(form.getFromStockBtn, {'label': false}) }}
         {{ form_row(form.getFromCatalogBtn, {'label': false}) }}
+        {{ form_row(form.content, {'label': false}) }}
     </div>
 
     <!-- Button trigger modal -->
@@ -120,12 +121,12 @@
                                     rounded-0
                                     p-3
                                 "
-                                id="{{ form.vars.id }}_modal_random-tab"
+                                id="{{ form.vars.id }}_modal_share_stock-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#{{ form.vars.id }}_modal_random"
+                                data-bs-target="#{{ form.vars.id }}_modal_share_stock"
                                 type="button"
                                 role="tab"
-                                aria-controls="{{ form.vars.id }}_modal_random"
+                                aria-controls="{{ form.vars.id }}_modal_share_stock"
                                 aria-selected="false"
                             >
                                 Share Stock
@@ -158,168 +159,12 @@
                     </ul>
                     <div class="tab-content p-1 bg-light" id="{{ form.vars.id }}_media_content_tab">
 
-                        <div class="tab-pane fade show active" id="{{ form.vars.id }}_modal_catalog" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_catalog-tab" tabindex="0">
-                            <div class="tab-pane-content d-flex flex-column justify-content-between align-items-baseline">
-                                <div
-                                    data-click-target="#{{ form.getFromCatalogBtn.vars.id }}"
-                                    data-media-id-field="#{{ form.systemId.vars.id }}"
-                                    data-click-target-mask="#{{ form.toSetFromCatalog.vars.id }}"
-                                    id="{{ form.vars.id }}_media_catalog_content"
-                                    class="media-catalog d-flex flex-row flex-wrap justify-content-between mb-5 w-100"
-                                >
-                                    <!-- EMPTY PLACE FOR LOADED MEDIA THUMBNAILS -->
-                                </div>
+                        {% include 'control-panel/variant/builder/form-component/media-uploader-tab-pane-my-catalog.html.twig' %}
+                        {% include 'control-panel/variant/builder/form-component/media-uploader-tab-pane-image-upload.html.twig' %}
+                        {% include 'control-panel/variant/builder/form-component/media-uploader-tab-pane-share-stock.html.twig' %}
 
-                                <div class="d-flex flex-row justify-content-between align-items-baseline w-100 pb-3">
-                                    <button
-                                        id="{{ form.vars.id }}_media_catalog_prev"
-                                        type="button"
-                                        class="
-                                        modal--tab-media-btn
-                                        modal--tab-media-btn-prev
-                                        btn
-                                        btn-dark
-                                        border-0
-                                        shadow-none
-                                        rounded-0
-                                        p-2
-                                        px-3
-                                        pe-5
-                                        text-center
-                                    "
-                                        data-direction="-1"
-                                        data-content-target="#{{ form.vars.id }}_media_catalog_content"
-                                        data-btn-prev="#{{ form.vars.id }}_media_catalog_prev"
-                                        data-btn-next="#{{ form.vars.id }}_media_catalog_next"
-                                    >
-                                        <svg class="bi bi-1 mb-1"><use xlink:href="#icon-arrow-left-fill"/></svg>
-                                        <span class="media-arrow-page-numbers"></span>
-                                    </button>
-                                    <button
-                                        id="{{ form.vars.id }}_media_catalog_more"
-                                        type="button"
-                                        class="
-                                        modal--tab-media-btn
-                                        btn-load-more
-                                        media-loader
-                                        btn
-                                        btn-dark
-                                        border-0
-                                        shadow-none
-                                        rounded-0
-                                        p-2
-                                    "
-                                        data-direction="1"
-                                        data-content-target="#{{ form.vars.id }}_media_catalog_content"
-                                        data-btn-prev="#{{ form.vars.id }}_media_catalog_prev"
-                                        data-btn-next="#{{ form.vars.id }}_media_catalog_next"
-                                    >
-                                        More
-                                    </button>
-                                    <button
-                                        id="{{ form.vars.id }}_media_catalog_next"
-                                        type="button"
-                                        class="
-                                        modal--tab-media-btn
-                                        modal--tab-media-btn-next
-                                        btn
-                                        btn-dark
-                                        border-0
-                                        shadow-none
-                                        rounded-0
-                                        p-2
-                                        px-3
-                                        ps-5
-                                        text-center
-                                    "
-                                        data-direction="1"
-                                        data-content-target="#{{ form.vars.id }}_media_catalog_content"
-                                        data-btn-prev="#{{ form.vars.id }}_media_catalog_prev"
-                                        data-btn-next="#{{ form.vars.id }}_media_catalog_next"
-                                    >
-                                        <span class="media-arrow-page-numbers"></span>
-                                        <svg class="bi bi-1 mb-1"><use xlink:href="#icon-arrow-right-fill"/></svg>
-                                    </button>
 
-                                </div>
 
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="{{ form.vars.id }}_modal_upload" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_upload-tab" tabindex="0">
-                            <div class="tab-pane-content d-flex flex-column justify-content-between align-items-baseline">
-
-                                <div>
-
-                                    {{ form_row(form.file, {'label': false, 'attr': {
-                                        'data-content-target': '#' ~ form.vars.id ~ '_media_choose_file_content',
-                                        'class': 'file-upload  with-preview d-none'
-                                    }}) }}
-                                    <label
-                                        for="{{ form.file.vars.id }}"
-                                        id="{{ form.vars.id }}_media_chooseFileBtn"
-                                        type="button"
-                                        class="
-                                            btn
-                                            btn-dark
-                                            border-0
-                                            shadow-none
-                                            rounded-0
-                                            p-3
-                                            m-auto
-                                        "
-                                    >
-                                        Choose image from your drive
-                                    </label>
-                                    <div class="m-auto help-text">Supported image extensions: <b>jpg, jpeg, png, webp, svg</b></div>
-                                </div>
-
-                                <img id="{{ form.vars.id }}_media_choose_file_content" class="px-4 py-2 mw-100 d-none" alt="uploaded file" title="uploaded file"/>
-
-                                <div class="d-flex flex-row justify-content-between align-items-baseline w-100 pb-3">
-                                    <button
-                                        id="{{ form.vars.id }}_media_upload_previewBtn"
-                                        type="button"
-                                        class="
-                                            formSubmit
-                                            modal--nav-media-btn
-                                            btn
-                                            btn-dark
-                                            m-0
-                                            border-0
-                                            shadow-none
-                                            rounded-0
-                                            p-3
-                                            ms-1
-                                        "
-                                    >
-                                        Upload
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="{{ form.vars.id }}_modal_random" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_random-tab" tabindex="0">
-
-                            {{ form_row(form.stockTags) }}
-
-                            <button
-                                id="{{ form.getFromStockBtn.vars.id }}_label"
-                                type="button"
-                                class="
-                                    modal--nav-media-btn
-                                    btn
-                                    btn-dark
-                                    m-0
-                                    border-0
-                                    shadow-none
-                                    rounded-0
-                                    p-3
-                                "
-                                data-click-target="#{{ form.getFromStockBtn.vars.id }}"
-                            >
-                                Get Random Image
-                            </button>
-                        </div>
                         <div class="tab-pane fade" id="{{ form.vars.id }}_modal_ai_generate" role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal_ai_generate-tab" tabindex="0">
 
                             <label

@@ -23,6 +23,7 @@ class MediaBuilder implements IEntityBuilder
         protected readonly MediaIdGenerator $mediaIdGenerator,
     ) {}
 
+
     public function fromArray(
         array $data
     ): Media {
@@ -68,6 +69,7 @@ class MediaBuilder implements IEntityBuilder
             }
         }
 
+        // TODO how to move it from build and separate store from build?
         if (false === $fileStored) {
             if ($media->getServerAlias() === 'local') {
                 // TODO decentralized filesystem
@@ -159,6 +161,29 @@ class MediaBuilder implements IEntityBuilder
         $dto->size = $media->getSize();
         $dto->version = $media->getVersion();
         $dto->tags = $media->getTags()->map(fn(Tag $tag) => $tag->getRawId())->toArray();
+
+        return $dto;
+    }
+
+    public function mediaDtoFromContent(
+        ?string $content = null,
+        array $tags = []
+    ): ?MediaDto {
+        dump($content);
+        if (null === $content) return null;
+
+        $dto = new MediaDto();
+        $dto->tags = $tags;
+
+        $contentData = explode('|||', trim($content));
+        dump($contentData);
+        if (count($contentData) < 2) {
+            $dto->content = $content;
+        } else {
+            $dto->content = $contentData[2];
+            $dto->mimeType = $contentData[1];
+            $dto->extension = $contentData[0];
+        }
 
         return $dto;
     }
