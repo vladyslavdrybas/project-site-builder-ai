@@ -102,6 +102,7 @@ class MediaBuilder implements IEntityBuilder
         ?UploadedFile $file = null,
         array $tags = [],
     ): ?MediaDto {
+        dump($file);
         if (null === $file) {
             return null;
         }

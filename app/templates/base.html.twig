@@ -80,6 +80,12 @@
 <script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
 
 <script>
+    function array_unique(arr) {
+        return arr.filter(function (v, i, self) {
+            return i === self.indexOf(v);
+        });
+    }
+
     function toastShow(data) {
         const html = $("#toast-template").html()
             .replace("{{ '{{title}}' }}", data.title)

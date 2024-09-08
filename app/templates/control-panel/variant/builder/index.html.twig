@@ -8,6 +8,7 @@
             overflow: hidden;
             margin: 0;
             padding: 0;
+            min-width: 769px !important;
         }
     </style>
     <div class="container-fluid vh-100">
@@ -18,7 +19,7 @@
                 class="
                     bg-light
                     scroll-primary
-                    col-md-4
+                    col-4
                     col-lg-3
                     min-vh-100
                     position-relative
@@ -88,25 +89,6 @@
                                 title="Preview"
                             >
                                 Preview
-                            </button>
-                            <button
-                                id="sidebar--nav-top-btn-icon-save"
-                                type="button"
-                                class="
-                                    sidebar--nav-top-btn
-                                    btn
-                                    btn-dark
-                                    m-0
-                                    border-0
-                                    shadow-none
-                                    rounded-0
-                                    p-3
-                                "
-                                data-click-target="#{{ builderForm.saveBtn.vars.id }}"
-                                title="Save"
-                            >
-                                <svg class="bi bi-1"><use xlink:href="#icon-save"/></svg>
-                                Save
                             </button>
                         </div>
 
@@ -233,13 +215,13 @@
                 id="cp-panel-right"
 
                 class="
-                    col-md-8
+                    col-8
                     col-lg-9
                     p-0
                     overflow-hidden
                     d-flex
                     flex-column
-                    align-items-start
+                    align-items-center
                 "
             >
                 <div
@@ -249,6 +231,10 @@
                         w-100
                         px-1
                         py-0
+                        d-flex
+                        flex-row
+                        justify-content-end
+                        flex-row-reverse
                     "
                 >
                     <button
@@ -259,7 +245,7 @@
                             sidebar--nav-top-btn
                             btn
                             btn-dark
-                            m-0
+                            mx-1
                             border-0
                             shadow-none
                             rounded-0
@@ -270,6 +256,27 @@
                         title="Cancel"
                     >
                         Highlight active section
+                    </button>
+
+
+                    <button
+                        id="sidebar--nav-top-btn-icon-save"
+                        type="button"
+                        class="
+                                    sidebar--nav-top-btn
+                                    btn
+                                    btn-primary
+                                    m-0
+                                    border-0
+                                    shadow-none
+                                    rounded-0
+                                    p-3
+                                "
+                        data-click-target="#{{ builderForm.saveBtn.vars.id }}"
+                        title="Save"
+                    >
+                        <svg class="bi bi-1"><use xlink:href="#icon-save"/></svg>
+                        Save
                     </button>
                 </div>
                 <iframe
@@ -308,7 +315,7 @@
 {% block scriptsbottom %}
 <script type="application/javascript">
     const mediaLibrary = {};
-    const mediaLibraryOrder = [];
+    let mediaLibraryOrder = [];
     // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
     const mediaLibraryConfig = {
         'lock': false,
@@ -409,11 +416,7 @@
                         const parent = me.parent();
                         const targetClick = $(parent.attr('data-click-target'));
                         const mediaIdField = $(parent.attr('data-media-id-field'));
-                        // const targetClickMask = $(parent.attr('data-click-target-mask'));
-
                         mediaIdField.attr('value', mediaId);
-                        // targetClickMask.attr('value', true);
-                        console.log(mediaIdField.attr('value'));
                         targetClick.trigger('click');
                     });
                 targetContent.append(el);
@@ -427,6 +430,8 @@
             mediaLibrary[key] = obj;
             mediaLibraryOrder[obj.order] = key;
         });
+
+        mediaLibraryOrder = array_unique(mediaLibraryOrder);
     }
 
     function resizer(e) {
@@ -481,12 +486,15 @@
         const hiddenInput = $('#' + targetId);
 
         hiddenInput.prop('value', true);
-        const formData = form.serialize();
 
         $.ajax({
             type: form.prop('method'),
             url: form.prop('action') + '/ajax',
-            data: formData,
+            data: new FormData(document.getElementById('{{ builderForm.vars.id }}')),
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
         })
             .done(function() {
                 document.getElementById('preview-frame').contentWindow.location.reload();
@@ -541,6 +549,16 @@
 
         return false;
     })
+
+    $('.file-upload.with-preview').on('change', function(event) {
+        const me = $(this);
+        const output = $(me.attr('data-content-target'));
+        output.attr('src', URL.createObjectURL(event.target.files[0]));
+        output.on('load', function() {
+            URL.revokeObjectURL(output.attr('src')) // free memory
+        });
+        output.removeClass('d-none');
+    });
 
     $(document).ready(function() {
         //load first images to modal media library

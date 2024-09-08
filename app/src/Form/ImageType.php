@@ -12,21 +12,29 @@ class ImageType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $acceptTypes = [
+            'image/jpeg',
+            'image/jpg',
+            'image/png',
+            'image/svg',
+            'image/svg+xml',
+            'image/webp',
+        ];
+        $maxSize = '5M';
+
         $resolver->setDefaults([
             'mapped' => false,
             'required' => false,
             'constraints' => [
                 new File([
-                    'mimeTypes' => [
-                        'image/jpeg',
-                        'image/jpg',
-                        'image/png',
-                        'image/svg',
-                        'image/svg+xml',
-                    ],
-                    'maxSize' => '5M',
+                    'mimeTypes' => $acceptTypes,
+                    'maxSize' => $maxSize,
                     'mimeTypesMessage' => 'Please upload a valid Image',
                 ])
+            ],
+            'attr' => [
+                'accept' => implode(',', $acceptTypes),
+                'maxSize' => $maxSize,
             ]
         ]);
     }

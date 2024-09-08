@@ -222,13 +222,7 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         }
 
         $result = null;
-        if ($mediaCreatorForm->file instanceof UploadedFile) {
-            $result = $this->mediaBuilder->mediaDtoFromUploadedFile(
-                $owner,
-                $mediaCreatorForm->file,
-                $tags
-            );
-        } else if ($mediaCreatorForm->toGetFromStock) {
+        if ($mediaCreatorForm->toGetFromStock) {
             $stockImage = $this->imageStocksFacade->findOneRandom($mediaCreatorForm->stockTags);
 
             if (null !== $stockImage) {
@@ -250,6 +244,12 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
             }
         } else if ($mediaCreatorForm->toSetFromCatalog) {
             $result = $this->mediaBuilder->mediaDtoFromMedia($mediaCreatorForm->systemId);
+        } else if ($mediaCreatorForm->file instanceof UploadedFile) {
+            $result = $this->mediaBuilder->mediaDtoFromUploadedFile(
+                $owner,
+                $mediaCreatorForm->file,
+                $tags
+            );
         }
 
         if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {

@@ -162,6 +162,7 @@ class VariantBuilderController extends AbstractControlPanelController
                     ['variant' => $variant->getId()]
                 ),
                 'method' => 'POST',
+                'allow_file_upload' => true,
             ]
         );
 
