@@ -14,18 +14,24 @@
             {% for feature in data.items %}
                 {% if feature.head is not null and feature.description is not null %}
                     <div class="col-md-4">
-                        {% if feature.media.id is defined and feature.media.id is not null %}
+                        {% if feature.media.ownerId is defined and feature.media.ownerId is not null %}
                             <div class="feature-icon mb-3">
-                                {% if feature.media.content is defined and feature.media.content is not null %}
+                                {% if feature.media.url is defined and feature.media.url is not null%}
                                     <img
+                                        src="{{ feature.media.url }}"
                                         class="img-fluid"
-                                        src="data:{{ feature.media.mimeType }};base64,{{ feature.media.content }}"
                                         alt="icon"
                                     >
-                                {% else %}
+                                {% elseif feature.media.content is defined and feature.media.content is not null %}
                                     <img
+                                        src="data:{{ feature.media.mimeType }};base64,{{ feature.media.content }}"
                                         class="img-fluid"
+                                        alt="icon"
+                                    >
+                                {% elseif feature.media.id is defined and feature.media.id is not null %}
+                                    <img
                                         src="{{ absolute_url(path('app_media_show', {'media': feature.media.id})) }}"
+                                        class="img-fluid"
                                         alt="icon"
                                     >
                                 {% endif %}

@@ -12,10 +12,11 @@ class ImageStocksFacade
         protected readonly PicsumAdapter $picsumAdapter
     ) {}
 
-    public function findOneByTags(array $tags)
+    public function loadByUrl(string $url): ?StockImageDto
     {
-
+        return $this->picsumAdapter->loadByUrl($url);
     }
+
     public function findOneRandom(
         array $tags = [],
         array $size = [512,512]

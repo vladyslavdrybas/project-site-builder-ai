@@ -80,11 +80,12 @@
 <script src="{{ absolute_url(asset('highlight.min.js', 'js')) }}"></script>
 
 <script>
-    function array_unique(arr) {
-        return arr.filter(function (v, i, self) {
-            return i === self.indexOf(v);
-        });
-    }
+    const object_flip = obj => Object.fromEntries(Object.entries(obj).map(([k, v]) => [v, k]));
+    const array_from_hash = function (obj) {
+        const ar = [];
+        Object.entries(obj).forEach(([i,v]) => ar[v] = i);
+        return ar;
+    };
 
     function toastShow(data) {
         const html = $("#toast-template").html()

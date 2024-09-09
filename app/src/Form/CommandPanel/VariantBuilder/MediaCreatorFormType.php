@@ -49,13 +49,19 @@ class MediaCreatorFormType extends AbstractType
             ->add('systemId',
                 HiddenType::class,
                 [
-                    'data' => $data?->systemId
+                    'data' => $data?->systemId,
                 ]
             )
             ->add('content',
                 HiddenType::class,
                 [
-                    'data' => $data?->content
+                    'data' => $data?->content,
+                ]
+            )
+            ->add('url',
+                HiddenType::class,
+                [
+                    'data' => $data?->url,
                 ]
             )
             ->add('file',

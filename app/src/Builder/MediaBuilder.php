@@ -9,6 +9,7 @@ use App\Entity\MediaAiPrompt;
 use App\Entity\Tag;
 use App\Entity\User;
 use App\Service\ImageStocks\DataTransferObject\StockImageDto;
+use App\Service\ImageStocks\ImageStocksFacade;
 use App\Utility\MediaIdGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,30 +22,40 @@ class MediaBuilder implements IEntityBuilder
         protected readonly string $contentDir,
         protected readonly Filesystem $filesystem,
         protected readonly MediaIdGenerator $mediaIdGenerator,
+        protected readonly ImageStocksFacade $imageStocksFacade
     ) {}
-
 
     public function fromArray(
         array $data
     ): Media {
+        dump($data);
         if (
             empty($data['ownerId'])
-            || empty($data['content'])
-            || empty($data['extension'])
         ) {
-            throw new \Exception('Media must have content and owner to create.');
+            throw new \Exception('Media must have owner to create.');
         }
+        $media = new Media();
+
         $mediaRepository = $this->em->getRepository(Media::class);
         $tagRepository = $this->em->getRepository(Tag::class);
 
         $tags = array_unique($data['tags']);
 
-        $media = new Media();
+        if (!empty($data['url'])) {
+            $imageStock = $this->imageStocksFacade->loadByUrl($data['url']);
+            $mediaDto = $this->mediaDtoFromStockImage($imageStock);
+            $mediaDto->ownerId = $data['ownerId'];
+            $data['extension'] = $mediaDto->extension;
+            $data['mimeType'] = $mediaDto->mimeType;
+            $data['size'] = $mediaDto->size;
+            $data['content'] = $mediaDto->content;
+            $data['id'] = $this->generateMediaId($mediaDto);
+        }
 
-        $media->setSize($data['size']);
-        $media->setExtension($data['extension']);
-        $media->setMimeType($data['mimeType']);;
         $media->setId($data['id']);
+        $media->setExtension($data['extension']);
+        $media->setMimetype($data['mimeType']);
+        $media->setSize($data['size'] ?? 0);
 
         if (!empty($data['mediaAiPromptId'])) {
             $mediaAiPromptRepository = $this->em->getRepository(MediaAiPrompt::class);
@@ -54,7 +65,9 @@ class MediaBuilder implements IEntityBuilder
 
         $existedMedia = $mediaRepository->find($media->getId());
 
+
         $content = base64_decode($data['content']);
+
         $filePath = $this->generateFilePath(
             $data['ownerId'],
             $data['id'],
@@ -143,6 +156,7 @@ class MediaBuilder implements IEntityBuilder
             $stockImage->tags,
             null,
             $stockImage->content,
+            $stockImage->url,
         );
     }
 
@@ -160,6 +174,7 @@ class MediaBuilder implements IEntityBuilder
         $dto->extension = $media->getExtension();
         $dto->size = $media->getSize();
         $dto->version = $media->getVersion();
+        $dto->ownerId = $media->getOwner()->getRawId();
         $dto->tags = $media->getTags()->map(fn(Tag $tag) => $tag->getRawId())->toArray();
 
         return $dto;

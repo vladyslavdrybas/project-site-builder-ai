@@ -3,21 +3,27 @@
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container">
 
-                {% if data.brand.media.id is defined and data.brand.media.id is not null %}
+                {% if (data.brand.media.ownerId is defined and data.brand.media.ownerId is not null) %}
                     <a class="navbar-brand" href="#">
                         <div
                             class="header-brand-logo"
                         >
-                            {% if data.brand.media.content is defined and data.brand.media.content is not null %}
+                            {% if data.brand.media.url is defined and data.brand.media.url is not null%}
                                 <img
+                                    src="{{ data.brand.media.url }}"
                                     class="h-100"
-                                    src="data:{{ data.brand.media.mimeType }};base64,{{ data.brand.media.content }}"
                                     alt="icon"
                                 >
-                            {% else %}
+                            {% elseif data.brand.media.content is defined and data.brand.media.content is not null %}
                                 <img
+                                    src="data:{{ data.brand.media.mimeType }};base64,{{ data.brand.media.content }}"
                                     class="h-100"
+                                    alt="icon"
+                                >
+                            {% elseif data.brand.media.id is defined and data.brand.media.id is not null %}
+                                <img
                                     src="{{ absolute_url(path('app_media_show', {'media': data.brand.media.id})) }}"
+                                    class="h-100"
                                     alt="icon"
                                 >
                             {% endif %}

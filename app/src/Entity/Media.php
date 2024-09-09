@@ -42,8 +42,8 @@ class Media implements EntityInterface
     #[ORM\Column(type: Types::STRING, length: 20)]
     protected string $extension;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    protected int $size;
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
+    protected int $size = 0;
 
     #[ORM\Column(type: Types::STRING)]
     protected string $path;

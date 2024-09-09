@@ -14,5 +14,6 @@ class StockImageDto
         public array $tags = [],
         public ?string $ownerId = null,
         public ?string $content = null,
+        public ?string $url = null,
     ) {}
 }

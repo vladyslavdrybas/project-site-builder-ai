@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace App\Service\ImageStocks\Adapter;
 
 use App\Service\ImageStocks\DataTransferObject\StockImageDto;
+use App\Utility\GetExtensionForMimeType;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class PicsumAdapter implements IAdapter
 {
@@ -21,9 +23,29 @@ class PicsumAdapter implements IAdapter
     public function __construct(
         protected readonly HttpClientInterface $picsumClient,
         protected readonly Filesystem $filesystem,
+        protected readonly GetExtensionForMimeType $getExtensionForMimeType,
         protected readonly string $projectDir,
         protected readonly string $projectEnvironment
     ) {}
+
+    public function loadByUrl(string $url): ?StockImageDto
+    {
+        $result = null;
+        try {
+            $response = $this->picsumClient->request(
+                'GET',
+                $url
+            );
+
+            if (Response::HTTP_OK === $response->getStatusCode()) {
+                $result = $this->stockImageDtoFromResponse($response);
+            }
+        } catch (Exception $e) {
+            dump($e);
+        }
+
+        return $result;
+    }
 
     public function findOneRandom(
         array $tags = [],
@@ -90,35 +112,57 @@ class PicsumAdapter implements IAdapter
                 sprintf('/%s/%s.jpg', $size[0], $size[1]),
                 [
                     'query' => $query,
+                    'max_redirects' => 1,
                 ]
             );
 
+            dump($response->getInfo());
+            dump($response->getStatusCode());
+
             if (Response::HTTP_OK === $response->getStatusCode()) {
-                $content = $response->getContent();
+                $result = $this->stockImageDtoFromResponse($response);
+                $result->tags = $tags;
 
                 if (in_array($this->projectEnvironment, ['local', 'dev'])) {
+                    $content = base64_decode($result->content);
                     $this->filesystem->dumpFile(
                         sprintf(
                             '%s/var/stockimages/%s-%s-%s.jpg',
                             $this->projectDir,
                             date('d-m-Y'),
                             date('H-i-s'),
-                            hash('sha256', $content)
+                            hash('sha256', $result->content)
                         ),
                         $content
                     );
                 }
-
-                $result = new StockImageDto();
-                $result->mimeType = 'image/jpeg';
-                $result->extension = 'jpg';
-                $result->content = base64_encode($content);
-                $result->tags = $tags;
             }
-
         } catch (Exception $e) {
             dump($e);
         }
+
+        return $result;
+    }
+
+    protected function stockImageDtoFromResponse(ResponseInterface $response): StockImageDto
+    {
+        $content = $response->getContent();
+        $info = $response->getInfo();
+
+        [
+            $mimeType,
+            $extension
+        ] = $this->getExtensionForMimeType->get($info['content_type']);
+
+        if (null === $mimeType || null === $extension) {
+            throw new Exception('Cannot get content type for ' . $info['url']);
+        }
+
+        $result = new StockImageDto();
+        $result->mimeType = $mimeType;
+        $result->extension = $extension;
+        $result->url = $info['url'];
+        $result->content = base64_encode($content);
 
         return $result;
     }

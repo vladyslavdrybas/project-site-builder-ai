@@ -7,7 +7,6 @@ use App\Builder\MediaBuilder;
 use App\Constants\RouteRequirements;
 use App\Controller\AbstractController;
 use App\DataTransferObject\Variant\MediaDto;
-use App\Entity\Media;
 use App\Entity\Tag;
 use App\Exceptions\AccessDenied;
 use App\Repository\MediaRepository;
@@ -87,11 +86,17 @@ class MediaController extends AbstractController
         MediaBuilder $mediaBuilder
     ): JsonResponse {
         $tags = [];
-        $stockImages = [$imageStocksFacade->findOneRandom($tags)];
+        $img = $imageStocksFacade->findOneRandom($tags);
+        $stockImages = [];
+
+        if ($img !== null) {
+            $stockImages[] = $img;
+        }
         $owner = $this->getUser();
 
         /** @var array<MediaDto> $mediasDto */
         $mediasDto = array_map(function(StockImageDto $dto) use ($mediaBuilder, $owner) {
+            dump($dto);
             $result = $mediaBuilder->mediaDtoFromStockImage($dto);
             $result->ownerId = $owner->getRawId();
             $result->tags = $dto->tags;
@@ -104,14 +109,23 @@ class MediaController extends AbstractController
 
         $data = [];
         foreach ($mediasDto as $key => $dto) {
+            dump([
+               'mediasDtoKEY',
+                $key
+            ]);
             $order = strval(microtime(true) / 100000);
             dump($order);
             $order = explode('.', $order);
             dump($order);
             $order = (int) (floatval($order[1]));
+            $order += $key;
             dump($order);
+
+            // save transfer overload
+            if (null !== $dto->url) $dto->content = null;
+
             $data[$dto->id] = [
-                'url' => null,
+                'url' => $dto->url,
                 'tags' => $dto->tags,
                 'order' => $order,
                 'content' => $dto->content,

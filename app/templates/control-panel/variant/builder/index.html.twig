@@ -315,6 +315,7 @@
 {% block scriptsbottom %}
 <script type="application/javascript">
     const mediaLibrary = {};
+    let mediaLibraryOrderHash = {};
     let mediaLibraryOrder = [];
     // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
     const mediaLibraryConfig = {
@@ -330,6 +331,7 @@
 
     const mediaShareStockLibrary = {};
     let mediaShareStockLibraryOrder = [];
+    let mediaShareStockLibraryOrderHash = {};
     // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
     const mediaShareStockLibraryConfig = {
         'type': 'media_share_stock',
@@ -403,7 +405,7 @@
         }
     }
 
-    function renderMediaList(me, library, libraryOrder, libraryConfig, direction = 1) {
+    function renderMediaList(me, targetContent, library, libraryOrder, libraryConfig, direction = 1) {
         direction = parseInt(me.attr('data-direction') ?? direction);
         direction = direction > 0 ? 1 : -1;
         const mediasLength = libraryOrder.length;
@@ -432,13 +434,11 @@
         $(me.attr('data-btn-next') + ' .media-arrow-page-numbers').text(pagesAhead > 0 ? pagesAhead : '');
 
         if (medias.length > 0) {
-            const targetContent = $(me.attr('data-content-target'));
-
             const template = $("#modal-media-img-template").html();
             targetContent.html('');
 
             $.each(medias, function(key, mediaId) {
-                let imgSource = library[mediaId].url;
+                let imgSource = library[mediaId].url ?? null;
                 if (null === imgSource && null !== library[mediaId].content !== library[mediaId].mimeType) {
                     imgSource = 'data:' + library[mediaId].mimeType + ';base64,' + library[mediaId].content;
                 }
@@ -454,6 +454,10 @@
                         const mediaIdField = $(parent.attr('data-media-id-field'));
                         if (mediaIdField !== undefined && null !== library[mediaId].url)
                             mediaIdField.attr('value', mediaId);
+
+                        const mediaUrlField = $(parent.attr('data-media-url-field'));
+                        if (mediaUrlField !== undefined && null !== library[mediaId].url)
+                            mediaUrlField.attr('value', library[mediaId].url);
 
                         const mediaContentField = $(parent.attr('data-media-content-field'));
                         if (mediaContentField !== undefined && null === library[mediaId].url && null !== library[mediaId].content)
@@ -472,29 +476,62 @@
 
                     });
                 targetContent.append(el);
-                {#"data:{{ data.brand.media.mimeType }};base64,#}
             });
+console.log([
+    'medias mod',
+    medias.length,
+    libraryConfig.viewLimit,
+    medias.length % libraryConfig.viewLimit
+]);
+            if (medias.length % 3 === 2) targetContent.append($(template).addClass('invisible'));
         }
     }
 
     function setMedias(data)
     {
+        const start = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+
         $.each(data, function (key, obj) {
             mediaLibrary[key] = obj;
-            mediaLibraryOrder[obj.order] = key;
+            mediaLibraryOrderHash[key] = obj.order;
         });
 
-        mediaLibraryOrder = array_unique(mediaLibraryOrder);
+        mediaLibraryOrder = array_from_hash(mediaLibraryOrderHash);
+
+        const end = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+
+        console.log(
+            {
+                'timing':'setMedias',
+                'start':start/1000,
+                'end':end/1000,
+                'diff': (end-start)/1000,
+            });
     }
 
     function setShareStockMedias(data)
     {
+        const start = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+
         $.each(data, function (key, obj) {
             mediaShareStockLibrary[key] = obj;
-            mediaShareStockLibraryOrder[obj.order] = key;
+            mediaShareStockLibraryOrderHash[key] = obj.order;
         });
 
-        mediaShareStockLibraryOrder = array_unique(mediaShareStockLibraryOrder);
+        const order = Object.values(mediaShareStockLibraryOrderHash).sort();
+        const hashes = array_from_hash(mediaShareStockLibraryOrderHash);
+
+        mediaShareStockLibraryOrder = order.map((v) => hashes[v]);
+
+        // mediaShareStockLibraryOrder = array_unique(mediaShareStockLibraryOrder);
+        const end = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+        console.log(
+            {
+            'timing':'setShareStockMedias',
+            'start':start/1000,
+            'end':end/1000,
+            'diff': (end-start)/1000,
+        });
     }
 
     function resizer(e) {
@@ -597,7 +634,7 @@
         event.preventDefault();
 
         const me = $(this);
-        loadMedias(me, mediaLibraryConfig).then((r) => renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig));
+        loadMedias(me, mediaLibraryConfig).then((r) => renderMediaList(me, $(me.attr('data-content-target')), mediaLibrary, mediaLibraryOrder, mediaLibraryConfig));
 
 
         return false;
@@ -608,7 +645,7 @@
         event.preventDefault();
 
         const me = $(this);
-        loadMedias(me, mediaShareStockLibraryConfig).then((r) => renderMediaList(me, mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig));
+        loadMedias(me, mediaShareStockLibraryConfig).then((r) => renderMediaList(me, $(me.attr('data-content-target-share-stock')), mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig));
 
         return false;
     })
@@ -618,17 +655,16 @@
         event.preventDefault();
 
         const me = $(this);
-        renderMediaList(me, mediaLibrary, mediaLibraryOrder, mediaLibraryConfig);
+        renderMediaList(me, $(me.attr('data-content-target')), mediaLibrary, mediaLibraryOrder, mediaLibraryConfig);
 
         return false;
     })
 
     // find content
-    $('.modal--tab-media-btn-prev.load-stock-share, .modal--tab-media-btn-next.load-stock-share').on('click', function(event, data) {
+    $('.modal--tab-media-btn-prev.load-stock-share, .modal--tab-media-btn-next.load-stock-share, .sidebar--btn-media-open-modal').on('click', function(event, data) {
         event.preventDefault();
-
         const me = $(this);
-        renderMediaList(me, mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig);
+        renderMediaList(me, $(me.attr('data-content-target-share-stock')), mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig);
 
         return false;
     })

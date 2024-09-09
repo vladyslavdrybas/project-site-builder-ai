@@ -46,7 +46,7 @@ class VariantBuilderController extends AbstractControlPanelController
         name: '_builder',
         methods: ['GET', 'POST']
     )]
-    public function show(
+    public function builder(
         Request $request,
         Variant $variant,
         string $projectDir,
@@ -240,7 +240,12 @@ class VariantBuilderController extends AbstractControlPanelController
                     if (empty($value['ownerId'])) {
                         $value['ownerId'] = $this->getUser()->getRawId();
                     }
-                    if (!empty($value['content'])) {
+                    if (!empty($value['url'])) {
+                        $value['content'] = null;
+                        $media = $this->mediaBuilder->fromArray($value);
+                        $medias[$media->getId()] = $media;
+                        unset($value['url']);
+                    } else if (!empty($value['content'])) {
                         $media = $this->mediaBuilder->fromArray($value);
                         $medias[$media->getId()] = $media;
 

@@ -25,17 +25,26 @@
                 {% endif %}
             </div>
 
-            {% if data.media.id is defined and data.media.id is not null %}
+            {% if data.media.ownerId is defined and data.media.ownerId is not null %}
                 <div class="col-10 col-sm-8 col-lg-6 d-none d-md-block">
+                    HAHHAHAHAHAHA
 
-                    {% if data.media.content is defined and data.media.content is not null %}
+                    {% if data.media.url is defined and data.media.url is not null%}
+                        <img
+                            src="{{ data.media.url }}"
+                            class="d-block mx-lg-auto img-fluid"
+                            alt="creativity"
+                            loading="lazy"
+                        >
+                    {% elseif data.media.content is defined and data.media.content is not null %}
                         <img
                             src="data:{{ data.media.mimeType }};base64,{{ data.media.content }}"
                             class="d-block mx-lg-auto img-fluid"
                             alt="creativity"
                             loading="lazy"
                         >
-                    {% else %}
+                    {% elseif data.media.id is defined and data.media.id is not null %}
+                        HAHHAHAHAHAHA111111111111111111111111
                         <img
                             src="{{ absolute_url(path('app_media_show', {'media': data.media.id})) }}"
                             class="d-block mx-lg-auto img-fluid"

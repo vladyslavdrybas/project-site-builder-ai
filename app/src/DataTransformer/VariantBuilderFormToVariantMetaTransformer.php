@@ -222,19 +222,15 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         }
 
         $result = null;
-        if ($mediaCreatorForm->toGetFromStock) {
-            dump([
-                __METHOD__,
-                __LINE__,
-                !empty($mediaCreatorForm->systemId),
-                !empty($mediaCreatorForm->content),
-            ]);
+        if ($mediaCreatorForm->url) {
+            $result = new MediaDto();
+            $result->ownerId = $owner->getRawId();
+            $result->url = $mediaCreatorForm->url;
+            $result->tags = $tags;
+        } else if ($mediaCreatorForm->toGetFromStock) {
+            // TODO slow on frontend, so refactor to use stock image url until user want to save image.
+            // only if user want to save it - then download content and store it on local server
             if (!empty($mediaCreatorForm->content)) {
-                dump([
-                    __METHOD__,
-                    __LINE__,
-
-                ]);
                 $result = $this->mediaBuilder->mediaDtoFromContent($mediaCreatorForm->content, $tags);
             } else if (!empty($mediaCreatorForm->systemId)) {
                 $result = $this->mediaBuilder->mediaDtoFromMedia($mediaCreatorForm->systemId);

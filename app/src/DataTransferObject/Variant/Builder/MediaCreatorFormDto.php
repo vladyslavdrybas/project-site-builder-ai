@@ -18,5 +18,6 @@ class MediaCreatorFormDto
         public bool $toGetFromStock = false,
         public bool $toSetFromCatalog = false,
         public ?string $content = null,
+        public ?string $url = null,
     ) {}
 }
