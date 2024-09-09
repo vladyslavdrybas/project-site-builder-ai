@@ -36,7 +36,6 @@ class ExceptionJsonSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event): void
     {
         $route = $event->getRequest()->attributes->get('_route');
-        dump($route);
         if (
             'cp_variant_builder_process_ajax' !== $route
             && !str_starts_with($event->getRequest()->server->get('REQUEST_URI'), '/api')
@@ -73,8 +72,6 @@ class ExceptionJsonSubscriber implements EventSubscriberInterface
         if ($this->projectEnvironment !== 'prod') {
             $data['trace'] = $exception->getTrace();
         }
-
-        dump($data);
 
         $event->setResponse(new JsonResponse($data, $code));
         // or stop propagation (prevents the next exception listeners from being called)
