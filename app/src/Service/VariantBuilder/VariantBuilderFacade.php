@@ -63,7 +63,8 @@ class VariantBuilderFacade
                 $variantMetaDto->parts->header->data->brand->text ?? null,
                 new MediaCreatorFormDto(
                     $variantMetaDto->parts->header->data->brand->media->id ?? null,
-                    [], //$variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                    $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                    $variantMetaDto->parts->header->data->brand->media->tags ?? [],
                     null,
                     $variantMetaDto->parts->header->data->brand->media
                 )
@@ -85,8 +86,9 @@ class VariantBuilderFacade
                 $variantMetaDto->parts->hero->data->callToActionButton ?? null,
                 new MediaCreatorFormDto(
                     $variantMetaDto->parts->hero->data->media->id ?? null,
-                        [], //$variantMetaDto->parts->hero->data->media->tags ?? [],
-                    null,
+                        $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                        $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                        null,
                     $variantMetaDto->parts->hero->data->media
                 )
             );
@@ -107,8 +109,9 @@ class VariantBuilderFacade
                         $item->description,
                         new MediaCreatorFormDto(
                             $item->media->id ?? null,
-                                [], //$item->media->tags ?? [],
-                            null,
+                                $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                                $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                                null,
                             $item->media
                         )
                     ),
@@ -132,8 +135,9 @@ class VariantBuilderFacade
                         $item->description,
                         new MediaCreatorFormDto(
                             $item->media->id ?? null,
-                                [], //$item->media->tags ?? [],
-                            null,
+                                $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                                $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                                null,
                             $item->media
                         )
                     ),
@@ -152,8 +156,9 @@ class VariantBuilderFacade
                     $item->description,
                     new MediaCreatorFormDto(
                         $item->media->id ?? null,
-                            [], //$item->media->tags ?? [],
-                        null,
+                            $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                            $variantMetaDto->parts->header->data->brand->media->tags ?? [],
+                            null,
                         $item->media
                     )
                 ),

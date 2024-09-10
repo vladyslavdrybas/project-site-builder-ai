@@ -40,7 +40,7 @@ class MediaCreatorFormType extends AbstractType
                 }
             }
         );
-
+dump($data?->stockTags);
         $builder
             ->add('toRemove', HiddenBooleanType::class, ['data' => false])
             ->add('toGenerate', HiddenBooleanType::class, ['data' => false])
@@ -74,8 +74,19 @@ class MediaCreatorFormType extends AbstractType
             ->add('stockTags',
                 ImageFromStocksType::class,
                 [
+                    'label' => false,
+                    'help' => '',
                     'mapped' => true,
-                    'data' => $data?->stockTags,
+                    'data' => empty($data?->stockTags ?? null) ? ['width512','height512','blur5','grayscale'] : $data->stockTags,
+                ]
+            )
+            ->add('aiTags',
+                ImageFromStocksType::class,
+                [
+                    'label' => false,
+                    'help' => '',
+                    'mapped' => true,
+                    'data' => empty($data?->aiTags ?? null) ? ['width512','height512','blur5','grayscale'] : $data->aiTags,
                 ]
             )
             ->add('getFromStockBtn',

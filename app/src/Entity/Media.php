@@ -48,6 +48,9 @@ class Media implements EntityInterface
     #[ORM\Column(type: Types::STRING)]
     protected string $path;
 
+    #[ORM\Column(type: Types::STRING, options: ['default' => 'user'])]
+    protected string $mediaTag = 'user';
+
     #[ORM\Column(type: Types::STRING, options: ['default' => 'local'])]
     protected string $serverAlias = 'local';
 
@@ -77,6 +80,16 @@ class Media implements EntityInterface
         $this->tags = new ArrayCollection();
         $this->setCreatedAt(new DateTime());
         $this->setUpdatedAt(new DateTime());
+    }
+
+    public function getMediaTag(): string
+    {
+        return $this->mediaTag;
+    }
+
+    public function setMediaTag(string $mediaTag): void
+    {
+        $this->mediaTag = $mediaTag;
     }
 
     public function getMediaAiPrompt(): ?MediaAiPrompt

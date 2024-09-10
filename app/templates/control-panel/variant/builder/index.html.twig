@@ -314,6 +314,12 @@
 
 {% block scriptsbottom %}
 <script type="application/javascript">
+    const VARIANT = {
+        id:  '{{ variant.id }}',
+        projectId: '{{  variant.project.rawId }}',
+        ownerId: '{{  variant.project.owner.rawId }}',
+    };
+
     const mediaLibrary = {};
     let mediaLibraryOrderHash = {};
     let mediaLibraryOrder = [];
@@ -342,6 +348,19 @@
         'baseUri': '{{ absolute_url(path('api_media_list_share_stock')) }}'
     };
 
+    const mediaAiLibrary = {};
+    let mediaAiLibraryOrder = [];
+    let mediaAiLibraryOrderHash = {};
+    // lock requests if already ran. lock if limit exceed. unlock if uploaded new media.
+    const mediaAiLibraryConfig = {
+        'type': 'media_ai',
+        'lock': false,
+        'viewLimit': 6,
+        'viewPage': 0,
+        'restrictUploadOnLimit': false,
+        'baseUri': '{{ absolute_url(path('api_media_variant_generate_ai', {'variant': variant.id})) }}'
+    };
+
     const leftPane = document.getElementById("cp-panel-left");
     const rightPane = document.getElementById("cp-panel-right");
     const gutter = document.getElementById("cp-gutter");
@@ -367,6 +386,8 @@
                             setMedias(response.data);
                         } else if (response.type === mediaShareStockLibraryConfig.type) {
                             setShareStockMedias(response.data);
+                        } else if (response.type === mediaAiLibraryConfig.type) {
+                            setAiMedias(response.data);
                         } else {
                             console.log('trying to find undefined content type.');
                         }
@@ -479,6 +500,7 @@
             });
 console.log([
     'medias mod',
+    libraryConfig.type,
     medias.length,
     libraryConfig.viewLimit,
     medias.length % libraryConfig.viewLimit
@@ -528,6 +550,31 @@ console.log([
         console.log(
             {
             'timing':'setShareStockMedias',
+            'start':start/1000,
+            'end':end/1000,
+            'diff': (end-start)/1000,
+        });
+    }
+
+    function setAiMedias(data)
+    {
+        const start = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+
+        $.each(data, function (key, obj) {
+            mediaAiLibrary[key] = obj;
+            mediaAiLibraryOrderHash[key] = obj.order;
+        });
+
+        const order = Object.values(mediaAiLibraryOrderHash).sort();
+        const hashes = array_from_hash(mediaAiLibraryOrderHash);
+
+        mediaAiLibraryOrder = order.map((v) => hashes[v]);
+
+        // mediaShareStockLibraryOrder = array_unique(mediaShareStockLibraryOrder);
+        const end = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+        console.log(
+            {
+            'timing':'setAiMediasMedias',
             'start':start/1000,
             'end':end/1000,
             'diff': (end-start)/1000,
@@ -597,6 +644,11 @@ console.log([
             cache: false,
         })
             .done(function(response) {
+                $('.file-upload.with-preview').each(function(i, el) {
+                    el = $(el);
+                    el.val(null);
+                    el.trigger('change');
+                });
                 document.getElementById('preview-frame').contentWindow.location.reload();
             })
             .always(function() {
@@ -651,7 +703,48 @@ console.log([
     })
 
     // find content
-    $('.modal--tab-media-btn-prev.load-catalog, .modal--tab-media-btn-next.load-catalog, .sidebar--btn-media-open-modal').on('click', function(event, data) {
+    $('.media-loader.load-ai').on('click', function(event, data) {
+        event.preventDefault();
+        const start = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+
+        const me = $(this);
+        loadMedias(me, mediaAiLibraryConfig)
+            .then((r) => renderMediaList(
+                me,
+                $(me.attr('data-content-target-ai')),
+                mediaAiLibrary,
+                mediaAiLibraryOrder,
+                mediaAiLibraryConfig
+            ))
+            .then(function(r) {
+                const end = (new Date()).getMinutes()*60*1000 + (new Date()).getSeconds()*1000 + (new Date()).getMilliseconds();
+                console.log(
+                    {
+                        'timing':'GENERATE AI',
+                        'start':start/1000,
+                        'end':end/1000,
+                        'diff': (end-start)/1000,
+                    });
+            });
+
+
+        return false;
+    })
+
+    // find content
+    $('.sidebar--btn-media-open-modal').on('click', function(event, data) {
+        event.preventDefault();
+
+        const me = $(this);
+        renderMediaList(me, $(me.attr('data-content-target')), mediaLibrary, mediaLibraryOrder, mediaLibraryConfig);
+        renderMediaList(me, $(me.attr('data-content-target-share-stock')), mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig);
+        renderMediaList(me, $(me.attr('data-content-target-ai')), mediaAiLibrary, mediaAiLibraryOrder, mediaAiLibraryConfig);
+
+        return false;
+    })
+
+    // find content
+    $('.modal--tab-media-btn-prev.load-catalog, .modal--tab-media-btn-next.load-catalog').on('click', function(event, data) {
         event.preventDefault();
 
         const me = $(this);
@@ -661,7 +754,7 @@ console.log([
     })
 
     // find content
-    $('.modal--tab-media-btn-prev.load-stock-share, .modal--tab-media-btn-next.load-stock-share, .sidebar--btn-media-open-modal').on('click', function(event, data) {
+    $('.modal--tab-media-btn-prev.load-stock-share, .modal--tab-media-btn-next.load-stock-share').on('click', function(event, data) {
         event.preventDefault();
         const me = $(this);
         renderMediaList(me, $(me.attr('data-content-target-share-stock')), mediaShareStockLibrary, mediaShareStockLibraryOrder, mediaShareStockLibraryConfig);
@@ -669,9 +762,23 @@ console.log([
         return false;
     })
 
+    // find content
+    $('.modal--tab-media-btn-prev.load-ai, .modal--tab-media-btn-next.load-ai').on('click', function(event, data) {
+        event.preventDefault();
+        const me = $(this);
+        renderMediaList(me, $(me.attr('data-content-target-ai')), mediaAiLibrary, mediaAiLibraryOrder, mediaAiLibraryConfig);
+
+        return false;
+    })
+
     $('.file-upload.with-preview').on('change', function(event) {
         const me = $(this);
         const output = $(me.attr('data-content-target'));
+        if (event.target.files.length === 0) {
+            output.addClass('d-none');
+
+            return;
+        }
         output.attr('src', URL.createObjectURL(event.target.files[0]));
         output.on('load', function() {
             URL.revokeObjectURL(output.attr('src')) // free memory

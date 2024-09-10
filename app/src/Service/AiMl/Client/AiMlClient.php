@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Service\AiMl\Client;
 
+use App\Builder\MediaBuilder;
 use App\DataTransferObject\Variant\MediaDto;
 use App\Entity\MediaAiPrompt;
+use App\Entity\User;
 use App\Repository\MediaAiPromptRepository;
 use DateTime;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,6 +25,7 @@ class AiMlClient
         protected readonly HttpClientInterface $aimlApiClient,
         protected readonly ParameterBagInterface $parameterBag,
         protected readonly MediaAiPromptRepository $mediaAiPromptRepository,
+        protected readonly MediaBuilder $mediaBuilder,
         protected readonly Security $security,
         protected readonly string $projectDir,
         protected readonly string $projectEnvironment
@@ -35,7 +38,6 @@ class AiMlClient
         array $size = [self::IMAGE_DEFAULT_WITH, self::IMAGE_DEFAULT_HEIGHT]
     ): ?MediaDto
     {
-
         if (count($tags) > 0) {
             $prompt = $prompt . sprintf(
                     'To generate image use next keywords: %s',
@@ -71,7 +73,8 @@ class AiMlClient
             $requestAt = new DateTime('now');
             $start = microtime(true);
 
-            $user = $this->security->getUser();
+            /** @var User $owner */
+            $owner = $this->security->getUser();
 
             $response = $this->aimlApiClient->request(
                 'POST',
@@ -93,7 +96,7 @@ class AiMlClient
             dump($content);
 
             $mediaPrompt = new MediaAiPrompt();
-            $mediaPrompt->setOwner($user);
+            $mediaPrompt->setOwner($owner);
             $mediaPrompt->setApiName('aiml');
             $mediaPrompt->setModelName($modelName);
             $mediaPrompt->setTags($tags);
@@ -133,11 +136,14 @@ class AiMlClient
                         $fileContent = $response->getContent();
 
                         $result = new MediaDto();
+                        $result->ownerId = $owner->getRawId();
                         $result->mimeType = $mediaPrompt->getMimeType();
                         $result->extension = $extension;
                         $result->content = base64_encode($fileContent);
                         $result->tags = $tags;
                         $result->mediaAiPromptId = $mediaPrompt->getRawId();
+
+                        $result->id = $this->mediaBuilder->generateMediaId($result);
 
                         if (in_array($this->projectEnvironment, ['local', 'dev'])) {
                             $this->filesystem->dumpFile(

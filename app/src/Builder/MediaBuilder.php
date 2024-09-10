@@ -8,12 +8,16 @@ use App\Entity\Media;
 use App\Entity\MediaAiPrompt;
 use App\Entity\Tag;
 use App\Entity\User;
+use App\Repository\MediaRepository;
+use App\Repository\TagRepository;
 use App\Service\ImageStocks\DataTransferObject\StockImageDto;
 use App\Service\ImageStocks\ImageStocksFacade;
 use App\Utility\MediaIdGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MediaBuilder implements IEntityBuilder
 {
@@ -22,97 +26,150 @@ class MediaBuilder implements IEntityBuilder
         protected readonly string $contentDir,
         protected readonly Filesystem $filesystem,
         protected readonly MediaIdGenerator $mediaIdGenerator,
-        protected readonly ImageStocksFacade $imageStocksFacade
+        protected readonly ImageStocksFacade $imageStocksFacade,
+        protected readonly UrlGeneratorInterface $urlGenerator,
+        protected readonly MediaRepository $mediaRepository,
+        protected readonly TagRepository $tagRepository
     ) {}
 
     public function fromArray(
         array $data
     ): Media {
-        dump($data);
-        if (
-            empty($data['ownerId'])
-        ) {
-            throw new \Exception('Media must have owner to create.');
+        dump([
+            __METHOD__,
+            $data
+        ]);
+
+        $isAlreadyExist = $data['id'] !== null && $data['url'] !== null;
+        $isStoreFromContent = !$isAlreadyExist && $data['content'] !== null;
+        $isStoreFromExternalResource = !$isAlreadyExist && $data['url'] !== null;
+        $mediaTag = $data['mediaTag'] ?? 'user';
+        $tags = array_unique($data['tags'] ?? []);
+
+        dump([
+            $isAlreadyExist,
+            $isStoreFromContent,
+            $isStoreFromExternalResource
+        ]);
+
+        $media = null;
+        if ($isAlreadyExist) {
+            $existedMedia = $this->mediaRepository->find($data['id']);
+            if (null === $existedMedia) {
+                throw new EntityNotFoundException(Media::class);
+            }
+
+            $media = $existedMedia;
         }
-        $media = new Media();
 
-        $mediaRepository = $this->em->getRepository(Media::class);
-        $tagRepository = $this->em->getRepository(Tag::class);
+        if ($isStoreFromExternalResource) {
+            dump([
+                __METHOD__,
+                'STORE FROM EXTERNAL RESOURCE',
+            ]);
 
-        $tags = array_unique($data['tags']);
+            if (!empty($data['url'])) {
+                $host = parse_url($data['url'])['host'];
+                dump([
+                    'url' => $host,
+                    'host' => $data['url'],
+                ]);
 
-        if (!empty($data['url'])) {
-            $imageStock = $this->imageStocksFacade->loadByUrl($data['url']);
-            $mediaDto = $this->mediaDtoFromStockImage($imageStock);
-            $mediaDto->ownerId = $data['ownerId'];
-            $data['extension'] = $mediaDto->extension;
-            $data['mimeType'] = $mediaDto->mimeType;
-            $data['size'] = $mediaDto->size;
-            $data['content'] = $mediaDto->content;
-            $data['id'] = $this->generateMediaId($mediaDto);
+                if (!in_array(
+                    $host,
+                    [
+                        'prototyper.localhost',
+                    ]
+                )) {
+                    $mediaTag = 'stock';
+                    $imageStock = $this->imageStocksFacade->loadByUrl($data['url']);
+                    dump($imageStock);
+                    $data['content'] = $imageStock->content;
+                    $data['extension'] = $imageStock->extension;
+                    $data['mimeType'] = $imageStock->mimeType;
+                    $data['size'] = $imageStock->size;
+                    dump($data);
+
+                    $isStoreFromContent = true;
+                }
+            }
         }
 
-        $media->setId($data['id']);
-        $media->setExtension($data['extension']);
-        $media->setMimetype($data['mimeType']);
-        $media->setSize($data['size'] ?? 0);
+        if ($isStoreFromContent) {
+            $dto = $this->mediaDtoByContent($data['content'], $tags);
+            $dto->extension = $data['extension'];
+            $dto->mimeType = $data['mimeType'];
+            $dto->size = $data['size'] ?? 0;
 
-        if (!empty($data['mediaAiPromptId'])) {
+            if (null === $media) {
+                $media = new Media();;
+            }
+
+            $media->setId($dto->id);
+            $media->setMimetype($dto->mimeType);
+            $media->setExtension($dto->extension);
+            $media->setSize($dto->size);
+
+            if ($dto === null) {
+                dump([
+                    $isAlreadyExist,
+                    $isStoreFromContent,
+                    $isStoreFromExternalResource
+                ]);
+                throw new \Exception('No content found to create media.');
+            }
+
+            $existedMedia = $this->mediaRepository->find($media->getId());
+            if ($existedMedia instanceof Media) {
+                $media = $existedMedia;
+            } else {
+                $filePath = $this->generateFilePath(
+                    $media->getRawId(),
+                    $media->getExtension(),
+                    $mediaTag
+                );
+
+                if (false === $this->filesystem->exists($filePath) && !empty($dto->content)) {
+                    $content = base64_decode($dto->content);
+                    if ($media->getServerAlias() === 'local') {
+                        // TODO decentralized filesystem
+                        $this->filesystem->dumpFile($filePath, $content);
+                    }
+                }
+
+                $media->setPath($filePath);
+
+                foreach ($dto->tags as $tag) {
+                    if ($media->hasTagByKey($tag)) {
+                        continue;
+                    }
+
+                    $existedTag = $this->tagRepository->find($tag);
+                    if (!$existedTag instanceof Tag) {
+                        $tag = new Tag($tag);
+                        $this->tagRepository->add($tag);
+                        $this->tagRepository->save();
+                    } else {
+                        $tag = $existedTag;
+                    }
+
+                    $media->addTag($tag);
+                }
+            }
+        }
+
+        if (empty($media?->getMediaAiPrompt()) && !empty($data['mediaAiPromptId'])) {
             $mediaAiPromptRepository = $this->em->getRepository(MediaAiPrompt::class);
             $mediaAiPrompt = $mediaAiPromptRepository->find($data['mediaAiPromptId']);
             $media->setMediaAiPrompt($mediaAiPrompt);
         }
 
-        $existedMedia = $mediaRepository->find($media->getId());
-
-
-        $content = base64_decode($data['content']);
-
-        $filePath = $this->generateFilePath(
-            $data['ownerId'],
-            $data['id'],
-            $data['extension']
-        );
-        $fileStored = false;
-
-        if ($existedMedia instanceof Media) {
-            $media = $existedMedia;
-            if ($this->filesystem->exists($filePath)) {
-                $fileStored = true;
-            }
-        }
-
-        // TODO how to move it from build and separate store from build?
-        if (false === $fileStored) {
-            if ($media->getServerAlias() === 'local') {
-                // TODO decentralized filesystem
-                $this->filesystem->dumpFile($filePath, $content);
-            }
-        }
-
-        $media->setPath($filePath);
-
-        foreach ($tags as $tag) {
-            if ($media->hasTagByKey($tag)) {
-                continue;
-            }
-
-            $existedTag = $tagRepository->find($tag);
-            if (!$existedTag instanceof Tag) {
-                $tag = new Tag($tag);
-                $tagRepository->add($tag);
-                $tagRepository->save();
-            } else {
-                $tag = $existedTag;
-            }
-
-            $media->addTag($tag);
-        }
+        dump($media);
 
         return $media;
     }
 
-    public function mediaDtoFromUploadedFile(
+    public function mediaDtoByUploadedFile(
         User $owner,
         ?UploadedFile $file = null,
         array $tags = [],
@@ -128,7 +185,6 @@ class MediaBuilder implements IEntityBuilder
         $mimeType = $file->getMimeType();
         $version = 0;
 
-
         $dto = new MediaDto(
             null,
             $mimeType,
@@ -141,46 +197,110 @@ class MediaBuilder implements IEntityBuilder
         );
 
         $dto->id = $this->generateMediaId($dto);
+        $dto->url = null;
+        $dto->mediaAiPromptId = null;
 
-        return $dto;
+
+        $media = $this->mediaRepository->find($dto->id);
+
+        if (!$media instanceof Media) {
+            $filePath = $this->generateFilePath(
+                $dto->id,
+                $dto->extension,
+            );
+
+            if (!$this->filesystem->exists($filePath)) {
+                $this->filesystem->dumpFile($filePath, $content);
+            }
+
+            $media = $this->mediaByMediaDto($dto);
+            $media->setOwner($owner);
+            $media->setMediaTag('user');
+            $media->setPath($filePath);
+
+            $this->mediaRepository->add($media);
+            $this->mediaRepository->save();
+        }
+
+        return $this->mediaDtoByMedia($media);
     }
 
-    public function mediaDtoFromStockImage(StockImageDto $stockImage): MediaDto
+    public function mediaByMediaDto(MediaDto $dto): Media
     {
-        return new MediaDto(
+        $media = new Media();
+        $media->setId($dto->id);
+        $media->setExtension($dto->extension);
+        $media->setMimeType($dto->mimeType);
+        $media->setSize($dto->size);
+        $media->setMediaAiPrompt($dto->mediaAiPromptId);
+
+        foreach ($dto->tags as $tag) {
+            if ($media->hasTagByKey($tag)) {
+                continue;
+            }
+
+            $existedTag = $this->tagRepository->find($tag);
+            if (!$existedTag instanceof Tag) {
+                $tag = new Tag($tag);
+                $this->tagRepository->add($tag);
+                $this->tagRepository->save();
+            } else {
+                $tag = $existedTag;
+            }
+
+            $media->addTag($tag);
+        }
+
+        return $media;
+    }
+
+    public function mediaDtoByStockImage(StockImageDto $stockImage): MediaDto
+    {
+        $media = new MediaDto(
             null,
             $stockImage->mimeType,
             $stockImage->extension,
             $stockImage->size,
             $stockImage->version,
             $stockImage->tags,
-            null,
+            $stockImage->ownerId,
             $stockImage->content,
             $stockImage->url,
         );
+        $media->id = $this->generateMediaId($media);
+
+        return $media;
     }
 
-    public function mediaDtoFromMedia(?string $id = null): ?MediaDto
+    public function mediaDtoByMediaId(?string $id = null): ?MediaDto
     {
         if (null === $id) return null;
-        $mediaRepository = $this->em->getRepository(Media::class);
-        $media = $mediaRepository->find($id);
+        $media = $this->mediaRepository->find($id);
 
         if (null === $media) return null;
 
+        return $this->mediaDtoByMedia($media);
+    }
+
+    public function mediaDtoByMedia(Media $media): MediaDto
+    {
         $dto = new MediaDto();
         $dto->id = $media->getId();
+        $dto->ownerId = $media->getOwner()->getRawId();
         $dto->mimeType = $media->getMimeType();
         $dto->extension = $media->getExtension();
         $dto->size = $media->getSize();
         $dto->version = $media->getVersion();
         $dto->ownerId = $media->getOwner()->getRawId();
         $dto->tags = $media->getTags()->map(fn(Tag $tag) => $tag->getRawId())->toArray();
+        $dto->mediaAiPromptId = $media->getMediaAiPrompt()?->getRawId();
+
+        $dto->url = $this->urlGenerator->generate('app_media_show', ['media' => $media->getRawId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $dto;
     }
 
-    public function mediaDtoFromContent(
+    public function mediaDtoByContent(
         ?string $content = null,
         array $tags = []
     ): ?MediaDto {
@@ -200,25 +320,28 @@ class MediaBuilder implements IEntityBuilder
             $dto->extension = $contentData[0];
         }
 
+        $dto->id = $this->generateMediaId($dto);
+
         return $dto;
     }
 
     public function generateMediaId(MediaDto $media): string
     {
-        return $this->mediaIdGenerator->generate($media->ownerId, $media->content, $media->version);
+        return $this->mediaIdGenerator->generate($media->content, $media->version);
     }
 
-    protected function generateFilePath(
-        string $ownerId,
+    public function generateFilePath(
         string $fileId,
-        string $fileExtension
+        string $fileExtension,
+        string $prefix = 'user',
+        int $nameSplitIndex = 6
     ): string {
-        $dir = $this->contentDir;
+        $fileId = implode('/', str_split($fileId, $nameSplitIndex));
 
         return sprintf(
             '%s/%s/%s.%s',
-            $dir,
-            str_replace('-', '/', $ownerId),
+            $this->contentDir,
+            $prefix,
             $fileId,
             $fileExtension
         );

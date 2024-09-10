@@ -215,56 +215,68 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
         ?Variant $variant = null,
     ): ?MediaDto
     {
+        dump($mediaCreatorForm->file);
+        dump($mediaCreatorForm);
+
         if (null === $mediaCreatorForm
             || true === $mediaCreatorForm->toRemove
         ) {
             return null;
         }
 
+        $toGenerateAi = $mediaCreatorForm->toGenerate;
+        $toGetFromStock = $mediaCreatorForm->toGetFromStock;
+        $toGetFromMyCatalog = $mediaCreatorForm->toSetFromCatalog;
+
+        $createAndStoreFromUploadedFile = $mediaCreatorForm->file instanceof UploadedFile
+            && !$toGenerateAi
+            && !$toGetFromStock
+            && !$toGetFromMyCatalog
+        ;
+        $getFromExternalMedia = $toGetFromStock
+            && !empty($mediaCreatorForm->url)
+        ;
+        $createFromContent = !empty($mediaCreatorForm->content);
+        $getFromExistedMedia = !empty($mediaCreatorForm->systemId);
+        $hasMedia = $mediaCreatorForm->media instanceof MediaDto;
+
         $result = null;
-        if ($mediaCreatorForm->url) {
-            $result = new MediaDto();
-            $result->ownerId = $owner->getRawId();
-            $result->url = $mediaCreatorForm->url;
-            $result->tags = $tags;
-        } else if ($mediaCreatorForm->toGetFromStock) {
-            // TODO slow on frontend, so refactor to use stock image url until user want to save image.
-            // only if user want to save it - then download content and store it on local server
-            if (!empty($mediaCreatorForm->content)) {
-                $result = $this->mediaBuilder->mediaDtoFromContent($mediaCreatorForm->content, $tags);
-            } else if (!empty($mediaCreatorForm->systemId)) {
-                $result = $this->mediaBuilder->mediaDtoFromMedia($mediaCreatorForm->systemId);
-            }
-
-            if (null !== $result) {
-                $result->ownerId = $owner->getRawId();
-                $result->id = $this->mediaBuilder->generateMediaId($result);
-            }
-        } else if ($mediaCreatorForm->toGenerate) {
-            $variantPromptMeta = $variant->getPromptMeta();
-
-            $result = $this->imageAiCreatorFacade->findOneRandom(
-                $variantPromptMeta,
-                $tags
-            );
-            if (null !== $result) {
-                $result->ownerId = $owner->getRawId();
-                $result->id = $this->mediaBuilder->generateMediaId($result);
-            }
-        } else if ($mediaCreatorForm->toSetFromCatalog) {
-            $result = $this->mediaBuilder->mediaDtoFromMedia($mediaCreatorForm->systemId);
-        } else if ($mediaCreatorForm->file instanceof UploadedFile) {
-            $result = $this->mediaBuilder->mediaDtoFromUploadedFile(
+        if ($createAndStoreFromUploadedFile) {
+            dump('FROM FILE');
+            $result = $this->mediaBuilder->mediaDtoByUploadedFile(
                 $owner,
                 $mediaCreatorForm->file,
                 $tags
             );
+        } else if ($getFromExternalMedia) {
+            dump('FROM EXTERNAL');
+
+            $result = new MediaDto();
+            $result->ownerId = $owner->getRawId();
+            $result->url = $mediaCreatorForm->url;
+            $result->tags = $tags;
+        } else if ($createFromContent) {
+            dump('FROM CONTENT');
+
+            $result = $this->mediaBuilder->mediaDtoByContent($mediaCreatorForm->content, $tags);
+
+            if (null !== $result) {
+                $result->ownerId = $owner->getRawId();
+            }
+        } else if ($getFromExistedMedia) {
+            dump('FROM EXISTED');
+
+            $result = $this->mediaBuilder->mediaDtoByMediaId($mediaCreatorForm->systemId);
         }
 
-        if (null === $result && $mediaCreatorForm->media instanceof MediaDto) {
+        if ($result === null && $hasMedia) {
+            dump('FROM WHAT HAS');
+
             $result = $mediaCreatorForm->media;
         }
 
+
+dump($result);
         return $result;
     }
 }

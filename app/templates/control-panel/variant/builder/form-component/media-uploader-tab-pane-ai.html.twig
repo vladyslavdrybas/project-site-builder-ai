@@ -1,0 +1,105 @@
+{% set tabId = '_ai' %}
+
+<div
+    class="tab-pane fade"
+    id="{{ form.vars.id }}_modal{{ tabId }}"
+    role="tabpanel" aria-labelledby="{{ form.vars.id }}_modal{{ tabId }}-tab"
+    tabindex="0"
+>
+    <div class="tab-pane-content d-flex flex-column justify-content-between align-items-baseline">
+
+        <div class="d-flex flex-row justify-content-between align-items-baseline w-100 pb-3">
+            {{ form_row(form.aiTags) }}
+        </div>
+
+        <div
+            data-media-type="media_ai"
+            data-click-target="#{{ form.generateBtn.vars.id }}"
+            data-media-id-field="#{{ form.systemId.vars.id }}"
+            data-media-url-field="#{{ form.url.vars.id }}"
+            data-media-content-field="#{{ form.content.vars.id }}"
+            data-click-target-mask="#{{ form.toGenerate.vars.id }}"
+            id="{{ form.vars.id }}_media{{ tabId }}_content"
+            class="media-catalog d-flex flex-row flex-wrap justify-content-between align-content-between align-items-center mb-5 w-100"
+        >
+            <!-- EMPTY PLACE FOR LOADED MEDIA THUMBNAILS -->
+        </div>
+
+        <div class="d-flex flex-row justify-content-between align-items-baseline w-100 pb-3">
+            <button
+                id="{{ form.vars.id }}_media{{ tabId }}_prev"
+                type="button"
+                class="
+                    modal--tab-media-btn
+                    modal--tab-media-btn-prev
+                    load-ai
+                    btn
+                    btn-dark
+                    border-0
+                    shadow-none
+                    rounded-0
+                    p-2
+                    px-3
+                    pe-5
+                    text-center
+                "
+                data-direction="-1"
+                data-content-target-ai="#{{ form.vars.id }}_media{{ tabId }}_content"
+                data-btn-prev="#{{ form.vars.id }}_media{{ tabId }}_prev"
+                data-btn-next="#{{ form.vars.id }}_media{{ tabId }}_next"
+            >
+                <svg class="bi bi-1 mb-1"><use xlink:href="#icon-arrow-left-fill"/></svg>
+                <span class="media-arrow-page-numbers"></span>
+            </button>
+            <button
+                id="{{ form.vars.id }}_media_catalog_more"
+                type="button"
+                class="
+                    modal--tab-media-btn
+                    btn-load-more
+                    media-loader
+                    load-ai
+                    btn
+                    btn-dark
+                    border-0
+                    shadow-none
+                    rounded-0
+                    p-2
+                "
+                data-direction="1"
+                data-content-target-ai="#{{ form.vars.id }}_media{{ tabId }}_content"
+                data-btn-prev="#{{ form.vars.id }}_media{{ tabId }}_prev"
+                data-btn-next="#{{ form.vars.id }}_media{{ tabId }}_next"
+            >
+                Generate
+            </button>
+            <button
+                id="{{ form.vars.id }}_media{{ tabId }}_next"
+                type="button"
+                class="
+                    modal--tab-media-btn
+                    modal--tab-media-btn-next
+                    load-ai
+                    btn
+                    btn-dark
+                    border-0
+                    shadow-none
+                    rounded-0
+                    p-2
+                    px-3
+                    ps-5
+                    text-center
+                "
+                data-direction="1"
+                data-content-target-ai="#{{ form.vars.id }}_media{{ tabId }}_content"
+                data-btn-prev="#{{ form.vars.id }}_media{{ tabId }}_prev"
+                data-btn-next="#{{ form.vars.id }}_media{{ tabId }}_next"
+            >
+                <span class="media-arrow-page-numbers"></span>
+                <svg class="bi bi-1 mb-1"><use xlink:href="#icon-arrow-right-fill"/></svg>
+            </button>
+
+        </div>
+
+    </div>
+</div>

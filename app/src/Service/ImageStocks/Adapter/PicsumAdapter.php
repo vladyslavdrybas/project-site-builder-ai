@@ -123,7 +123,7 @@ class PicsumAdapter implements IAdapter
                 $result = $this->stockImageDtoFromResponse($response);
                 $result->tags = $tags;
 
-                if (in_array($this->projectEnvironment, ['local', 'dev'])) {
+                if (in_array($this->projectEnvironment, ['local'])) {
                     $content = base64_decode($result->content);
                     $this->filesystem->dumpFile(
                         sprintf(

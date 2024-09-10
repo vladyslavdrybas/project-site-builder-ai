@@ -11,6 +11,7 @@ class MediaCreatorFormDto
     public function __construct(
         public ?string $systemId = null,
         public array $stockTags = [],
+        public array $aiTags = [],
         public ?UploadedFile $file = null,
         public ?MediaDto $media = null,
         public bool $toRemove = false,

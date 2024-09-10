@@ -16,6 +16,14 @@ class ImageFromStocksType extends AbstractType
             'label' => 'Search Image on stocks',
             'help' => 'Add keywords separated by space. for example: width512, height512, blur5, grayscale, etc.',
             'required' => false,
+            'row_attr' => [
+                'class' => 'w-100',
+            ],
+            'attr' => [
+                'class' => 'input-tags text-secondary search-keywords w-100',
+                'placeholder' => 'keywords',
+                'data-ub-tag-separator' => ' ',
+            ]
         ]);
     }
 

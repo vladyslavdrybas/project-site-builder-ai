@@ -5,8 +5,8 @@ namespace App\Utility;
 
 class MediaIdGenerator
 {
-    public function generate(string $ownerId, string $content, int $version): string
+    public function generate(string $content, int $version = 0): string
     {
-        return hash('sha256', $ownerId .$content . $version);
+        return hash('sha256', $content . $version);
     }
 }

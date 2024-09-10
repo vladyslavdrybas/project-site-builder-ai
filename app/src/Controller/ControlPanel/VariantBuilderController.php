@@ -195,16 +195,26 @@ class VariantBuilderController extends AbstractControlPanelController
                         $mediasToStore
                     );
 
-                    $mediaRepository = $this->em->getRepository(Media::class);
-                    foreach ($mediasToStore as $media) {
-                        if (null === $media->getOwner()) {
-                            $media->setOwner($this->getUser());
-                            $mediaRepository->add($media);
+                    try {
+                        $mediaRepository = $this->em->getRepository(Media::class);
+                        foreach ($mediasToStore as $media) {
+                            if (null === $media->getOwner()) {
+                                $media->setOwner($this->getUser());
+                                $mediaRepository->add($media);
+                            }
+                            $variant->addMedia($media);
                         }
-                        $variant->addMedia($media);
+                        $mediaRepository->save();
+                    }catch (Exception $e) {
+                        dump($mediasToStore);
+                        dump($e);
+                        throw $e;
                     }
-                    $mediaRepository->save();
 
+                    dump([
+                        '$variantMetaArray',
+                        $variantMetaArray,
+                    ]);
                     $variant->setMeta($variantMetaArray);
 
                     $variantRepository = $this->em->getRepository(Variant::class);
@@ -241,9 +251,14 @@ class VariantBuilderController extends AbstractControlPanelController
                         $value['ownerId'] = $this->getUser()->getRawId();
                     }
                     if (!empty($value['url'])) {
+                        dump([
+                            'id' => $value['id'],
+                            'url' => $value['url'],
+                        ]);
                         $value['content'] = null;
                         $media = $this->mediaBuilder->fromArray($value);
                         $medias[$media->getId()] = $media;
+                        $ar[$key] = $this->mediaBuilder->mediaDtoByMedia($media);
                         unset($value['url']);
                     } else if (!empty($value['content'])) {
                         $media = $this->mediaBuilder->fromArray($value);
@@ -252,11 +267,12 @@ class VariantBuilderController extends AbstractControlPanelController
                         unset($value['content']);
                         unset($value['size']);
 
-                        $ar[$key] = $value;
+                        $ar[$key] = $this->mediaBuilder->mediaDtoByMedia($media);
                     };
 
                     continue;
                 } catch (\Exception $e) {
+                    dump($e->getMessage());
                     $this->addFlash('error', $e->getMessage());
                 }
             } else {

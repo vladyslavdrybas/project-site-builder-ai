@@ -73,6 +73,8 @@ class ExceptionJsonSubscriber implements EventSubscriberInterface
             $data['trace'] = $exception->getTrace();
         }
 
+        dump($data);
+
         $event->setResponse(new JsonResponse($data, $code));
         // or stop propagation (prevents the next exception listeners from being called)
         $event->stopPropagation();
