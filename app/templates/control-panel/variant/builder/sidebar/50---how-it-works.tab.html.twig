@@ -1,1 +1,18 @@
-{{ form_row(form.howitworks, {'label' : false}) }}
+{% set form = form.howitworks %}
+
+{% include 'control-panel/variant/builder/form-component/show-section-switcher.html.twig' with {'form': form} only %}
+
+{{ form_row(form.headline) }}
+
+{{ form_row(form.subheadline) }}
+
+{% include 'control-panel/variant/builder/form-component/items-accordion-with-description-and-media.html.twig'
+    with {
+    'wrapperId': form.vars.id,
+    'items': form.items,
+    'labels': {
+        'activeButton': 'Show step',
+        'mediaButton': 'Edit Step Image',
+        'headerPrefix': 'Steps',
+    }
+} only %}

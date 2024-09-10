@@ -40,7 +40,7 @@ class MediaCreatorFormType extends AbstractType
                 }
             }
         );
-dump($data?->stockTags);
+
         $builder
             ->add('toRemove', HiddenBooleanType::class, ['data' => false])
             ->add('toGenerate', HiddenBooleanType::class, ['data' => false])

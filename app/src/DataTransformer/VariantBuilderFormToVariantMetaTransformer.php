@@ -107,6 +107,11 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
             $value->features->isActive
         );
 
+        dump([
+            __METHOD__,
+            'HOW IT WORKS ITEMS',
+            $value->howitworks
+        ]);
         $howitworks = new HowItWorksPartDto(
             new HowItWorksPartDataDto(
                 $value->howitworks->headline,
