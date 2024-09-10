@@ -1,0 +1,41 @@
+{% set itemActiveButtonLabel = 'Show feature' %}
+{% set itemMediaButtonLabel = 'Edit Feature Image' %}
+{% set itemHeaderPrefixLabel = 'Feature' %}
+
+<div class="accordion accordion-flush" id="{{ wrapperId }}_items_accordion">
+    {% for item in items %}
+
+        <div id="{{ item.vars.id }}_item_{{ loop.index }}" class="accordion-item">
+            <h2 class="accordion-header bg-dark">
+                <button
+                    class="accordion-button py-3 px-1 bg-dark collapsed text-white"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#{{ item.vars.id }}_item_{{ loop.index }}_collapse" aria-expanded="true"
+                    aria-controls="{{ item.vars.id }}_item_{{ loop.index }}_collapse"
+                >
+                    {{ labels.headerPrefix }} #{{ loop.index }} <span class="badge ps-1">--- config</span>
+                </button>
+            </h2>
+            <div
+                id="{{ item.vars.id }}_item_{{ loop.index }}_collapse"
+                class="
+                accordion-collapse
+                collapse
+            "
+                data-bs-parent="#{{ wrapperId }}_items_accordion"
+            >
+                <div class="accordion-body">
+                    {% include 'control-panel/variant/builder/form-component/switcher.html.twig' with {'form': item, 'label': labels.activeButton } only %}
+
+                    {{ form_row(item.headline, {'label': labels.headline ?? 'Headline'}) }}
+                    {{ form_row(item.subheadline, {'label': labels.subheadline ?? 'Subheadline'}) }}
+
+                    {% include 'control-panel/variant/builder/form-component/media-uploader.html.twig' with {'form': item.media, 'label': labels.mediaButton } only %}
+                </div>
+            </div>
+        </div>
+
+
+    {% endfor %}
+</div>

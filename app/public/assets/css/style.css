@@ -138,6 +138,16 @@ body {
     --palette-color-black: #0d1216;
 
     --paletter-color-primary: var(--palette-generic-100);
+
+    --bg-dark-hex: #212529;
+
+    --bs-accordion-btn-icon-white: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon-white: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 5L8 11L14 5'/%3e%3c/svg%3e");
+}
+
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: var(--bg-dark-hex) !important;
 }
 
 .btn-light {
