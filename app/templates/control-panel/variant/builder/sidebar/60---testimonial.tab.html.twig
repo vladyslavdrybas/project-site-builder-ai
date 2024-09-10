@@ -1,1 +1,20 @@
-{{ form_row(form.testimonial, {'label' : false}) }}
+{% set form = form.testimonial %}
+
+{% include 'control-panel/variant/builder/form-component/show-section-switcher.html.twig' with {'form': form} only %}
+
+{{ form_row(form.headline) }}
+
+{{ form_row(form.subheadline) }}
+
+{% include 'control-panel/variant/builder/form-component/items-accordion-with-description-and-media.html.twig'
+    with {
+    'wrapperId': form.vars.id,
+    'items': form.items,
+    'labels': {
+        'headline': 'Reviewer name',
+        'subheadline': 'Review text',
+        'activeButton': 'Show reveiw',
+        'mediaButton': 'Edit Avatar',
+        'headerPrefix': 'Review',
+    }
+} only %}

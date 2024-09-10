@@ -16,6 +16,8 @@
 
         <div class="carousel-indicators">
             {% for item in data.items %}
+
+                {% if item.isActive == true %}
                 <button
                     type="button"
                     data-bs-target="#testimonialsCarousel"
@@ -26,42 +28,45 @@
                         aria-current="true"
                     {% endif %}
                 ></button>
+                {% endif %}
             {% endfor %}
         </div>
 
         <div class="carousel-inner">
 
             {% for item in data.items %}
-                {% set itemHasMedia = item.media.ownerId is defined and item.media.ownerId is not null %}
-                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-                    <div class="container">
-                        <div class="testimonial carousel-caption">
-                            {% if itemHasMedia %}
-                                {% if item.media.url is defined and item.media.url is not null%}
-                                    <img
-                                        src="{{ item.media.url }}"
-                                        class="rounded-circle mb-3"
-                                        alt="icon"
-                                    >
-                                {% elseif item.media.content is defined and item.media.content is not null %}
-                                    <img
-                                        src="data:{{ item.media.mimeType }};base64,{{ item.media.content }}"
-                                        class="rounded-circle mb-3"
-                                        alt="icon"
-                                    >
-                                {% elseif item.media.id is defined and item.media.id is not null %}
-                                    <img
-                                        src="{{ absolute_url(path('app_media_show', {'media': item.media.id})) }}"
-                                        class="rounded-circle mb-3"
-                                        alt="icon"
-                                    >
+                {% if item.isActive == true %}
+                    {% set itemHasMedia = item.media.ownerId is defined and item.media.ownerId is not null %}
+                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                        <div class="container">
+                            <div class="testimonial carousel-caption">
+                                {% if itemHasMedia %}
+                                    {% if item.media.url is defined and item.media.url is not null%}
+                                        <img
+                                            src="{{ item.media.url }}"
+                                            class="rounded-circle mb-3"
+                                            alt="icon"
+                                        >
+                                    {% elseif item.media.content is defined and item.media.content is not null %}
+                                        <img
+                                            src="data:{{ item.media.mimeType }};base64,{{ item.media.content }}"
+                                            class="rounded-circle mb-3"
+                                            alt="icon"
+                                        >
+                                    {% elseif item.media.id is defined and item.media.id is not null %}
+                                        <img
+                                            src="{{ absolute_url(path('app_media_show', {'media': item.media.id})) }}"
+                                            class="rounded-circle mb-3"
+                                            alt="icon"
+                                        >
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            <p>{{ item.description ?? null }}</p>
-                            <h5>{{ item.headline ?? null }}</h5>
+                                <p>{{ item.description ?? null }}</p>
+                                <h5>{{ item.headline ?? null }}</h5>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
 
         </div>

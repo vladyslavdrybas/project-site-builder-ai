@@ -146,11 +146,26 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
             $value->testimonial->items
         );
 
-        $testimonial = new TestimonialPartDto(
-            $value->howitworks->headline,
-            $value->howitworks->subheadline,
+        $isTestimonialActive = array_reduce(
             $testimonialItems,
-            $value->testimonial->isActive
+            function(int $carry, ?TestimonialDto $item){
+                dump([
+                    $item?->isActive,
+                    filter_var($item?->isActive, FILTER_VALIDATE_INT),
+                    (int) $item?->isActive,
+                ]) ;
+                return $carry + filter_var($item?->isActive, FILTER_VALIDATE_INT);
+            },
+            0
+        );
+
+        $isTestimonialActive *= (int) $value->subscriptions->isActive;
+
+        $testimonial = new TestimonialPartDto(
+            $value->testimonial->headline,
+            $value->testimonial->subheadline,
+            $testimonialItems,
+            $isTestimonialActive > 0
         );
 
         $subscriptions = new SubscriptionsPartDto(
