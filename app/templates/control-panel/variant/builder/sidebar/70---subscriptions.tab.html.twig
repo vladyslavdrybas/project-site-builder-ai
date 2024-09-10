@@ -1,1 +1,55 @@
-{{ form_row(form.subscriptions, {'label' : false}) }}
+{% set form = form.subscriptions %}
+{% set wrapperId = form.vars.id %}
+{% set items = form.items %}
+{% set labels = {
+    'activeButton': 'Show plan',
+    'headerPrefix': 'Plan',
+} %}
+
+{% include 'control-panel/variant/builder/form-component/show-section-switcher.html.twig' with {'form': form} only %}
+
+{{ form_row(form.headline) }}
+
+{{ form_row(form.subheadline) }}
+
+<div class="accordion accordion-flush" id="{{ wrapperId }}_items_accordion">
+    {% for item in items %}
+
+        <div id="{{ item.vars.id }}_item_{{ loop.index }}" class="accordion-item">
+            <h2 class="accordion-header bg-dark">
+                <button
+                    class="accordion-button py-3 px-1 bg-dark collapsed text-white"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#{{ item.vars.id }}_item_{{ loop.index }}_collapse" aria-expanded="true"
+                    aria-controls="{{ item.vars.id }}_item_{{ loop.index }}_collapse"
+                >
+                    {{ labels.headerPrefix }} #{{ loop.index }} <span class="badge ps-1">--- config</span>
+                </button>
+            </h2>
+            <div
+                id="{{ item.vars.id }}_item_{{ loop.index }}_collapse"
+                class="
+                accordion-collapse
+                collapse
+            "
+                data-bs-parent="#{{ wrapperId }}_items_accordion"
+            >
+                <div class="accordion-body">
+                    {% include 'control-panel/variant/builder/form-component/switcher.html.twig' with {'form': item, 'label': labels.activeButton } only %}
+
+                    {{ form_row(item.headline, {'label': labels.headline ?? 'Headline'}) }}
+                    {{ form_row(item.subheadline, {'label': labels.subheadline ?? 'Subheadline'}) }}
+                    {{ form_row(item.features, {'label': labels.features ?? 'Features'}) }}
+                    {{ form_row(item.price, {'label': labels.price ?? 'Price'}) }}
+                    {{ form_row(item.currencySign, {'label': labels.currencySign ?? 'Currency Sign'}) }}
+                    {{ form_row(item.period, {'label': labels.period ?? 'Perion'}) }}
+
+                    {% include 'control-panel/variant/builder/form-component/call-to-action-button.html.twig' with {'form': item.callToActionButton} only %}
+
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pb-5 pt-5"></div>

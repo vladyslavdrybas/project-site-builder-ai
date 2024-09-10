@@ -159,7 +159,8 @@ class VariantBuilderFormToVariantMetaTransformer implements DataTransformerInter
             0
         );
 
-        $isTestimonialActive *= (int) $value->subscriptions->isActive;
+        $isTestimonialActive *= (int) $value->testimonial->isActive;
+
 
         $testimonial = new TestimonialPartDto(
             $value->testimonial->headline,
