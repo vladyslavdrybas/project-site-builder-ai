@@ -5,8 +5,6 @@
 
 {% include 'control-panel/variant/builder/form-component/show-section-switcher.html.twig' with {'form': form} only %}
 
-{% include 'control-panel/variant/builder/form-component/call-to-action-button.html.twig' with {'form': form.callToActionButton} only %}
-
 <div class="text-uppercase text-start w-100 d-flex flex-row justify-content-start">
     {{ form_row(form.brand.isVisible, {'label': false}) }}
 
@@ -16,5 +14,9 @@
 {{ form_row(form.brand.name, {'label': false}) }}
 
 {% include 'control-panel/variant/builder/form-component/media-uploader.html.twig' with {'form': form.brand.logo, 'label': 'Edit Brand Logo'} only %}
+
+<div class="pb-3"></div>
+
+{% include 'control-panel/variant/builder/form-component/call-to-action-button.html.twig' with {'form': form.callToActionButton} only %}
 
 <div class="pb-5 pt-5"></div>
